@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
@@ -13,8 +13,8 @@ class UriBaseAccessChecker(
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
         authenticationCheckResource: AuthenticationCheckResource
-    ): List<AccessResource> {
-        val accessResources: MutableList<AccessResource> = ArrayList()
+    ): List<AccessResources.Reply.AccessState> {
+        val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val antPathMatcher = AntPathMatcher()
         for (accessUri in authenticationCheckResource.accessUriGroup!!) {
             var isMatch = false
@@ -30,9 +30,9 @@ class UriBaseAccessChecker(
                 }
             }
             if (isMatch) {
-                accessResources.add(AccessResource.ofAccept(matchedSourceUrl!!))
-            } else accessResources.add(AccessResource.ofDenied(accessUri.uri, "not matched"))
+                accessStates.add(AccessResources.Reply.AccessState.ofAccept(matchedSourceUrl!!))
+            } else accessStates.add(AccessResources.Reply.AccessState.ofDenied(accessUri.uri, "not matched"))
         }
-        return accessResources
+        return accessStates
     }
 }

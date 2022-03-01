@@ -23,8 +23,8 @@ var OsoriRoute = (function () {
     map.set("view.project.configuration.members",       "/view/project/{id}/configuration/members");
 
     //Api
-    map.set("admin.findOne",    "/management/admin");
-    map.set("admin.modifyInfo", "/management/admin");
+    map.set("admin.findOne",    "/v1/maintenance/management/admin");
+    map.set("admin.modifyInfo", "/v1/maintenance/management/admin");
 
     map.set("user.create",                  "/v1/maintenance/management/user");
     map.set("user.modifyInfo",              "/v1/maintenance/management/user/{userId}");

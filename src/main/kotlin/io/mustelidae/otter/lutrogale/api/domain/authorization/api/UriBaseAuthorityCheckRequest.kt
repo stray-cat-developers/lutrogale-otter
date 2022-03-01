@@ -5,6 +5,5 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization.api
  */
 
 class UriBaseAuthorityCheckRequest(
-    val apiKey: String,
     val accessUriRequests: List<AccessUriRequest>
 )

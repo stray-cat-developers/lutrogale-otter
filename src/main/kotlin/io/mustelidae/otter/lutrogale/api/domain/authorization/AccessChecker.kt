@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 
@@ -12,5 +12,5 @@ interface AccessChecker {
     fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
         authenticationCheckResource: AuthenticationCheckResource
-    ): List<AccessResource>
+    ): List<AccessResources.Reply.AccessState>
 }

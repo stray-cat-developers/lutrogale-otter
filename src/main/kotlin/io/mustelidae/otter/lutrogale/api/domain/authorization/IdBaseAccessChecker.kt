@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
@@ -12,19 +12,19 @@ class IdBaseAccessChecker(
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
         authenticationCheckResource: AuthenticationCheckResource
-    ): List<AccessResource> {
-        val accessResources: MutableList<AccessResource> = ArrayList()
+    ): List<AccessResources.Reply.AccessState> {
+        val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val targetMenuNavigationGroup: List<MenuNavigation> =
             menuNavigationManager.findBy(authenticationCheckResource.menuNavigationIdGroup!!)
         for (menuNavigation in targetMenuNavigationGroup) {
-            if (sourceNavigationGroup.contains(menuNavigation) && menuNavigation.project!!.apiKey == authenticationCheckResource.apiKey) accessResources.add(
-                AccessResource.ofAccept(
+            if (sourceNavigationGroup.contains(menuNavigation) && menuNavigation.project!!.apiKey == authenticationCheckResource.apiKey) accessStates.add(
+                AccessResources.Reply.AccessState.ofAccept(
                     menuNavigation.id!!
                 )
             ) else {
-                accessResources.add(AccessResource.ofDenied(menuNavigation.id!!, "접근 할 수 없는 메뉴입니다."))
+                accessStates.add(AccessResources.Reply.AccessState.ofDenied(menuNavigation.id!!, "접근 할 수 없는 메뉴입니다."))
             }
         }
-        return accessResources
+        return accessStates
     }
 }

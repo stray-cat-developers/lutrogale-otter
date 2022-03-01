@@ -4,6 +4,9 @@ import io.mustelidae.otter.lutrogale.api.common.Reply
 import io.mustelidae.otter.lutrogale.api.common.toReply
 import io.mustelidae.otter.lutrogale.api.lock.EnableUserLock
 import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
+import io.swagger.v3.oas.annotations.tags.Tags
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/sample")
 class SampleController {
 
-    @EnableUserLock
+    @Operation(hidden = true)
     @GetMapping
     fun helloWorld(
         @RequestHeader(RoleHeader.XUser.KEY) userId: Long

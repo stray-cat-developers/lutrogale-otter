@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 @Transactional(readOnly = true)
-class AdminLogin(
+class AdminLoginInteraction(
     private val adminRepository: AdminRepository
 ) {
     fun loginCheck(email: String, pw: String): Admin {

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession
  * Created by seooseok on 2016. 10. 18..
  */
 @RestController
-@RequestMapping("/management/admin")
+@RequestMapping("/v1/maintenance/management/admin")
 class AdminController(
     private val adminInteraction: AdminInteraction,
     private val adminFinder: AdminFinder,
