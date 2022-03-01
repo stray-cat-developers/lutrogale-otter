@@ -18,7 +18,7 @@ class MenuNavigationResource(
 ) {
 
     companion object {
-        fun of(menuNavigation: MenuNavigation, fullUrl: String): MenuNavigationResource {
+        fun from(menuNavigation: MenuNavigation, fullUrl: String): MenuNavigationResource {
             var fullUrl = fullUrl
             if (!Strings.isNullOrEmpty(fullUrl)) fullUrl = fullUrl.replace("//*".toRegex(), "/")
 

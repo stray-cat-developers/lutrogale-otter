@@ -1,8 +1,8 @@
-package io.mustelidae.otter.lutrogale.web.domain.grant.api
+package io.mustelidae.otter.lutrogale.web.domain.authority.api
 
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
-import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityBundle
+import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityBundleInteraction
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.TreeBranchResource
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -10,34 +10,33 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /**
  * Created by seooseok on 2016. 9. 30..
  */
 @RestController
-@RequestMapping("/project")
+@RequestMapping("/v1/maintenance/project")
 class AuthorityController(
-    private val authorityBundle: AuthorityBundle
+    private val authorityBundleInteraction: AuthorityBundleInteraction
 ) {
 
     @PostMapping("/{projectId}/authority-bundle")
     fun create(
         @PathVariable projectId: Long,
-        @RequestParam groupName: String?,
-        @RequestParam("naviId[]") naviIdGroup: List<Long>
+        @RequestBody request: AuthorityBundleResources.Request.AuthorityBundle
     ): ApiRes<*> {
-        val defineId: Long = authorityBundle.createBundle(projectId, groupName, naviIdGroup)
+        val defineId: Long = authorityBundleInteraction.createBundle(projectId, request.groupName, request.naviId)
         return ApiRes<Any?>(defineId)
     }
 
     @GetMapping("/{projectId}/authority-bundles")
     fun findAll(@PathVariable projectId: Long): ApiRes<*> {
-        val authorityDefinitions = authorityBundle.getBundles(projectId)
-        val authGroup = authorityDefinitions.map { AuthGroup.of(it) }
-        return ApiRes<Any?>(authGroup)
+        val authorityDefinitions = authorityBundleInteraction.getBundles(projectId)
+        val authorityBundles = authorityDefinitions.map { AuthorityBundleResources.Reply.AuthorityBundle.from(it) }
+        return ApiRes<Any?>(authorityBundles)
     }
 
     @GetMapping("/{projectId}/authority-bundle/{authId}/navigations")
@@ -45,7 +44,7 @@ class AuthorityController(
         @PathVariable projectId: Long,
         @PathVariable authId: Long
     ): ApiRes<*> {
-        val menuNavigations: List<MenuNavigationResource> = authorityBundle.lookInBundle(authId)
+        val menuNavigations: List<MenuNavigationResource> = authorityBundleInteraction.lookInBundle(authId)
         return ApiRes<Any?>(menuNavigations)
     }
 
@@ -54,7 +53,7 @@ class AuthorityController(
         @PathVariable projectId: Long,
         @PathVariable authId: Long
     ): ApiRes<*> {
-        val treeBranchResources: List<TreeBranchResource> = authorityBundle.lookInBundleForTreeFormat(authId)
+        val treeBranchResources: List<TreeBranchResource> = authorityBundleInteraction.lookInBundleForTreeFormat(authId)
         return ApiRes<Any?>(treeBranchResources)
     }
 
@@ -62,9 +61,9 @@ class AuthorityController(
     fun modifyInfo(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
-        @RequestParam naviId: Long
+        @RequestBody modify: AuthorityBundleResources.Modify.Tree
     ): ApiRes<*> {
-        authorityBundle.modifyBundlesNavigation(projectId, authId, naviId)
+        authorityBundleInteraction.mappingNavigationAndDefinition(projectId, authId, modify.naviId)
         return success()
     }
 
@@ -73,7 +72,7 @@ class AuthorityController(
         @PathVariable projectId: Long,
         @PathVariable authId: Long
     ): ApiRes<*> {
-        authorityBundle.expireBy(projectId, authId)
+        authorityBundleInteraction.expireBy(projectId, authId)
         return success()
     }
 
@@ -83,7 +82,7 @@ class AuthorityController(
         @PathVariable authId: Long,
         @PathVariable("naviIdGroup") naviIdGroup: List<Long>
     ): ApiRes<*> {
-        authorityBundle.expireAuthorityNavigation(projectId, authId, naviIdGroup)
+        authorityBundleInteraction.removeMappingNavigationAndDefinition(projectId, authId, naviIdGroup)
         return success()
     }
 }

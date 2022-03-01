@@ -2,8 +2,8 @@ package io.mustelidae.otter.lutrogale.web.domain.user
 
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
-import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinitionManager
+import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinitionManager
 import io.mustelidae.otter.lutrogale.web.domain.grant.api.AuthorityGrantResource
 import io.mustelidae.otter.lutrogale.web.domain.grant.api.PersonalGrantResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation

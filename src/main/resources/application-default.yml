@@ -31,11 +31,9 @@ spring:
     cache: false
   mvc:
     throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       use-new-id-generator-mappings: false
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -68,6 +66,9 @@ spring:
     store-type: jdbc
     jdbc:
       platform: mysql
+  web:
+    resources:
+      add-mappings: false
 
 
 springdoc:

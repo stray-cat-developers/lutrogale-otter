@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.web.domain.grant
+package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
@@ -8,7 +8,7 @@ import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
-import io.mustelidae.otter.lutrogale.web.domain.project.ProjectManager
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
 import org.springframework.stereotype.Service
@@ -21,9 +21,9 @@ import java.util.stream.Collectors
  */
 @Service
 @Transactional
-class ClientAuthentication(
+class ClientCertificationInteraction(
     private val userManager: UserManager,
-    private val projectManager: ProjectManager,
+    private val projectFinder: ProjectFinder,
     private val accessCheckerHandler: AccessCheckerHandler
 
 ) {
@@ -34,7 +34,7 @@ class ClientAuthentication(
     }
 
     fun check(checkResource: AuthenticationCheckResource): List<AccessResource> {
-        val project = projectManager.findByLiveProjectOfApiKey(checkResource.apiKey)
+        val project = projectFinder.findByLiveProjectOfApiKey(checkResource.apiKey)
 
         val user: User = userManager.findBy(checkResource.email)
         val sourceNavigationGroup = getNavigationsOfUser(user, project)

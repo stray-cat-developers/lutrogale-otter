@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant.api
 
 import io.mustelidae.otter.lutrogale.utils.toDateString
-import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import java.time.LocalDateTime
 
 /**

@@ -1,6 +1,6 @@
-package io.mustelidae.otter.lutrogale.web.domain.grant.repository
+package io.mustelidae.otter.lutrogale.web.domain.navigation.repository
 
-import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityNavigationUnit
+import io.mustelidae.otter.lutrogale.web.domain.navigation.AuthorityNavigationUnit
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

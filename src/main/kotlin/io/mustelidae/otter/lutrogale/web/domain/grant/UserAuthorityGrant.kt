@@ -1,6 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant
 
 import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import javax.persistence.Entity
 import javax.persistence.FetchType

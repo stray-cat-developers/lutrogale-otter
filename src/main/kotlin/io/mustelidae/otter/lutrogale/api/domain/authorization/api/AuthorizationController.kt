@@ -8,9 +8,9 @@ import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
 import io.mustelidae.otter.lutrogale.web.commons.exception.SystemErr
 import io.mustelidae.otter.lutrogale.web.commons.utils.DecryptUtil.aes128
 import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessUri
-import io.mustelidae.otter.lutrogale.web.domain.grant.ClientAuthentication
+import io.mustelidae.otter.lutrogale.api.domain.authorization.ClientCertificationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
-import io.mustelidae.otter.lutrogale.web.domain.project.ProjectManager
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,9 +32,9 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api")
 class AuthorizationController(
-    private val clientAuthentication: ClientAuthentication,
+    private val clientCertificationInteraction: ClientCertificationInteraction,
     private val userManager: UserManager,
-    private val projectManager: ProjectManager,
+    private val projectFinder: ProjectFinder,
     private val menuNavigationManager: MenuNavigationManager
 ) {
 
@@ -52,7 +52,7 @@ class AuthorizationController(
         @RequestParam apiKey: String
     ): Replies<AccessResource> {
         val email: String = decryptEmail(apiKey, encryptedEmail)
-        if (!clientAuthentication.isAuthorizedUser(email)) {
+        if (!clientCertificationInteraction.isAuthorizedUser(email)) {
             val accessResources: MutableList<AccessResource> = ArrayList()
             accessResources.addAll(
                 idGroup.map {
@@ -66,7 +66,7 @@ class AuthorizationController(
             return accessResources.toReplies()
         }
         val checkResource: AuthenticationCheckResource = AuthenticationCheckResource.ofIdBase(email, apiKey, idGroup)
-        val accessResources: List<AccessResource> = clientAuthentication.check(checkResource)
+        val accessResources: List<AccessResource> = clientCertificationInteraction.check(checkResource)
         return accessResources.toReplies()
     }
 
@@ -90,7 +90,7 @@ class AuthorizationController(
             throw ApplicationException(HumanErr.INVALID_URL)
         }
 
-        if (!clientAuthentication.isAuthorizedUser(email)) {
+        if (!clientCertificationInteraction.isAuthorizedUser(email)) {
             val accessResources: MutableList<AccessResource> = ArrayList<AccessResource>()
             accessResources.addAll(
                 accessUris.map { AccessResource.ofDenied(it.uri, "최초 접근한 유저이며 유저의 권한 등록이 필요합니다.") }
@@ -99,7 +99,7 @@ class AuthorizationController(
         }
         val checkResource: AuthenticationCheckResource =
             AuthenticationCheckResource.ofUrlBase(email, request.apiKey, accessUris)
-        val accessResources: List<AccessResource> = clientAuthentication.check(checkResource)
+        val accessResources: List<AccessResource> = clientCertificationInteraction.check(checkResource)
 
         return accessResources.toReplies()
     }
@@ -116,7 +116,7 @@ class AuthorizationController(
         val user: User = userManager.findBy(email)
             ?: throw ApplicationException(HumanErr.INVALID_USER)
 
-        val project = projectManager.findByLive(projectId) ?: throw ApplicationException(HumanErr.IS_EMPTY)
+        val project = projectFinder.findByLive(projectId)
 
         if (type != null && !listOf(*NavigationType.values()).contains(type))
             throw ApplicationException(HumanErr.INVALID_ARGS)

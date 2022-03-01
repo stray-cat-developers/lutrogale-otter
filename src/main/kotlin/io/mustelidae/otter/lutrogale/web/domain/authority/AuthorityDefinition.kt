@@ -1,12 +1,13 @@
-package io.mustelidae.otter.lutrogale.web.domain.grant
+package io.mustelidae.otter.lutrogale.web.domain.authority
 
 import io.mustelidae.otter.lutrogale.api.common.Audit
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
+import io.mustelidae.otter.lutrogale.web.domain.navigation.AuthorityNavigationUnit
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import org.hibernate.annotations.Where
-import java.util.function.Consumer
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -39,16 +40,16 @@ class AuthorityDefinition(
     var status = true
         protected set
 
+    @OneToMany(mappedBy = "authorityDefinition", fetch = LAZY)
     @Where(clause = "status = true")
-    @OneToMany(
-        mappedBy = "authorityDefinition",
-        fetch = LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH]
-    )
     var authorityNavigationUnits: MutableList<AuthorityNavigationUnit> = arrayListOf()
         protected set
 
-    @OneToMany(mappedBy = "authorityDefinition", fetch = LAZY)
+    @OneToMany(
+        mappedBy = "authorityDefinition",
+        fetch = LAZY,
+        cascade = [CascadeType.ALL]
+    )
     @Where(clause = "status = true")
     var userAuthorityGrants: MutableList<UserAuthorityGrant> = arrayListOf()
         protected set
@@ -56,7 +57,7 @@ class AuthorityDefinition(
     fun expire() {
         status = false
         authorityNavigationUnits.forEach { it.expire() }
-        userAuthorityGrants.forEach(Consumer { grant: UserAuthorityGrant -> grant.expire() })
+        userAuthorityGrants.forEach { it.expire() }
     }
 
     val menuNavigations: List<MenuNavigation>
@@ -68,6 +69,7 @@ class AuthorityDefinition(
             authorityNavigationUnit.setBy(this)
     }
 
+    @Deprecated("쓰지말자")
     fun addBy(menuNavigation: MenuNavigation) {
         if (menuNavigation.id == null)
             throw ApplicationException(ProcessErr.WRONG_DEVELOP_PROCESS)
@@ -80,8 +82,8 @@ class AuthorityDefinition(
         unit.setBy(this)
     }
 
-    fun removeBy(menuNavigation: MenuNavigation?) {
-        val target = this.authorityNavigationUnits.find { it.menuNavigation!!.id!! == menuNavigation!!.id }!!
+    fun removeBy(menuNavigation: MenuNavigation) {
+        val target = this.authorityNavigationUnits.find { it.menuNavigation!!.id!! == menuNavigation.id }!!
         target.expire()
     }
 

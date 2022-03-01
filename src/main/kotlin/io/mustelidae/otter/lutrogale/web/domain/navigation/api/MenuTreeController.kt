@@ -3,22 +3,19 @@ package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.domain.navigation.NavigationTree
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping(value = ["/project/{projectId}/menu-tree"])
+@RequestMapping(value = ["/v1/maintenance/project/{projectId}/menu-tree"])
 class MenuTreeController(
     private val navigationTree: NavigationTree
 ) {
@@ -26,9 +23,9 @@ class MenuTreeController(
     @PostMapping("/branch")
     fun createBranch(
         @PathVariable projectId: Long,
-        @RequestBody branchRequest: BranchRequest
+        @RequestBody request: MenuTreeResources.Request.Branch
     ): ApiRes<*> {
-        val id: Long = navigationTree.createBranch(projectId, branchRequest)
+        val id: Long = navigationTree.createBranch(projectId, request)
         return ApiRes<Any?>(id)
     }
 

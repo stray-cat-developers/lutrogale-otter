@@ -41,19 +41,19 @@ var OsoriRoute = (function () {
     map.set("users.modifyInfo",     "/management/users/{userIdGroup}");
     map.set("users.expireStatus",   "/management/users/{userIdGroup}");
 
-    map.set("authority.findAll",                "/project/{id}/authority-bundles");
-    map.set("authority.create",                 "/project/{id}/authority-bundle");
-    map.set("authority.expire",                 "/project/{id}/authority-bundle/{authId}");
-    map.set("authority.modifyInfo",             "/project/{id}/authority-bundle/{authId}");
-    map.set("authority.findBundlesBranches",    "/project/{id}/authority-bundle/{authId}/branches");
-    map.set("authority.findBundlesNavigations", "/project/{id}/authority-bundle/{authId}/navigations");
-    map.set("authority.expireNavigations",      "/project/{id}/authority-bundle/{authId}/navigations/{menuNaviIdGroup}");
+    map.set("authority.findAll",                "/v1/maintenance/project/{id}/authority-bundles");
+    map.set("authority.create",                 "/v1/maintenance/project/{id}/authority-bundle");
+    map.set("authority.expire",                 "/v1/maintenance/project/{id}/authority-bundle/{authId}");
+    map.set("authority.modifyInfo",             "/v1/maintenance/project/{id}/authority-bundle/{authId}");
+    map.set("authority.findBundlesBranches",    "/v1/maintenance/project/{id}/authority-bundle/{authId}/branches");
+    map.set("authority.findBundlesNavigations", "/v1/maintenance/project/{id}/authority-bundle/{authId}/navigations");
+    map.set("authority.expireNavigations",      "/v1/maintenance/project/{id}/authority-bundle/{authId}/navigations/{menuNaviIdGroup}");
 
-    map.set("menuTree.getAllBranch",    "/project/{id}/menu-tree/branches");
-    map.set("menuTree.createBranch",    "/project/{id}/menu-tree/branch");
-    map.set("menuTree.findBranch",      "/project/{id}/menu-tree/branch/{nodeId}");
-    map.set("menuTree.moveBranch",      "/project/{id}/menu-tree/branch/{nodeId}");
-    map.set("menuTree.deleteBranch",    "/project/{id}/menu-tree/branch/{nodeId}");
+    map.set("menuTree.getAllBranch",    "/v1/maintenance/project/{id}/menu-tree/branches");
+    map.set("menuTree.createBranch",    "/v1/maintenance/project/{id}/menu-tree/branch");
+    map.set("menuTree.findBranch",      "/v1/maintenance/project/{id}/menu-tree/branch/{nodeId}");
+    map.set("menuTree.moveBranch",      "/v1/maintenance/project/{id}/menu-tree/branch/{nodeId}");
+    map.set("menuTree.deleteBranch",    "/v1/maintenance/project/{id}/menu-tree/branch/{nodeId}");
 
     map.set("navigation.modifyInfo",    "/project/{id}/navigation/{nodeId}");
 

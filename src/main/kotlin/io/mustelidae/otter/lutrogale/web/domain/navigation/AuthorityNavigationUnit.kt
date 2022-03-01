@@ -1,7 +1,7 @@
-package io.mustelidae.otter.lutrogale.web.domain.grant
+package io.mustelidae.otter.lutrogale.web.domain.navigation
 
 import io.mustelidae.otter.lutrogale.api.common.Audit
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue

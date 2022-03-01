@@ -1,10 +1,9 @@
-package io.mustelidae.otter.lutrogale.web.domain.grant
+package io.mustelidae.otter.lutrogale.web.domain.authority
 
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.domain.grant.repository.AuthorityDefinitionRepository
+import io.mustelidae.otter.lutrogale.web.domain.authority.repository.AuthorityDefinitionRepository
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.function.Consumer
@@ -25,24 +24,12 @@ class AuthorityDefinitionManager(
         return authorityDefinitionRepository.save<AuthorityDefinition>(authorityDefinition)
     }
 
-    fun findBy(defineId: Long): AuthorityDefinition {
-        return authorityDefinitionRepository.findByIdOrNull(defineId) ?: throw ApplicationException(HumanErr.IS_EMPTY)
-    }
-
-    fun findListBy(projectId: Long): List<AuthorityDefinition> {
-        return authorityDefinitionRepository.findByProjectIdAndStatusTrue(projectId) ?: emptyList()
-    }
-
-    fun findByLive(authorityDefinitionId: Long): AuthorityDefinition {
-        val authorityDefinition = this.findBy(authorityDefinitionId)
-        if (!authorityDefinition.status) throw ApplicationException(HumanErr.IS_EXPIRE)
-        return authorityDefinition
-    }
-
+    @Deprecated("사용하지 말자")
     fun findBy(authorityDefinitionIdGroup: List<Long>): List<AuthorityDefinition> {
         return authorityDefinitionRepository.findByIdIn(authorityDefinitionIdGroup) ?: emptyList()
     }
 
+    @Deprecated("사용하지 말자")
     fun findByLive(authorityDefinitionIds: List<Long>): List<AuthorityDefinition> {
         val authorityDefinitions = this.findBy(authorityDefinitionIds)
         authorityDefinitions.forEach(

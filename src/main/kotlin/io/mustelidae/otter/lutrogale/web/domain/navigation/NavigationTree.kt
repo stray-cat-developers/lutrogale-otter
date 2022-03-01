@@ -2,13 +2,12 @@ package io.mustelidae.otter.lutrogale.web.domain.navigation
 
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityNavigationUnit
-import io.mustelidae.otter.lutrogale.web.domain.grant.repository.AuthorityNavigationUnitRepository
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.BranchRequest
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource.Companion.of
+import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.AuthorityNavigationUnitRepository
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Request.Branch
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource.Companion.from
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.TreeBranchResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
-import io.mustelidae.otter.lutrogale.web.domain.project.ProjectManager
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.ArrayList
@@ -23,21 +22,21 @@ class NavigationTree(
     private val menuNavigationRepository: MenuNavigationRepository,
     private val authorityNavigationUnitRepository: AuthorityNavigationUnitRepository,
     private val menuNavigationManager: MenuNavigationManager,
-    private val projectManager: ProjectManager
+    private val projectFinder: ProjectFinder
 ) {
 
-    fun createBranch(projectId: Long, branchRequest: BranchRequest): Long {
-        val project = projectManager.findByLive(projectId)
+    fun createBranch(projectId: Long, branch: Branch): Long {
+        val project = projectFinder.findByLive(projectId)
         val parentMenuNavigation =
-            menuNavigationRepository.findByProjectIdAndTreeId(projectId, branchRequest.parentTreeId)
+            menuNavigationRepository.findByProjectIdAndTreeId(projectId, branch.parentTreeId)
 
         val menuNavigation = MenuNavigation(
-            branchRequest.name,
-            branchRequest.type,
-            branchRequest.uriBlock,
-            branchRequest.methodType,
-            branchRequest.treeId,
-            branchRequest.parentTreeId
+            branch.name,
+            branch.type,
+            branch.uriBlock,
+            branch.methodType,
+            branch.treeId,
+            branch.parentTreeId
         ).apply {
             setBy(project)
         }
@@ -51,7 +50,7 @@ class NavigationTree(
 
     fun getTreeBranches(projectId: Long): List<TreeBranchResource> {
         val treeBranchResources: MutableList<TreeBranchResource> = ArrayList()
-        val project = projectManager.findByLive(projectId)
+        val project = projectFinder.findByLive(projectId)
         val menuNavigations: List<MenuNavigation> = project.menuNavigations
         if (menuNavigations.isEmpty())
             throw ApplicationException(HumanErr.IS_EMPTY)
@@ -69,7 +68,7 @@ class NavigationTree(
 
     private fun getTreeBranch(menuNavigation: MenuNavigation): TreeBranchResource {
         val fullUrl = menuNavigationManager.getFullUrl(menuNavigation)
-        val menuNavigationResource = of(menuNavigation, fullUrl)
+        val menuNavigationResource = from(menuNavigation, fullUrl)
         return TreeBranchResource.of(menuNavigation.treeId, menuNavigation.parentTreeId, menuNavigationResource)
     }
 
