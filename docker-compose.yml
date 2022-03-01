@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  maria:
+    image: mariadb:10.7.1
+    platform: linux/arm64/v8
+    container_name: mariadb
+    command: "mysqld --character-set-server=utf8mb4"
+    environment:
+      MYSQL_ROOT_PASSWORD: local
+      MYSQL_DATABASE: local
+      MYSQL_USER: local
+      MYSQL_PASSWORD: local
+    ports:
+      - "3319:3306"

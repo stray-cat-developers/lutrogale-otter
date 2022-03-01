@@ -1,0 +1,69 @@
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+    org.springframework.boot.actuate: off
+    org.springframework.web: debug
+    org.springframework.boot: info
+    org.springframework.orm.jpa: debug
+    org.springframework.transaction: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type: off
+    org.hibernate.tool.schema: error
+    com.zaxxer.hikari: error
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+    io.mustelidae: debug
+
+server:
+  error:
+    include-stacktrace: always
+    whitelabel:
+      enabled: false
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    lazy-initialization: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:default;DB_CLOSE_ON_EXIT=FALSE;AUTOCOMMIT=OFF;TRACE_LEVEL_FILE=2
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    platform: h2
+    hikari:
+      minimum-idle: 40
+      maximum-pool-size: 60
+      pool-name: SpringBootHikariCP
+  jpa:
+    hibernate:
+      ddl-auto: create
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        default_batch_fetch_size: 50
+      org:
+        hibernate:
+          envers:
+            audit_strategy: org.hibernate.envers.strategy.DefaultAuditStrategy
+    database-platform: org.hibernate.dialect.H2Dialect
+
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: false
+---
+spring:
+  config:
+    activate:
+      on-profile: embedded
+  data:
+    mongodb:
+      database: smooth-coated-otter
+      host: localhost
+
+app:
