@@ -32,7 +32,6 @@ class Admin(
     var pw: String? = null
         protected set
 
-
     var status = false
 
     @ManyToOne

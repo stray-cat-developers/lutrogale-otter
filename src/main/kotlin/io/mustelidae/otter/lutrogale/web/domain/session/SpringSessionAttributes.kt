@@ -3,14 +3,11 @@ package io.mustelidae.otter.lutrogale.web.domain.session
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import java.io.Serializable
-import java.sql.Blob
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.ForeignKey
 import javax.persistence.Id
-import javax.persistence.IdClass
-import javax.persistence.Index
 import javax.persistence.JoinColumn
 import javax.persistence.Lob
 import javax.persistence.ManyToOne
@@ -40,6 +37,4 @@ class SpringSessionAttributes : Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(referencedColumnName = "PRIMARY_ID", name = "SESSION_PRIMARY_ID", foreignKey = ForeignKey(name = "SPRING_SESSION_ATTRIBUTES_FK"))
     var springSession: SpringSession? = null
-
-
 }

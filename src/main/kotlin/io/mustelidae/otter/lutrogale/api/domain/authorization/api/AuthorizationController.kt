@@ -2,17 +2,17 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
 import io.mustelidae.otter.lutrogale.api.common.Replies
 import io.mustelidae.otter.lutrogale.api.common.toReplies
+import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessUri
+import io.mustelidae.otter.lutrogale.api.domain.authorization.ClientCertificationInteraction
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.NavigationType
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
 import io.mustelidae.otter.lutrogale.web.commons.exception.SystemErr
 import io.mustelidae.otter.lutrogale.web.commons.utils.DecryptUtil.aes128
-import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessUri
-import io.mustelidae.otter.lutrogale.api.domain.authorization.ClientCertificationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.User
-import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
+import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -33,7 +33,7 @@ import javax.validation.Valid
 @RequestMapping("/api")
 class AuthorizationController(
     private val clientCertificationInteraction: ClientCertificationInteraction,
-    private val userManager: UserManager,
+    private val userFinder: UserFinder,
     private val projectFinder: ProjectFinder,
     private val menuNavigationManager: MenuNavigationManager
 ) {
@@ -91,7 +91,7 @@ class AuthorizationController(
         }
 
         if (!clientCertificationInteraction.isAuthorizedUser(email)) {
-            val accessResources: MutableList<AccessResource> = ArrayList<AccessResource>()
+            val accessResources: MutableList<AccessResource> = ArrayList()
             accessResources.addAll(
                 accessUris.map { AccessResource.ofDenied(it.uri, "최초 접근한 유저이며 유저의 권한 등록이 필요합니다.") }
             )
@@ -113,8 +113,7 @@ class AuthorizationController(
     ): Replies<AccessUri> {
         val email: String = decryptEmail(apiKey, encryptedEmail)
 
-        val user: User = userManager.findBy(email)
-            ?: throw ApplicationException(HumanErr.INVALID_USER)
+        val user: User = userFinder.findBy(email)
 
         val project = projectFinder.findByLive(projectId)
 

@@ -21,7 +21,6 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver
 import java.time.format.DateTimeFormatter
 
-
 @Configuration
 @ControllerAdvice
 class WebConfiguration(

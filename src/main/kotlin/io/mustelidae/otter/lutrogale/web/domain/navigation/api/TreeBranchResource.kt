@@ -17,7 +17,6 @@ class TreeBranchResource(
     val menuNavigationResource: MenuNavigationResource? = null
 ) {
 
-
     companion object {
         fun of(
             treeId: String,

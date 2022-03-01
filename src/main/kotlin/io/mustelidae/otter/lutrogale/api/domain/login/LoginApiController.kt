@@ -22,7 +22,6 @@ class LoginApiController(
     @PostMapping("/v1/check-login")
     fun checkLogin(@RequestBody request: LoginResources.Request, httpServletRequest: HttpServletRequest): ApiRes<*> {
 
-
         val admin: Admin = adminLogin.loginCheck("admin@osori.com", "admin")
         val sessionInfo = OsoriSessionInfo.of(admin)
         addSessionBy(httpSession, sessionInfo)

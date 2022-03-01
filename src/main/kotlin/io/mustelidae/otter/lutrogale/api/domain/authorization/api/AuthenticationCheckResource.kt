@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
 import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessUri
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
 
 class AuthenticationCheckResource(
     val email: String,

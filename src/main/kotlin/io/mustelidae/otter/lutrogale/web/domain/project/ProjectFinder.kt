@@ -28,14 +28,12 @@ class ProjectFinder(
         return projectRepository.findByIdOrNull(id) ?: throw ApplicationException(HumanErr.IS_EMPTY)
     }
 
-
     fun findByLive(id: Long): Project {
         val project = findBy(id)
         if (!project.status)
             throw ApplicationException(HumanErr.IS_EXPIRE)
         return project
     }
-
 
     fun findByLiveProjectOfApiKey(apiKey: String): Project {
         val project = projectRepository.findByApiKey(apiKey) ?: throw ApplicationException(HumanErr.INVALID_APIKEY)
@@ -45,7 +43,6 @@ class ProjectFinder(
         return project
     }
 
-
     fun findAllByIncludeNavigationsProject(id: Long): List<MenuNavigationResource> {
         val project = findByLive(id)
 
@@ -53,5 +50,4 @@ class ProjectFinder(
             MenuNavigationResource.from(it, menuNavigationManager.getFullUrl(it))
         }
     }
-
 }

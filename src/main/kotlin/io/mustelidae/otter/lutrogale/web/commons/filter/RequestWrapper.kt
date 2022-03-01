@@ -1,6 +1,5 @@
 package io.mustelidae.otter.lutrogale.web.commons.filter
 
-import com.google.common.base.Strings
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletRequestWrapper
 
@@ -43,7 +42,6 @@ internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServlet
     private fun cleanXSS(param: String): String {
         return param.replace(XSS_FORMAT.toRegex(), "")
     }
-
 
     companion object {
         private const val XSS_FORMAT =

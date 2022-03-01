@@ -26,20 +26,20 @@ var OsoriRoute = (function () {
     map.set("admin.findOne",    "/management/admin");
     map.set("admin.modifyInfo", "/management/admin");
 
-    map.set("user.create",                  "/management/user");
-    map.set("user.modifyInfo",              "/management/user/{userId}");
-    map.set("user.findOne",                 "/management/user/{userId}");
-    map.set("user.findUsersProjects",       "/management/user/{userId}/projects");
-    map.set("user.findUsersGrants",         "/management/user/{userId}/grants");
-    map.set("user.findGrantsForUser",       "/management/user/{userId}/grant/project/{projectId}");
-    map.set("user.assignAuthorityGrant",    "/management/user/{userId}/grant/project/{projectId}/authority-bundle/{authIdGroup}");
-    map.set("user.withdrawAuthorityGrant",  "/management/user/{userId}/grant/project/{projectId}/authority-bundle/{authIdGroup}");
-    map.set("user.assignPersonalGrant",     "/management/user/{userId}/grant/project/{projectId}/authority-personal/{menuNaviIdGroup}");
-    map.set("user.withdrawPersonalGrant",   "/management/user/{userId}/grant/project/{projectId}/authority-personal/{menuNaviIdGroup}");
+    map.set("user.create",                  "/v1/maintenance/management/user");
+    map.set("user.modifyInfo",              "/v1/maintenance/management/user/{userId}");
+    map.set("user.findOne",                 "/v1/maintenance/management/user/{userId}");
+    map.set("user.findUsersProjects",       "/v1/maintenance/management/user/{userId}/projects");
+    map.set("user.findUsersGrants",         "/v1/maintenance/management/user/{userId}/grants");
+    map.set("user.findGrantsForUser",       "/v1/maintenance/management/user/{userId}/grant/project/{projectId}");
+    map.set("user.assignAuthorityGrant",    "/v1/maintenance/management/user/{userId}/grant/project/{projectId}/authority-bundle/{authIdGroup}");
+    map.set("user.withdrawAuthorityGrant",  "/v1/maintenance/management/user/{userId}/grant/project/{projectId}/authority-bundle/{authIdGroup}");
+    map.set("user.assignPersonalGrant",     "/v1/maintenance/management/user/{userId}/grant/project/{projectId}/authority-personal/{menuNaviIdGroup}");
+    map.set("user.withdrawPersonalGrant",   "/v1/maintenance/management/user/{userId}/grant/project/{projectId}/authority-personal/{menuNaviIdGroup}");
 
-    map.set("users.findAll",        "/management/users");
-    map.set("users.modifyInfo",     "/management/users/{userIdGroup}");
-    map.set("users.expireStatus",   "/management/users/{userIdGroup}");
+    map.set("users.findAll",        "/v1/maintenance/management/users");
+    map.set("users.modifyInfo",     "/v1/maintenance/management/users/{userIdGroup}");
+    map.set("users.expireStatus",   "/v1/maintenance/management/users/{userIdGroup}");
 
     map.set("authority.findAll",                "/v1/maintenance/project/{id}/authority-bundles");
     map.set("authority.create",                 "/v1/maintenance/project/{id}/authority-bundle");

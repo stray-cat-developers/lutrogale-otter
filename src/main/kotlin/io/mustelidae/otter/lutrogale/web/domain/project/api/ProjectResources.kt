@@ -7,7 +7,7 @@ class ProjectResources {
 
     data class Request(
         val name: String,
-        val description:String
+        val description: String
     )
 
     class Reply(
@@ -35,7 +35,4 @@ class ProjectResources {
             }
         }
     }
-
 }
-
-

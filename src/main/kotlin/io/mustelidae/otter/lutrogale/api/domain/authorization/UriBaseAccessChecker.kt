@@ -6,7 +6,6 @@ import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
 import org.springframework.util.AntPathMatcher
 
-
 class UriBaseAccessChecker(
     private val menuNavigationManager: MenuNavigationManager
 ) : AccessChecker {

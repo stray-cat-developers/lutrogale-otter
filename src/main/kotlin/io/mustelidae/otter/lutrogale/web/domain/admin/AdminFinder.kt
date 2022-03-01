@@ -14,7 +14,7 @@ class AdminFinder(
 ) {
 
     fun findBy(id: Long): Admin {
-        val admin =  adminRepository.findByIdOrNull(id) ?: throw ApplicationException(HumanErr.IS_EMPTY)
+        val admin = adminRepository.findByIdOrNull(id) ?: throw ApplicationException(HumanErr.IS_EMPTY)
         if (!admin.status)
             throw ApplicationException(HumanErr.IS_EXPIRE)
 

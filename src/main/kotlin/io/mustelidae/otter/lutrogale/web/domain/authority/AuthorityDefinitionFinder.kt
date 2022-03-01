@@ -19,7 +19,7 @@ class AuthorityDefinitionFinder(
         return authorityDefinition
     }
 
-    fun findByLive(projectId:Long,authorityDefinitionId: Long): AuthorityDefinition {
+    fun findByLive(projectId: Long, authorityDefinitionId: Long): AuthorityDefinition {
         val authorityDefinition = this.findByLive(authorityDefinitionId)
         if (authorityDefinition.project!!.id != projectId)
             throw ApplicationException(HumanErr.INVALID_INCLUDE)
@@ -34,4 +34,20 @@ class AuthorityDefinitionFinder(
         return authorityDefinitionRepository.findByProjectIdAndStatusTrue(projectId) ?: emptyList()
     }
 
+    fun findBy(authorityDefinitionIdGroup: List<Long>): List<AuthorityDefinition> {
+        return authorityDefinitionRepository.findByIdIn(authorityDefinitionIdGroup) ?: emptyList()
+    }
+
+    fun findByLive(authorityDefinitionIds: List<Long>): List<AuthorityDefinition> {
+        val authorityDefinitions = this.findBy(authorityDefinitionIds)
+
+        authorityDefinitions.forEach {
+            if (!it.status) throw ApplicationException(
+                HumanErr.IS_EXPIRE,
+                arrayOf(it.id)
+            )
+        }
+
+        return authorityDefinitions
+    }
 }

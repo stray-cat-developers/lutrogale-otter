@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class DbInitializer(
     private val adminRepository: AdminRepository
-): CommandLineRunner {
+) : CommandLineRunner {
     override fun run(vararg args: String?) {
 
-        val existedOsori  = adminRepository.findByIdOrNull(1)
+        val existedOsori = adminRepository.findByIdOrNull(1)
 
-        if(existedOsori == null) {
+        if (existedOsori == null) {
             val osoriAdmin = Admin(
                 "admin@osori.com",
                 "슈퍼 관리자",
@@ -31,5 +31,4 @@ class DbInitializer(
             adminRepository.save(osoriAdmin)
         }
     }
-
 }

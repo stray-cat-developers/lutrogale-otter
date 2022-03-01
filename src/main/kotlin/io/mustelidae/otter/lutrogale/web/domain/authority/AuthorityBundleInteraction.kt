@@ -1,14 +1,14 @@
 package io.mustelidae.otter.lutrogale.web.domain.authority
 
+import io.mustelidae.otter.lutrogale.web.domain.authority.repository.AuthorityDefinitionRepository
 import io.mustelidae.otter.lutrogale.web.domain.navigation.AuthorityNavigationUnit
 import io.mustelidae.otter.lutrogale.web.domain.navigation.DefinitionAndNavigationFinder
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
-import io.mustelidae.otter.lutrogale.web.domain.authority.repository.AuthorityDefinitionRepository
-import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.AuthorityNavigationUnitRepository
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource.Companion.from
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.TreeBranchResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.AuthorityNavigationUnitRepository
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,9 +25,9 @@ class AuthorityBundleInteraction(
     private val authorityDefinitionFinder: AuthorityDefinitionFinder
 ) {
 
-    fun hasMenuNavigations(authorityDefinitionId:Long): List<MenuNavigation>{
+    fun hasMenuNavigations(authorityDefinitionId: Long): List<MenuNavigation> {
         val authorityNavigationUnits =
-            authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionId(authorityDefinitionId)?: emptyList()
+            authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionId(authorityDefinitionId) ?: emptyList()
 
         return authorityNavigationUnits.map { it.menuNavigation!! }
     }
@@ -124,5 +124,4 @@ class AuthorityBundleInteraction(
             putInParentMenuNavigation(menuNavigations, parentMenuNavigation)
         }
     }
-
 }

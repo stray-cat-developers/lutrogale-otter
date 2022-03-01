@@ -28,11 +28,9 @@ class AdminInteraction(
             this.description = description
         }
 
-        if(pw.isNullOrEmpty().not())
+        if (pw.isNullOrEmpty().not())
             admin.setPassword(pw!!)
 
         adminRepository.save(admin)
     }
-
-
 }

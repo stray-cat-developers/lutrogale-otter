@@ -4,13 +4,14 @@ import io.mustelidae.otter.lutrogale.api.common.Replies
 import io.mustelidae.otter.lutrogale.api.common.toReplies
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
-import io.mustelidae.otter.lutrogale.web.commons.toApiRes
 import io.mustelidae.otter.lutrogale.web.domain.user.User
+import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -19,40 +20,34 @@ import org.springframework.web.bind.annotation.RestController
  * Created by seooseok on 2016. 10. 6..
  */
 @RestController
-@RequestMapping("/management/users")
+@RequestMapping("/v1/maintenance/management/users")
 class UsersController(
-    private val userManager: UserManager
+    private val userManager: UserManager,
+    private val userFinder: UserFinder
 ) {
 
     @GetMapping
-    fun findAll(@RequestParam(required = false) status: String?): Replies<UserResource> {
-        var users = userManager.findByLive()
+    fun findAll(@RequestParam(required = false) status: String?): Replies<UserResources.Reply.Simple> {
+        var users = userFinder.findByLive()
         status?.let {
             users = users.filter { user -> user.status == User.Status.valueOf(it) }
         }
 
-        return users.map { UserResource.of(it) }.toReplies()
+        return users.map { UserResources.Reply.Simple.from(it) }.toReplies()
     }
 
-    @PutMapping("/{userIdGroup}")
+    @PutMapping("/{userIds}")
     fun modifyInfo(
-        @PathVariable userIdGroup: List<Long>,
-        @RequestParam(required = false) department: String?,
-        @RequestParam(required = false) isPrivacy: Boolean,
-        @RequestParam(required = false) status: String?
+        @PathVariable userIds: List<Long>,
+        @RequestBody modify: UserResources.Modify.UserState
     ): ApiRes<*> {
-
-        userManager.modifyBy(userIdGroup, department, isPrivacy)
-
-        if (status != null)
-            userManager.modifyBy(userIdGroup, User.Status.valueOf(status))
-
+        userManager.modifyBy(userIds, modify.status)
         return success()
     }
 
-    @DeleteMapping("/{userIdGroup}")
-    fun expireStatus(@PathVariable userIdGroup: List<Long>): ApiRes<*> {
-        userManager.expireBy(userIdGroup)
+    @DeleteMapping("/{userIds}")
+    fun expireStatus(@PathVariable userIds: List<Long>): ApiRes<*> {
+        userManager.expireBy(userIds)
         return success()
     }
 }

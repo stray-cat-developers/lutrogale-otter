@@ -1,6 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
 import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.api.config.InvalidArgumentException
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
@@ -50,29 +51,13 @@ class User(
     val authorityDefinitions: List<AuthorityDefinition>
         get() = userAuthorityGrants.map { it.authorityDefinition!! }
 
-    fun addBy(authorityDefinition: AuthorityDefinition) {
-        require(!this.authorityDefinitions.contains(authorityDefinition)) { "이미 해당 권한 그룹은 허용되어 있습니다." }
-        val userAuthorityGrant = UserAuthorityGrant()
-        userAuthorityGrant.setBy(this)
-        userAuthorityGrant.setBy(authorityDefinition)
-
-        addBy(userAuthorityGrant)
-    }
-
     fun addBy(userAuthorityGrant: UserAuthorityGrant) {
-        require(!this.userAuthorityGrants.contains(userAuthorityGrant)) { "이미 해당 권한 그룹은 허용되어 있습니다." }
+        if (this.userAuthorityGrants.contains(userAuthorityGrant))
+            throw InvalidArgumentException("이미 해당 권한 그룹은 허용되어 있습니다.")
+
         userAuthorityGrants.add(userAuthorityGrant)
         if (userAuthorityGrant.user != this)
             userAuthorityGrant.setBy(this)
-    }
-
-    fun removeBy(authorityDefinition: AuthorityDefinition?) {
-        this.userAuthorityGrants.forEach(
-            Consumer { grant: UserAuthorityGrant ->
-                if (grant.authorityDefinition!! == authorityDefinition)
-                    grant.expire()
-            }
-        )
     }
 
     @Where(clause = "status = true")
@@ -84,7 +69,9 @@ class User(
         get() = userPersonalGrants.map { it.menuNavigation!! }
 
     fun addBy(menuNavigation: MenuNavigation) {
-        require(!this.menuNavigations.contains(menuNavigation)) { "이미 해당 권한 그룹은 허용되어 있습니다." }
+        if (this.menuNavigations.contains(menuNavigation))
+            throw IllegalStateException("이미 해당 권한 그룹은 허용되어 있습니다.")
+
         val userPersonalGrant = UserPersonalGrant()
         userPersonalGrant.setBy(this)
         userPersonalGrant.setBy(menuNavigation)

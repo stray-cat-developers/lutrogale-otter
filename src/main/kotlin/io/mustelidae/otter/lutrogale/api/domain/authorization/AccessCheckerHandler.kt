@@ -4,7 +4,6 @@ import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.Authenti
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 /**

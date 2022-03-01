@@ -11,6 +11,6 @@ class DefinitionAndNavigationFinder(
 ) {
 
     fun findMappings(authorityDefinitionId: Long, menuNavigationIds: List<Long>): List<AuthorityNavigationUnit> {
-        return authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionIdAndMenuNavigationIdIn(authorityDefinitionId, menuNavigationIds)?: emptyList()
+        return authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionIdAndMenuNavigationIdIn(authorityDefinitionId, menuNavigationIds) ?: emptyList()
     }
 }

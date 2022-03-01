@@ -1,8 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.authority
 
 import io.mustelidae.otter.lutrogale.api.common.Audit
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
 import io.mustelidae.otter.lutrogale.web.domain.navigation.AuthorityNavigationUnit
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
@@ -67,19 +65,6 @@ class AuthorityDefinition(
         authorityNavigationUnits.add(authorityNavigationUnit)
         if (authorityNavigationUnit.authorityDefinition != this)
             authorityNavigationUnit.setBy(this)
-    }
-
-    @Deprecated("쓰지말자")
-    fun addBy(menuNavigation: MenuNavigation) {
-        if (menuNavigation.id == null)
-            throw ApplicationException(ProcessErr.WRONG_DEVELOP_PROCESS)
-
-        require(!menuNavigations.contains(menuNavigation)) { "이미 해당 메뉴는 등록되어 있습니다." }
-
-        val unit = AuthorityNavigationUnit()
-
-        unit.setBy(menuNavigation)
-        unit.setBy(this)
     }
 
     fun removeBy(menuNavigation: MenuNavigation) {
