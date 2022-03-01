@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.home
 
-import io.mustelidae.smoothcoatedotter.web.domain.user.User
-import io.mustelidae.smoothcoatedotter.web.domain.user.repository.UserRepository
+import io.mustelidae.otter.lutrogale.web.domain.user.User
+import io.mustelidae.otter.lutrogale.web.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
 /**

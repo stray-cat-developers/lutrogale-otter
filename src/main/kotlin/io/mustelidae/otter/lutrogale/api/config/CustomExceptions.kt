@@ -1,8 +1,8 @@
 package io.mustelidae.otter.lutrogale.api.config
 
-import io.mustelidae.smoothcoatedotter.api.common.Error
-import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
-import io.mustelidae.smoothcoatedotter.api.common.ErrorSource
+import io.mustelidae.otter.lutrogale.api.common.Error
+import io.mustelidae.otter.lutrogale.api.common.ErrorCode
+import io.mustelidae.otter.lutrogale.api.common.ErrorSource
 
 open class CustomException(val error: ErrorSource) : RuntimeException(error.message)
 

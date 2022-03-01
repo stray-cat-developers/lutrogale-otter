@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.config
 
-import io.mustelidae.smoothcoatedotter.OsoriApplication
+import io.mustelidae.otter.lutrogale.OsoriApplication
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

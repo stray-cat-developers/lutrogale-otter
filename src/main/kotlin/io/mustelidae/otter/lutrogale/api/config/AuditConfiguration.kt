@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.config
 
-import io.mustelidae.smoothcoatedotter.web.commons.utils.RequestHelper
+import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware

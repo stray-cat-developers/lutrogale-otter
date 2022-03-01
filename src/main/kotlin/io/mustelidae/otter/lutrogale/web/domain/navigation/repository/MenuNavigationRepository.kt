@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.repository
 
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

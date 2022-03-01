@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.session
 
-import io.mustelidae.smoothcoatedotter.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import org.springframework.web.bind.annotation.ModelAttribute
 
 /**

@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale
 
-import io.mustelidae.smoothcoatedotter.api.config.AppEnvironment
+import io.mustelidae.otter.lutrogale.api.config.AppEnvironment
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication

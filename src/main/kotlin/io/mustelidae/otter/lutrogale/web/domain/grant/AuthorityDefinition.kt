@@ -1,10 +1,10 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant
 
-import io.mustelidae.smoothcoatedotter.api.common.Audit
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ProcessErr
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import org.hibernate.annotations.Where
 import java.util.function.Consumer
 import javax.persistence.CascadeType

@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.home.web
 
-import io.mustelidae.smoothcoatedotter.web.commons.annotations.LoginCheck
-import io.mustelidae.smoothcoatedotter.web.domain.home.DashBoard
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.domain.home.DashBoard
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

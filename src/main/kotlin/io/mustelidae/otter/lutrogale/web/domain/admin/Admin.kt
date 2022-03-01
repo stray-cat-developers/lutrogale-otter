@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin
 
-import io.mustelidae.smoothcoatedotter.web.commons.utils.EncryptUtil
+import io.mustelidae.otter.lutrogale.web.commons.utils.EncryptUtil
 import java.util.ArrayList
 import javax.persistence.CascadeType
 import javax.persistence.Column

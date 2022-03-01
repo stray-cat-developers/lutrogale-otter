@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.project
 
-import io.mustelidae.smoothcoatedotter.api.common.Audit
-import io.mustelidae.smoothcoatedotter.web.commons.utils.EncryptUtil
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityDefinition
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.web.commons.utils.EncryptUtil
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import org.hibernate.annotations.Where
 import java.time.LocalDateTime
 import java.time.ZoneId

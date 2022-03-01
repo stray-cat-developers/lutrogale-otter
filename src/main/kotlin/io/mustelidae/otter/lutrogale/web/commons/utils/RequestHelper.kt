@@ -1,8 +1,8 @@
 package io.mustelidae.otter.lutrogale.web.commons.utils
 
 import com.google.common.base.Strings
-import io.mustelidae.smoothcoatedotter.web.commons.annotations.LoginCheck
-import io.mustelidae.smoothcoatedotter.web.domain.session.OsoriSessionInfo
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.domain.session.OsoriSessionInfo
 import org.springframework.core.annotation.AnnotationUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType

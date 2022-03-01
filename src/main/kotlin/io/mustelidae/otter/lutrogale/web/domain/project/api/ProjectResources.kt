@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.project.api
 
-import io.mustelidae.smoothcoatedotter.utils.toDateString
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.utils.toDateString
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
 
 class ProjectResources {
 

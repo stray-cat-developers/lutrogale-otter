@@ -1,14 +1,14 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.HumanErr
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityDefinition
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityDefinitionManager
-import io.mustelidae.smoothcoatedotter.web.domain.grant.api.AuthorityGrantResource
-import io.mustelidae.smoothcoatedotter.web.domain.grant.api.PersonalGrantResource
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigationManager
-import io.mustelidae.smoothcoatedotter.web.domain.user.repository.UserRepository
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinitionManager
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.AuthorityGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.PersonalGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

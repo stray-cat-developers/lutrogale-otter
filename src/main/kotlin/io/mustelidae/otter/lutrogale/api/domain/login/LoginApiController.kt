@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.api.domain.login
 
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes
-import io.mustelidae.smoothcoatedotter.web.commons.utils.RequestHelper.addSessionBy
-import io.mustelidae.smoothcoatedotter.web.domain.admin.Admin
-import io.mustelidae.smoothcoatedotter.web.domain.session.OsoriSessionInfo
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper.addSessionBy
+import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.session.OsoriSessionInfo
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController

@@ -1,12 +1,12 @@
 package io.mustelidae.otter.lutrogale.web.domain.user.api
 
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserAuthorityGrant
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserPersonalGrant
-import io.mustelidae.smoothcoatedotter.web.domain.grant.api.AuthorityGrantResource
-import io.mustelidae.smoothcoatedotter.web.domain.grant.api.PersonalGrantResource
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
-import io.mustelidae.smoothcoatedotter.web.domain.project.api.ProjectResources.Reply
-import io.mustelidae.smoothcoatedotter.web.domain.user.User
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.AuthorityGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.PersonalGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources.Reply
+import io.mustelidae.otter.lutrogale.web.domain.user.User
 import java.time.LocalDateTime
 
 /**

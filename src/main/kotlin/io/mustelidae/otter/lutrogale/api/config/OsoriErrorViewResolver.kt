@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.config
 
-import io.mustelidae.smoothcoatedotter.web.commons.utils.RequestHelper
+import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus

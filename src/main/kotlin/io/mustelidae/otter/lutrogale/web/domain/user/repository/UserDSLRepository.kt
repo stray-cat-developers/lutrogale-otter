@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.user.repository
 
-import io.mustelidae.smoothcoatedotter.web.domain.user.User
+import io.mustelidae.otter.lutrogale.web.domain.user.User
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
 

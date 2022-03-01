@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.commons
 
-import io.mustelidae.smoothcoatedotter.web.commons.exception.Err
+import io.mustelidae.otter.lutrogale.web.commons.exception.Err
 import java.time.LocalDateTime
 import java.time.ZoneId
 

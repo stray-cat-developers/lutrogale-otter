@@ -1,10 +1,10 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes.Companion.success
-import io.mustelidae.smoothcoatedotter.web.commons.utils.RequestHelper.getSessionByAdmin
-import io.mustelidae.smoothcoatedotter.web.domain.admin.AdminFinder
-import io.mustelidae.smoothcoatedotter.web.domain.admin.AdminManager
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper.getSessionByAdmin
+import io.mustelidae.otter.lutrogale.web.domain.admin.AdminFinder
+import io.mustelidae.otter.lutrogale.web.domain.admin.AdminManager
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody

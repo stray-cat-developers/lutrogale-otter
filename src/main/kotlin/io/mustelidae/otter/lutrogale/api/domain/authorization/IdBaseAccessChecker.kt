@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
-import io.mustelidae.smoothcoatedotter.api.domain.authorization.api.AccessResource
-import io.mustelidae.smoothcoatedotter.api.domain.authorization.api.AuthenticationCheckResource
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
 import org.springframework.stereotype.Service
 
 

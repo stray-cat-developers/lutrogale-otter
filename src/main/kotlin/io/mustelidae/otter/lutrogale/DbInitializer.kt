@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale
 
-import io.mustelidae.smoothcoatedotter.web.domain.admin.Admin
-import io.mustelidae.smoothcoatedotter.web.domain.admin.repository.AdminRepository
+import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile

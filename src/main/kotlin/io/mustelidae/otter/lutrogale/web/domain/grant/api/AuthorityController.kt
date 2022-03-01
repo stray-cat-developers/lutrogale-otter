@@ -1,10 +1,10 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant.api
 
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes.Companion.success
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityBundle
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.api.MenuNavigationResource
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.api.TreeBranchResource
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityBundle
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.TreeBranchResource
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

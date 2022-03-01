@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant
 
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.HumanErr
-import io.mustelidae.smoothcoatedotter.web.domain.grant.repository.AuthorityDefinitionRepository
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.web.domain.grant.repository.AuthorityDefinitionRepository
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

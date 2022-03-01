@@ -1,12 +1,12 @@
 package io.mustelidae.otter.lutrogale.web.domain.project.api
 
-import io.mustelidae.smoothcoatedotter.api.common.Reply
-import io.mustelidae.smoothcoatedotter.api.common.toReply
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes
-import io.mustelidae.smoothcoatedotter.web.commons.toApiRes
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.api.MenuNavigationResource
-import io.mustelidae.smoothcoatedotter.web.domain.project.ProjectManager
-import io.mustelidae.smoothcoatedotter.web.domain.user.UserManager
+import io.mustelidae.otter.lutrogale.api.common.Reply
+import io.mustelidae.otter.lutrogale.api.common.toReply
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.toApiRes
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectManager
+import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping

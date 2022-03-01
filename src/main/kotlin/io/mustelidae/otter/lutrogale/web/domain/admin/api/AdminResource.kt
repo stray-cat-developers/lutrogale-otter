@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
-import io.mustelidae.smoothcoatedotter.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 
 class AdminResource(
     val id: Long,

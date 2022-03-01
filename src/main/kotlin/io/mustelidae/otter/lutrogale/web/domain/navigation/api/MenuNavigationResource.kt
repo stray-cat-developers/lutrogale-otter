@@ -1,8 +1,8 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
 import com.google.common.base.Strings
-import io.mustelidae.smoothcoatedotter.web.commons.constant.OsoriConstant
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import org.springframework.web.bind.annotation.RequestMethod
 
 /**

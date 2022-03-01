@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
 
 /**
  * Created by HanJaehyun on 2016. 10. 11..

@@ -1,10 +1,10 @@
 package io.mustelidae.otter.lutrogale.api.domain.login
 
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.HumanErr
-import io.mustelidae.smoothcoatedotter.web.commons.utils.EncryptUtil.sha256
-import io.mustelidae.smoothcoatedotter.web.domain.admin.Admin
-import io.mustelidae.smoothcoatedotter.web.domain.admin.repository.AdminRepository
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.web.commons.utils.EncryptUtil.sha256
+import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

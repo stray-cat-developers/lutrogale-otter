@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.commons.filter
 
-import io.mustelidae.smoothcoatedotter.web.commons.utils.RequestHelper
+import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import javax.servlet.Filter

@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes.Companion.success
-import io.mustelidae.smoothcoatedotter.web.commons.constant.OsoriConstant.NavigationType
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.NavigationType
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody

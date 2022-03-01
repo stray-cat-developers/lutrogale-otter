@@ -1,16 +1,16 @@
 package io.mustelidae.otter.lutrogale.web.domain.user.api
 
-import io.mustelidae.smoothcoatedotter.api.common.Replies
-import io.mustelidae.smoothcoatedotter.api.common.Reply
-import io.mustelidae.smoothcoatedotter.api.common.toReplies
-import io.mustelidae.smoothcoatedotter.api.common.toReply
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes
-import io.mustelidae.smoothcoatedotter.web.commons.ApiRes.Companion.success
-import io.mustelidae.smoothcoatedotter.web.domain.grant.api.AuthorityGrantResource
-import io.mustelidae.smoothcoatedotter.web.domain.grant.api.PersonalGrantResource
-import io.mustelidae.smoothcoatedotter.web.domain.project.api.ProjectResources
-import io.mustelidae.smoothcoatedotter.web.domain.user.UserGrant
-import io.mustelidae.smoothcoatedotter.web.domain.user.UserManager
+import io.mustelidae.otter.lutrogale.api.common.Replies
+import io.mustelidae.otter.lutrogale.api.common.Reply
+import io.mustelidae.otter.lutrogale.api.common.toReplies
+import io.mustelidae.otter.lutrogale.api.common.toReply
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.AuthorityGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.PersonalGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
+import io.mustelidae.otter.lutrogale.web.domain.user.UserGrant
+import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

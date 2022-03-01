@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.session.web
 
-import io.mustelidae.smoothcoatedotter.api.domain.login.AdminLogin
+import io.mustelidae.otter.lutrogale.api.domain.login.AdminLogin
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import javax.servlet.http.HttpSession

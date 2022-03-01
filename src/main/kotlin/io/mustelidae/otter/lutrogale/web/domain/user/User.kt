@@ -1,11 +1,11 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
-import io.mustelidae.smoothcoatedotter.api.common.Audit
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityDefinition
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserAuthorityGrant
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserPersonalGrant
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import org.hibernate.annotations.Where
 import java.util.function.Consumer
 import javax.persistence.CascadeType.ALL

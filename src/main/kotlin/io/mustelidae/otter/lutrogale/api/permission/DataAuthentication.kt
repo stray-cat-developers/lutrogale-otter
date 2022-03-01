@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.permission
 
-import io.mustelidae.smoothcoatedotter.api.config.DevelopMistakeException
-import io.mustelidae.smoothcoatedotter.api.config.MissingRequestXHeaderException
+import io.mustelidae.otter.lutrogale.api.config.DevelopMistakeException
+import io.mustelidae.otter.lutrogale.api.config.MissingRequestXHeaderException
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 

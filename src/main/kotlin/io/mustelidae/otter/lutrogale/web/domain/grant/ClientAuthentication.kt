@@ -1,16 +1,16 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant
 
-import io.mustelidae.smoothcoatedotter.web.commons.constant.OsoriConstant.AuthenticationCheckType
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.HumanErr
-import io.mustelidae.smoothcoatedotter.api.domain.authorization.AccessCheckerHandler
-import io.mustelidae.smoothcoatedotter.api.domain.authorization.api.AccessResource
-import io.mustelidae.smoothcoatedotter.api.domain.authorization.api.AuthenticationCheckResource
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigation
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
-import io.mustelidae.smoothcoatedotter.web.domain.project.ProjectManager
-import io.mustelidae.smoothcoatedotter.web.domain.user.User
-import io.mustelidae.smoothcoatedotter.web.domain.user.UserManager
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessCheckerHandler
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectManager
+import io.mustelidae.otter.lutrogale.web.domain.user.User
+import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.stream.Collectors

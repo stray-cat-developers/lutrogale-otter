@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
-import io.mustelidae.smoothcoatedotter.web.commons.constant.OsoriConstant.AuthenticationCheckType
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ProcessErr
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 

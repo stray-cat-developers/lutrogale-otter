@@ -3,11 +3,11 @@
 package io.mustelidae.otter.lutrogale.api.config
 
 import com.google.common.base.Strings
-import io.mustelidae.smoothcoatedotter.api.common.Error
-import io.mustelidae.smoothcoatedotter.api.common.ErrorCode
-import io.mustelidae.smoothcoatedotter.api.common.ErrorSource
-import io.mustelidae.smoothcoatedotter.utils.Jackson
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.api.common.Error
+import io.mustelidae.otter.lutrogale.api.common.ErrorCode
+import io.mustelidae.otter.lutrogale.api.common.ErrorSource
+import io.mustelidae.otter.lutrogale.utils.Jackson
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.error.ErrorAttributeOptions
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes

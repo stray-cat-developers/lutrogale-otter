@@ -1,10 +1,10 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.smoothcoatedotter.api.common.Audit
-import io.mustelidae.smoothcoatedotter.web.commons.constant.OsoriConstant
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityNavigationUnit
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserPersonalGrant
-import io.mustelidae.smoothcoatedotter.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityNavigationUnit
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import org.springframework.web.bind.annotation.RequestMethod
 import javax.persistence.CascadeType.ALL
 import javax.persistence.Column

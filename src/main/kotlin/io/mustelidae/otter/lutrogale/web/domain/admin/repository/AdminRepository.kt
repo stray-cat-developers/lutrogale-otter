@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin.repository
 
-import io.mustelidae.smoothcoatedotter.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

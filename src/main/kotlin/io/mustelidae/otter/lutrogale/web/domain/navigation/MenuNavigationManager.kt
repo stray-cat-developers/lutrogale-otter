@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.smoothcoatedotter.web.commons.constant.OsoriConstant.NavigationType
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.HumanErr
-import io.mustelidae.smoothcoatedotter.web.domain.navigation.repository.MenuNavigationRepository
+import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.NavigationType
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestMethod

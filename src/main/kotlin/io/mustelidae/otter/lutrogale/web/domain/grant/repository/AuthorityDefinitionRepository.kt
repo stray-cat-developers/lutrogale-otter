@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant.repository
 
-import io.mustelidae.smoothcoatedotter.web.domain.grant.AuthorityDefinition
+import io.mustelidae.otter.lutrogale.web.domain.grant.AuthorityDefinition
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

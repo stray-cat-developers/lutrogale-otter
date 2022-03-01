@@ -1,12 +1,12 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ApplicationException
-import io.mustelidae.smoothcoatedotter.web.commons.exception.HumanErr
-import io.mustelidae.smoothcoatedotter.web.commons.exception.ProcessErr
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserAuthorityGrant
-import io.mustelidae.smoothcoatedotter.web.domain.grant.UserPersonalGrant
-import io.mustelidae.smoothcoatedotter.web.domain.user.api.UserResource
-import io.mustelidae.smoothcoatedotter.web.domain.user.repository.UserRepository
+import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
+import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResource
+import io.mustelidae.otter.lutrogale.web.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.ArrayList
