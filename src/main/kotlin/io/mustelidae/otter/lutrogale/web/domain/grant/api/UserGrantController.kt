@@ -68,8 +68,8 @@ class UserGrantController(
 
     @GetMapping("/{userId}/grant/project/{projectId}")
     fun findGrantsForUser(@PathVariable projectId: Long, @PathVariable userId: Long): ApiRes<*> {
-        val authorityGrantResources: List<AuthorityGrantResource> = userGrantInteraction.getUserAuthorityGrants(userId, projectId)
-        val personalGrantResources: List<PersonalGrantResource> = userGrantInteraction.getUserPersonalGrants(userId, projectId)
+        val authorityGrantResources = userGrantInteraction.getUserAuthorityGrants(userId, projectId)
+        val personalGrantResources = userGrantInteraction.getUserPersonalGrants(userId, projectId)
         val map: MutableMap<String, Any> = HashMap()
         map["authorityDefinitions"] = authorityGrantResources
         map["menuNavigations"] = personalGrantResources

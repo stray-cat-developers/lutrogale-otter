@@ -9,7 +9,7 @@ import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserGrantInteraction
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
-import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
+import io.mustelidae.otter.lutrogale.web.domain.user.UserInteraction
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/maintenance/management/user")
 class UserController(
     private val userGrantInteraction: UserGrantInteraction,
-    private val userManager: UserManager,
+    private val userInteraction: UserInteraction,
     private val userFinder: UserFinder
 ) {
 
@@ -33,7 +33,7 @@ class UserController(
     fun create(
         @RequestBody request: UserResources.Request
     ): Reply<Long> {
-        val user = userManager.createBy(request.email, request.name, request.isPrivacy, request.department)
+        val user = userInteraction.createBy(request.email, request.name, request.isPrivacy, request.department)
         return user.id!!.toReply()
     }
 
@@ -48,7 +48,7 @@ class UserController(
         @PathVariable userId: Long,
         @RequestBody modify: UserResources.Modify.Info
     ): ApiRes<*> {
-        userManager.modifyBy(userId, modify.name, modify.department, modify.isPrivacy)
+        userInteraction.modifyBy(userId, modify.name, modify.department, modify.isPrivacy)
         return success()
     }
 

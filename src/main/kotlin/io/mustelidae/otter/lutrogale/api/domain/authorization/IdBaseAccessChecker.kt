@@ -1,23 +1,23 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
 
 class IdBaseAccessChecker(
-    private val menuNavigationManager: MenuNavigationManager
+    private val menuNavigationFinder: MenuNavigationFinder,
 ) : AccessChecker {
 
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        authenticationCheckResource: AuthenticationCheckResource
+        accessGrant: AuthenticationResources.Reply.AccessGrant
     ): List<AccessResources.Reply.AccessState> {
         val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val targetMenuNavigationGroup: List<MenuNavigation> =
-            menuNavigationManager.findBy(authenticationCheckResource.menuNavigationIdGroup!!)
+            menuNavigationFinder.findBy(accessGrant.menuNavigationIdGroup!!)
         for (menuNavigation in targetMenuNavigationGroup) {
-            if (sourceNavigationGroup.contains(menuNavigation) && menuNavigation.project!!.apiKey == authenticationCheckResource.apiKey) accessStates.add(
+            if (sourceNavigationGroup.contains(menuNavigation) && menuNavigation.project!!.apiKey == accessGrant.apiKey) accessStates.add(
                 AccessResources.Reply.AccessState.ofAccept(
                     menuNavigation.id!!
                 )

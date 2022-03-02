@@ -2,7 +2,6 @@ package io.mustelidae.otter.lutrogale.api.config
 
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
 import org.springframework.context.annotation.Configuration
-import org.springframework.util.StringUtils
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.context.request.RequestAttributes
@@ -42,12 +41,12 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
             errorAttributes["exception"] = error!!.javaClass.name
             addErrorMessage(errorAttributes, error)
         }
-        val message = getAttribute<Any>(requestAttributes, "javax.servlet.error.message")
-        if ((!StringUtils.isEmpty(message) || errorAttributes["message"] == null) &&
+        val message = getAttribute<String>(requestAttributes, "javax.servlet.error.message") as String
+        if ((message.isEmpty().not() || errorAttributes["message"] == null) &&
             error !is BindingResult
         ) {
             errorAttributes["message"] =
-                if (StringUtils.isEmpty(message)) "No message available" else message
+                message.ifEmpty { "No message available" }
         }
     }
 

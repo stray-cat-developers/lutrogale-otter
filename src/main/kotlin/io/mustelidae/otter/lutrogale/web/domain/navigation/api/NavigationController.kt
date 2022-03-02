@@ -2,7 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping(value = ["/project/{projectId}"])
 class NavigationController(
-    private val menuNavigationManager: MenuNavigationManager
+    private val menuNavigationInteraction: MenuNavigationInteraction
 ) {
 
     @PutMapping("/navigation/{menuNavigationId}")
@@ -24,7 +24,7 @@ class NavigationController(
         @PathVariable menuNavigationId: Long,
         @RequestBody modify: NavigationResources.Modify,
     ): ApiRes<*> {
-        menuNavigationManager.modify(menuNavigationId, modify.name, modify.type, modify.methodType, modify.uriBlock)
+        menuNavigationInteraction.modify(menuNavigationId, modify.name, modify.type, modify.methodType, modify.uriBlock)
         return success()
     }
 }

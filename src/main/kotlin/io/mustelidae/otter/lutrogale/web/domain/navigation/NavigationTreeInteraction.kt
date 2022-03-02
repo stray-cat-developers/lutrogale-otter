@@ -2,26 +2,26 @@ package io.mustelidae.otter.lutrogale.web.domain.navigation
 
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource.Companion.from
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Request.Branch
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.TreeBranchResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation.Companion.from
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.AuthorityNavigationUnitRepository
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.ArrayList
-import java.util.Optional
 
 /**
  * Created by HanJaehyun on 2016. 9. 22..
  */
 @Service
 @Transactional
-class NavigationTree(
+class NavigationTreeInteraction(
     private val menuNavigationRepository: MenuNavigationRepository,
     private val authorityNavigationUnitRepository: AuthorityNavigationUnitRepository,
-    private val menuNavigationManager: MenuNavigationManager,
+    private val menuNavigationInteraction: MenuNavigationInteraction,
+    private val menuNavigationFinder: MenuNavigationFinder,
     private val projectFinder: ProjectFinder
 ) {
 
@@ -48,44 +48,41 @@ class NavigationTree(
         return menuNavigationRepository.save(menuNavigation).id!!
     }
 
-    fun getTreeBranches(projectId: Long): List<TreeBranchResource> {
-        val treeBranchResources: MutableList<TreeBranchResource> = ArrayList()
+    fun getTreeBranches(projectId: Long): List<MenuTreeResources.Reply.TreeBranch> {
+        val treeBranches: MutableList<MenuTreeResources.Reply.TreeBranch> = ArrayList()
         val project = projectFinder.findByLive(projectId)
         val menuNavigations: List<MenuNavigation> = project.menuNavigations
         if (menuNavigations.isEmpty())
             throw ApplicationException(HumanErr.IS_EMPTY)
 
         for (menuNavigation in menuNavigations) {
-            treeBranchResources.add(this.getTreeBranch(menuNavigation))
+            treeBranches.add(this.getTreeBranch(menuNavigation))
         }
-        return treeBranchResources
+        return treeBranches
     }
 
-    fun getTreeBranch(projectId: Long, menuNavigationId: Long): TreeBranchResource {
-        val navigation = menuNavigationManager.findBy(projectId, menuNavigationId)
+    fun getTreeBranch(projectId: Long, menuNavigationId: Long): MenuTreeResources.Reply.TreeBranch {
+        val navigation = menuNavigationFinder.findByMenuNavigationId(projectId, menuNavigationId)
         return this.getTreeBranch(navigation)
     }
 
-    private fun getTreeBranch(menuNavigation: MenuNavigation): TreeBranchResource {
-        val fullUrl = menuNavigationManager.getFullUrl(menuNavigation)
+    private fun getTreeBranch(menuNavigation: MenuNavigation): MenuTreeResources.Reply.TreeBranch {
+        val fullUrl = menuNavigationInteraction.getFullUrl(menuNavigation)
         val menuNavigationResource = from(menuNavigation, fullUrl)
-        return TreeBranchResource.of(menuNavigation.treeId, menuNavigation.parentTreeId, menuNavigationResource)
+        return MenuTreeResources.Reply.TreeBranch.of(menuNavigation.treeId, menuNavigation.parentTreeId, menuNavigationResource)
     }
 
     fun moveBranch(projectId: Long, nodeId: Long, newParentId: String?): Boolean {
-        val menuNavigation = Optional.ofNullable(menuNavigationRepository.findByProjectIdAndId(projectId, nodeId))
-        if (!menuNavigation.isPresent) throw ApplicationException(HumanErr.IS_EMPTY)
-        val navigation = menuNavigation.get()
+
+        val navigation = menuNavigationFinder.findByMenuNavigationId(projectId, nodeId)
         navigation.parentTreeId = newParentId!!
-        val parentMenuNavigation = menuNavigationRepository.findByProjectIdAndTreeId(projectId, newParentId)
-        navigation.setBy(parentMenuNavigation!!)
+        val parentMenuNavigation = menuNavigationFinder.findByTreeId(projectId, newParentId)
+        navigation.setBy(parentMenuNavigation)
         return true
     }
 
     fun removeBranch(projectId: Long, id: Long): Boolean {
-        val menuNavigation = menuNavigationRepository.findByProjectIdAndId(projectId, id)
-            ?: throw ApplicationException(HumanErr.IS_EMPTY)
-
+        val menuNavigation = menuNavigationFinder.findByMenuNavigationId(projectId, id)
         menuNavigation.expire()
 
         val authorityNavigationUnits: List<AuthorityNavigationUnit> =

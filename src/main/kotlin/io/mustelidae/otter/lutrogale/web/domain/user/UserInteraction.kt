@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
  * Created by seooseok on 2016. 10. 5..
  */
 @Service
-class UserManager(
+class UserInteraction(
     val userRepository: UserRepository,
     val userFinder: UserFinder
 ) {

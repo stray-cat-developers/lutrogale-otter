@@ -9,7 +9,7 @@ import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.Navigati
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
 import io.mustelidae.otter.lutrogale.web.commons.exception.SystemErr
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.GeneralSecurityException
-import javax.validation.Valid
 
 @Tag(name = "권한 체크", description = "이메일 사용자의 접근 권한 여부를 체크합니다.")
 @RestController
@@ -35,7 +34,7 @@ class AuthorizationController(
     private val clientCertificationInteraction: ClientCertificationInteraction,
     private val userFinder: UserFinder,
     private val projectFinder: ProjectFinder,
-    private val menuNavigationManager: MenuNavigationManager
+    private val menuNavigationInteraction: MenuNavigationInteraction
 ) {
 
     /**
@@ -61,21 +60,21 @@ class AuthorizationController(
 
             return accessStates.toReplies()
         }
-        val checkResource: AuthenticationCheckResource = AuthenticationCheckResource.ofIdBase(email, apiKey, ids)
-        val accessStates: List<AccessResources.Reply.AccessState> = clientCertificationInteraction.check(checkResource)
+        val accessGrant = AuthenticationResources.Reply.AccessGrant.ofIdBase(email, apiKey, ids)
+        val accessStates: List<AccessResources.Reply.AccessState> = clientCertificationInteraction.check(accessGrant)
         return accessStates.toReplies()
     }
 
     @PostMapping("/user/{email}/authorization-check/uri")
     fun urlCheck(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
-        @PathVariable email:String,
-        @RequestBody request: @Valid UriBaseAuthorityCheckRequest
+        @PathVariable email: String,
+        @RequestBody request: AccessResources.Request.UriBase
     ): Replies<AccessResources.Reply.AccessState> {
         val accessUris: MutableList<AccessUri> = ArrayList()
         try {
             var uri: URI
-            for (uriRequest in request.accessUriRequests) {
+            for (uriRequest in request.accessUris) {
                 uri = URI(uriRequest.getDecryptedUri(apiKey))
                 accessUris.add(AccessUri.of(uri.path, RequestMethod.valueOf(uriRequest.methodType)))
             }
@@ -92,9 +91,9 @@ class AuthorizationController(
             )
             return accessStates.toReplies()
         }
-        val checkResource: AuthenticationCheckResource =
-            AuthenticationCheckResource.ofUrlBase(email, apiKey, accessUris)
-        val accessStates: List<AccessResources.Reply.AccessState> = clientCertificationInteraction.check(checkResource)
+        val accessGrant: AuthenticationResources.Reply.AccessGrant =
+            AuthenticationResources.Reply.AccessGrant.ofUrlBase(email, apiKey, accessUris)
+        val accessStates: List<AccessResources.Reply.AccessState> = clientCertificationInteraction.check(accessGrant)
 
         return accessStates.toReplies()
     }
@@ -128,7 +127,7 @@ class AuthorizationController(
         val navigations = groupMenuNavigations.plus(personalMenuNavigations)
 
         val urls = navigations.map {
-            AccessUri.of(menuNavigationManager.getFullUrl(it), it.methodType)
+            AccessUri.of(menuNavigationInteraction.getFullUrl(it), it.methodType)
         }
 
         return urls.toReplies()

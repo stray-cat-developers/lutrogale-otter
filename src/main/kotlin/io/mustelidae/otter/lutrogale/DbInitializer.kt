@@ -16,10 +16,10 @@ class DbInitializer(
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
 
-        val existedOsori = adminRepository.findByIdOrNull(1)
+        val supervisor = adminRepository.findByIdOrNull(1)
 
-        if (existedOsori == null) {
-            val osoriAdmin = Admin(
+        if (supervisor == null) {
+            val admin = Admin(
                 "admin@osori.com",
                 "슈퍼 관리자",
                 "오소리의 모든 권한을 가지고 있습니다.",
@@ -28,7 +28,7 @@ class DbInitializer(
                 setPassword("admin")
                 status = true
             }
-            adminRepository.save(osoriAdmin)
+            adminRepository.save(admin)
         }
     }
 }

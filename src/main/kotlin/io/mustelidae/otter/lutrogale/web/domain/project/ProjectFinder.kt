@@ -2,8 +2,8 @@ package io.mustelidae.otter.lutrogale.web.domain.project
 
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.repository.ProjectRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class ProjectFinder(
     private val projectRepository: ProjectRepository,
-    private val menuNavigationManager: MenuNavigationManager
+    private val menuNavigationInteraction: MenuNavigationInteraction
 ) {
 
     fun findAllByLive(): List<Project> {
@@ -43,11 +43,11 @@ class ProjectFinder(
         return project
     }
 
-    fun findAllByIncludeNavigationsProject(id: Long): List<MenuNavigationResource> {
+    fun findAllByIncludeNavigationsProject(id: Long): List<ReplyOfMenuNavigation> {
         val project = findByLive(id)
 
         return project.menuNavigations.map {
-            MenuNavigationResource.from(it, menuNavigationManager.getFullUrl(it))
+            ReplyOfMenuNavigation.from(it, menuNavigationInteraction.getFullUrl(it))
         }
     }
 }

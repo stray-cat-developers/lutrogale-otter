@@ -3,8 +3,8 @@ package io.mustelidae.otter.lutrogale.web.domain.authority.api
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityBundleInteraction
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuNavigationResource
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.TreeBranchResource
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Reply.TreeBranch
+import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -44,7 +44,7 @@ class AuthorityController(
         @PathVariable projectId: Long,
         @PathVariable authId: Long
     ): ApiRes<*> {
-        val menuNavigations: List<MenuNavigationResource> = authorityBundleInteraction.lookInBundle(authId)
+        val menuNavigations: List<ReplyOfMenuNavigation> = authorityBundleInteraction.lookInBundle(authId)
         return ApiRes<Any?>(menuNavigations)
     }
 
@@ -53,8 +53,8 @@ class AuthorityController(
         @PathVariable projectId: Long,
         @PathVariable authId: Long
     ): ApiRes<*> {
-        val treeBranchResources: List<TreeBranchResource> = authorityBundleInteraction.lookInBundleForTreeFormat(authId)
-        return ApiRes<Any?>(treeBranchResources)
+        val treeBranches: List<TreeBranch> = authorityBundleInteraction.lookInBundleForTreeFormat(authId)
+        return ApiRes<Any?>(treeBranches)
     }
 
     @PutMapping("/{projectId}/authority-bundle/{authId}")

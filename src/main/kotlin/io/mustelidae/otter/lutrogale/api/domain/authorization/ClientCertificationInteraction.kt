@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationResources
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
@@ -31,7 +31,7 @@ class ClientCertificationInteraction(
         return user.status === User.Status.allow
     }
 
-    fun check(checkResource: AuthenticationCheckResource): List<AccessResources.Reply.AccessState> {
+    fun check(checkResource: AuthenticationResources.Reply.AccessGrant): List<AccessResources.Reply.AccessState> {
         val project = projectFinder.findByLiveProjectOfApiKey(checkResource.apiKey)
 
         val user: User = userFinder.findBy(checkResource.email)

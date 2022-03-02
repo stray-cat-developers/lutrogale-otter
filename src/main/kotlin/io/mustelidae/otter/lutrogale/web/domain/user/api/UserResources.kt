@@ -2,8 +2,8 @@ package io.mustelidae.otter.lutrogale.web.domain.user.api
 
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
-import io.mustelidae.otter.lutrogale.web.domain.grant.api.AuthorityGrantResource
-import io.mustelidae.otter.lutrogale.web.domain.grant.api.PersonalGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Reply.AuthorityGrant
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Reply.PersonalGrant
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import io.mustelidae.otter.lutrogale.web.domain.user.User
@@ -66,8 +66,8 @@ class UserResources {
             val status: User.Status,
             val department: String? = null,
             val projects: List<ProjectResources.Reply>? = null,
-            val authorityDefinitions: List<AuthorityGrantResource>? = null,
-            val menuNavigations: List<PersonalGrantResource>? = null
+            val authorityDefinitions: List<AuthorityGrant>? = null,
+            val menuNavigations: List<PersonalGrant>? = null
         ) {
             companion object {
                 fun from(
@@ -78,8 +78,8 @@ class UserResources {
                 ): Detail {
 
                     val repliesOfProject = projects.map { ProjectResources.Reply.from(it) }
-                    val authorityGrantResources = userAuthorityGrants.map { AuthorityGrantResource.of(it.authorityDefinition!!, it.createdAt!!) }
-                    val personalGrantResources = userPersonalGrants.map { PersonalGrantResource.of(it.menuNavigation!!, it.createdAt!!) }
+                    val authorityGrants = userAuthorityGrants.map { AuthorityGrant.from(it.authorityDefinition!!, it.createdAt!!) }
+                    val personalGrants = userPersonalGrants.map { PersonalGrant.from(it.menuNavigation!!, it.createdAt!!) }
 
                     return user.run {
                         Detail(
@@ -91,8 +91,8 @@ class UserResources {
                             status,
                             department,
                             repliesOfProject,
-                            authorityGrantResources,
-                            personalGrantResources
+                            authorityGrants,
+                            personalGrants
                         )
                     }
                 }

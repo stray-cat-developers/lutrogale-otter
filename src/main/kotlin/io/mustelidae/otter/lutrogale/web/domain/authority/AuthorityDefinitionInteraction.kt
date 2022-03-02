@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 @Transactional
-class AuthorityDefinitionManager(
+class AuthorityDefinitionInteraction(
     private val authorityDefinitionRepository: AuthorityDefinitionRepository,
 ) {
 

@@ -3,50 +3,49 @@ package io.mustelidae.otter.lutrogale.web.domain.grant
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinitionFinder
-import io.mustelidae.otter.lutrogale.web.domain.grant.api.AuthorityGrantResource
-import io.mustelidae.otter.lutrogale.web.domain.grant.api.PersonalGrantResource
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Reply.AuthorityGrant
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Reply.PersonalGrant
 import io.mustelidae.otter.lutrogale.web.domain.grant.repository.UserAuthorityGrantRepository
 import io.mustelidae.otter.lutrogale.web.domain.grant.repository.UserPersonalGrantRepository
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-/**
- * Created by HanJaehyun on 2016. 9. 21..
- */
 @Transactional
 @Service
 class UserGrantInteraction(
     private val userFinder: UserFinder,
     private val authorityDefinitionFinder: AuthorityDefinitionFinder,
-    private val menuNavigationManager: MenuNavigationManager,
+    private val menuNavigationInteraction: MenuNavigationInteraction,
     private val userAuthorityGrantRepository: UserAuthorityGrantRepository,
     private val userPersonalGrantRepository: UserPersonalGrantRepository,
     private val userAuthorityGrantFinder: UserAuthorityGrantFinder,
-    private val userPersonalGrantFinder: UserPersonalGrantFinder
+    private val userPersonalGrantFinder: UserPersonalGrantFinder,
+    private val menuNavigationFinder: MenuNavigationFinder
 ) {
 
-    fun getUserAuthorityGrants(id: Long, projectId: Long): List<AuthorityGrantResource> {
+    fun getUserAuthorityGrants(id: Long, projectId: Long): List<AuthorityGrant> {
         val user = userFinder.findBy(id)
 
         return user.userAuthorityGrants
             .filter { it.authorityDefinition!!.project!!.id == projectId }
             .map {
-                AuthorityGrantResource.of(it.authorityDefinition!!, it.createdAt!!)
+                AuthorityGrant.from(it.authorityDefinition!!, it.createdAt!!)
             }
     }
 
-    fun getUserPersonalGrants(id: Long, projectId: Long): List<PersonalGrantResource> {
+    fun getUserPersonalGrants(id: Long, projectId: Long): List<PersonalGrant> {
         val user = userFinder.findBy(id)
 
         return user.userPersonalGrants.filter { it.menuNavigation!!.project!!.id == projectId }
             .map {
-                PersonalGrantResource.of(
+                PersonalGrant.from(
                     it.menuNavigation!!,
                     it.createdAt!!,
-                    menuNavigationManager.getFullUrl(it.menuNavigation!!)
+                    menuNavigationInteraction.getFullUrl(it.menuNavigation!!)
                 )
             }
     }
@@ -90,7 +89,7 @@ class UserGrantInteraction(
 
     fun addByPersonalGrant(userId: Long, projectId: Long, menuNavigationIds: List<Long>) {
         val user = userFinder.findByStatusAllow(userId)
-        val menuNavigations: List<MenuNavigation> = menuNavigationManager.findByLive(menuNavigationIds)
+        val menuNavigations: List<MenuNavigation> = menuNavigationFinder.findByLive(menuNavigationIds)
         for (menuNavigation in menuNavigations) {
             if (menuNavigation.project!!.id != projectId)
                 throw ApplicationException(HumanErr.INVALID_INCLUDE)
@@ -110,7 +109,7 @@ class UserGrantInteraction(
 
     fun removeByPersonalGrant(userId: Long, projectId: Long, menuNavigationIds: List<Long>) {
         userFinder.findByStatusAllow(userId)
-        val menuNavigations: List<MenuNavigation> = menuNavigationManager.findByLive(menuNavigationIds)
+        val menuNavigations: List<MenuNavigation> = menuNavigationFinder.findByLive(menuNavigationIds)
 
         for (menuNavigation in menuNavigations) {
             if (menuNavigation.project!!.id != projectId)

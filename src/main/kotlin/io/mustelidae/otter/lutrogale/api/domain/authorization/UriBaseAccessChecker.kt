@@ -1,28 +1,28 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationCheckResource
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.util.AntPathMatcher
 
 class UriBaseAccessChecker(
-    private val menuNavigationManager: MenuNavigationManager
+    private val menuNavigationInteraction: MenuNavigationInteraction
 ) : AccessChecker {
 
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        authenticationCheckResource: AuthenticationCheckResource
+        accessGrant: AuthenticationResources.Reply.AccessGrant
     ): List<AccessResources.Reply.AccessState> {
         val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val antPathMatcher = AntPathMatcher()
-        for (accessUri in authenticationCheckResource.accessUriGroup!!) {
+        for (accessUri in accessGrant.accessUriGroup!!) {
             var isMatch = false
             var matchedSourceUrl: String? = null
             for (menuNavigation in sourceNavigationGroup) {
-                val sourceUrl: String = menuNavigationManager.getFullUrl(menuNavigation)
+                val sourceUrl: String = menuNavigationInteraction.getFullUrl(menuNavigation)
                 if (antPathMatcher.match(sourceUrl, accessUri.uri) &&
-                    menuNavigation.methodType == accessUri.requestMethod && menuNavigation.project!!.apiKey == authenticationCheckResource.apiKey
+                    menuNavigation.methodType == accessUri.requestMethod && menuNavigation.project!!.apiKey == accessGrant.apiKey
                 ) {
                     isMatch = true
                     matchedSourceUrl = sourceUrl

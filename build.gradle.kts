@@ -6,11 +6,11 @@ plugins {
     id("org.jmailen.kotlinter") version "3.6.0"
     id("com.avast.gradle.docker-compose") version "0.14.9"
     kotlin("jvm") version "1.5.32"
-    kotlin("plugin.spring") version "1.5.32"
-    kotlin("plugin.jpa") version "1.5.32"
-    kotlin("plugin.allopen") version "1.5.32"
-    kotlin("plugin.noarg") version "1.5.32"
-    kotlin("kapt") version "1.5.32"
+    kotlin("plugin.spring") version "1.6.10"
+    kotlin("plugin.jpa") version "1.6.10"
+    kotlin("plugin.allopen") version "1.6.10"
+    kotlin("plugin.noarg") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
 }
 
 group = "io.mustelidae.otter.lutrogale"
@@ -45,8 +45,8 @@ dependencies {
     implementation("com.querydsl:querydsl-core:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.3")
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.5")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.5")
 
     testImplementation("com.h2database:h2")
@@ -55,7 +55,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.session:spring-session-jdbc")
     implementation("org.hibernate:hibernate-envers")
-    implementation("com.google.guava:guava:23.0")
+    implementation("com.google.guava:guava:31.0.1-jre")
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 }

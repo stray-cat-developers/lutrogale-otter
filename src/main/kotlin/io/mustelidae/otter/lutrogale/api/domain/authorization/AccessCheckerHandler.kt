@@ -3,7 +3,8 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
-import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationManager
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.stereotype.Service
 
 /**
@@ -12,14 +13,15 @@ import org.springframework.stereotype.Service
  */
 @Service
 class AccessCheckerHandler(
-    private val menuNavigationManager: MenuNavigationManager
+    private val menuNavigationInteraction: MenuNavigationInteraction,
+    private val menuNavigationFinder: MenuNavigationFinder
 ) {
 
     fun handle(checkType: AuthenticationCheckType): AccessChecker {
         if (checkType === AuthenticationCheckType.id)
-            return IdBaseAccessChecker(menuNavigationManager)
+            return IdBaseAccessChecker(menuNavigationFinder)
         if (checkType === AuthenticationCheckType.uri)
-            return UriBaseAccessChecker(menuNavigationManager)
+            return UriBaseAccessChecker(menuNavigationInteraction)
         throw ApplicationException(ProcessErr.WRONG_DEVELOP_PROCESS)
     }
 }

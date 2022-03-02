@@ -6,7 +6,7 @@ import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
-import io.mustelidae.otter.lutrogale.web.domain.user.UserManager
+import io.mustelidae.otter.lutrogale.web.domain.user.UserInteraction
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/v1/maintenance/management/users")
 class UsersController(
-    private val userManager: UserManager,
+    private val userInteraction: UserInteraction,
     private val userFinder: UserFinder
 ) {
 
@@ -41,13 +41,13 @@ class UsersController(
         @PathVariable userIds: List<Long>,
         @RequestBody modify: UserResources.Modify.UserState
     ): ApiRes<*> {
-        userManager.modifyBy(userIds, modify.status)
+        userInteraction.modifyBy(userIds, modify.status)
         return success()
     }
 
     @DeleteMapping("/{userIds}")
     fun expireStatus(@PathVariable userIds: List<Long>): ApiRes<*> {
-        userManager.expireBy(userIds)
+        userInteraction.expireBy(userIds)
         return success()
     }
 }
