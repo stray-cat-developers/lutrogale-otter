@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jmailen.kotlinter") version "3.6.0"
     id("com.avast.gradle.docker-compose") version "0.14.9"
-    kotlin("jvm") version "1.5.32"
+    kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
     kotlin("plugin.jpa") version "1.6.10"
     kotlin("plugin.allopen") version "1.6.10"
@@ -25,7 +25,7 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.32")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

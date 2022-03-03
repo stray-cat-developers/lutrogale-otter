@@ -16,7 +16,7 @@ import kotlin.Throws
  * 로그인 인터프리터
  */
 @Configuration
-class OsoriLoginHandlerInterceptor : HandlerInterceptor {
+class AdminLoginHandlerInterceptor : HandlerInterceptor {
     @Throws(Exception::class)
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
 

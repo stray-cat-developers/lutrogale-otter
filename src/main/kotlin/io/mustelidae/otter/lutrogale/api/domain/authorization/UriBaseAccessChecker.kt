@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.util.AntPathMatcher
@@ -12,7 +11,7 @@ class UriBaseAccessChecker(
 
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        accessGrant: AuthenticationResources.Reply.AccessGrant
+        accessGrant: AccessGrant
     ): List<AccessResources.Reply.AccessState> {
         val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val antPathMatcher = AntPathMatcher()
@@ -22,7 +21,7 @@ class UriBaseAccessChecker(
             for (menuNavigation in sourceNavigationGroup) {
                 val sourceUrl: String = menuNavigationInteraction.getFullUrl(menuNavigation)
                 if (antPathMatcher.match(sourceUrl, accessUri.uri) &&
-                    menuNavigation.methodType == accessUri.requestMethod && menuNavigation.project!!.apiKey == accessGrant.apiKey
+                    menuNavigation.methodType == accessUri.methodType && menuNavigation.project!!.apiKey == accessGrant.apiKey
                 ) {
                     isMatch = true
                     matchedSourceUrl = sourceUrl

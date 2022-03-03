@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper.getSessionByAdmin
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminFinder
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminInteraction
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession
 /**
  * Created by seooseok on 2016. 10. 18..
  */
+@LoginCheck
 @RestController
 @RequestMapping("/v1/maintenance/management/admin")
 class AdminController(

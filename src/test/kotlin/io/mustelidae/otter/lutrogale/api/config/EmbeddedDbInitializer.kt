@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale
+package io.mustelidae.otter.lutrogale.api.config
 
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
@@ -19,10 +19,10 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.RequestMethod
 
-@Profile("default")
+@Profile("embedded")
 @Configuration
 @Transactional
-class DbInitializer(
+class EmbeddedDbInitializer(
     private val adminRepository: AdminRepository,
     private val projectController: ProjectController,
     private val menuTreeController: MenuTreeController,
@@ -47,7 +47,7 @@ class DbInitializer(
     private fun addUser(): Long {
         return userController.create(
             UserResources.Request(
-                "lutrogale@otter.com",
+                userEmail,
                 "Lutrogale Otter",
                 false,
                 "Otter World"
@@ -150,5 +150,9 @@ class DbInitializer(
             }
             adminRepository.save(admin)
         }
+    }
+
+    companion object {
+        const val userEmail = "lutrogale@otter.com"
     }
 }

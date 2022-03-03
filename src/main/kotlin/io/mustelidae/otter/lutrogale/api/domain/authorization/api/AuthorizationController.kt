@@ -2,32 +2,26 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
 import io.mustelidae.otter.lutrogale.api.common.Replies
 import io.mustelidae.otter.lutrogale.api.common.toReplies
-import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessUri
+import io.mustelidae.otter.lutrogale.api.config.DataNotFindException
+import io.mustelidae.otter.lutrogale.api.domain.authorization.AccessGrant
 import io.mustelidae.otter.lutrogale.api.domain.authorization.ClientCertificationInteraction
 import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.NavigationType
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.commons.exception.SystemErr
+import io.mustelidae.otter.lutrogale.utils.toDecode
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
-import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.net.URI
-import java.net.URISyntaxException
-import java.security.GeneralSecurityException
 
 @Tag(name = "권한 체크", description = "이메일 사용자의 접근 권한 여부를 체크합니다.")
+@LoginCheck(false)
 @RestController
 @RequestMapping("/v1/verification")
 class AuthorizationController(
@@ -44,90 +38,64 @@ class AuthorizationController(
      * @apiName 네비ID 권한 체크
      * @apiDescription 오소리 admin에 등록된 메뉴 네비게이션 ID를 가지고 권한을 체크 합니다.
      */
-    @PostMapping("/user/{email}/authorization-check/id")
+    @PostMapping("authorization-check/id")
     fun idChecks(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
-        @PathVariable email: String,
-        @RequestParam ids: List<Long>
+        @RequestBody request: AccessResources.Request.IdBase
     ): Replies<AccessResources.Reply.AccessState> {
-        if (!clientCertificationInteraction.isAuthorizedUser(email)) {
+        val ids = request.ids
+        val email = request.email
+        if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
             val accessStates = ids.map {
-                AccessResources.Reply.AccessState.ofDenied(
-                    it,
-                    "최초 접근한 유저이며 유저의 권한 등록이 필요합니다."
-                )
+                AccessResources.Reply.AccessState.ofDenied(it, "최초 접근한 유저이며 유저의 권한 등록이 필요합니다.")
             }
-
             return accessStates.toReplies()
         }
-        val accessGrant = AuthenticationResources.Reply.AccessGrant.ofIdBase(email, apiKey, ids)
+        val accessGrant = AccessGrant.ofIdBase(email, apiKey, ids)
         val accessStates: List<AccessResources.Reply.AccessState> = clientCertificationInteraction.check(accessGrant)
         return accessStates.toReplies()
     }
 
-    @PostMapping("/user/{email}/authorization-check/uri")
+    @PostMapping("authorization-check/uri")
     fun urlCheck(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
-        @PathVariable email: String,
         @RequestBody request: AccessResources.Request.UriBase
     ): Replies<AccessResources.Reply.AccessState> {
-        val accessUris: MutableList<AccessUri> = ArrayList()
-        try {
-            var uri: URI
-            for (uriRequest in request.accessUris) {
-                uri = URI(uriRequest.getDecryptedUri(apiKey))
-                accessUris.add(AccessUri.of(uri.path, RequestMethod.valueOf(uriRequest.methodType)))
-            }
-        } catch (e: GeneralSecurityException) {
-            throw ApplicationException(SystemErr.ERROR_ENCRYPT)
-        } catch (e: URISyntaxException) {
-            throw ApplicationException(HumanErr.INVALID_URL)
-        }
-
-        if (!clientCertificationInteraction.isAuthorizedUser(email)) {
+        val accessUris = request.uris.map { AccessResources.AccessUri.of(it.uri, it.methodType) }
+        val email = request.email
+        if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
             val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
             accessStates.addAll(
                 accessUris.map { AccessResources.Reply.AccessState.ofDenied(it.uri, "최초 접근한 유저이며 유저의 권한 등록이 필요합니다.") }
             )
             return accessStates.toReplies()
         }
-        val accessGrant: AuthenticationResources.Reply.AccessGrant =
-            AuthenticationResources.Reply.AccessGrant.ofUrlBase(email, apiKey, accessUris)
-        val accessStates: List<AccessResources.Reply.AccessState> = clientCertificationInteraction.check(accessGrant)
+        val accessGrant = AccessGrant.ofUrlBase(email, apiKey, accessUris)
+        val accessStates = clientCertificationInteraction.check(accessGrant)
 
         return accessStates.toReplies()
     }
 
-    @GetMapping("/user/{email}/project/{projectId}/urls")
-    fun accessibleList(
+    @GetMapping("accessible-urls")
+    fun findAllAccessibleGrant(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
-        @PathVariable email: String,
-        @PathVariable projectId: Long,
-        @RequestParam(required = false) type: NavigationType?
-    ): Replies<AccessUri> {
-        val user: User = userFinder.findBy(email)
+        @RequestParam email: String,
+    ): Replies<AccessResources.AccessUri> {
+        val userEmail = email.toDecode()
+        val user = userFinder.findBy(userEmail) ?: throw DataNotFindException(userEmail, "사용자가 존재하지 않습니다.")
+        val project = projectFinder.findByLiveProjectOfApiKey(apiKey)
 
-        val project = projectFinder.findByLive(projectId)
-
-        if (type != null && !listOf(*NavigationType.values()).contains(type))
-            throw ApplicationException(HumanErr.INVALID_ARGS)
-
-        var groupMenuNavigations = user.authorityDefinitions
+        val groupMenuNavigations = user.authorityDefinitions
             .filter { it.project!!.id == project.id }
             .flatMap { it.menuNavigations }
 
-        var personalMenuNavigations = user.menuNavigations
+        val personalMenuNavigations = user.menuNavigations
             .filter { it.project!!.id == project.id }
-
-        if (type != null) {
-            groupMenuNavigations = groupMenuNavigations.filter { it.type == type }
-            personalMenuNavigations = personalMenuNavigations.filter { it.type == type }
-        }
 
         val navigations = groupMenuNavigations.plus(personalMenuNavigations)
 
         val urls = navigations.map {
-            AccessUri.of(menuNavigationInteraction.getFullUrl(it), it.methodType)
+            AccessResources.AccessUri.of(menuNavigationInteraction.getFullUrl(it), it.methodType)
         }
 
         return urls.toReplies()

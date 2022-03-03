@@ -12,7 +12,7 @@ logging:
     org.hibernate.tool.schema: error
     com.zaxxer.hikari: error
     io.swagger.models.parameters.AbstractSerializableParameter: error
-    io.mustelidae.otter.neotropical: debug
+    io.mustelidae.otter.lutrogale: debug
 
 
 server:

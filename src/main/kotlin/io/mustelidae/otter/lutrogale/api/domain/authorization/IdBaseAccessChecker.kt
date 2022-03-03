@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
 
@@ -11,7 +10,7 @@ class IdBaseAccessChecker(
 
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        accessGrant: AuthenticationResources.Reply.AccessGrant
+        accessGrant: AccessGrant
     ): List<AccessResources.Reply.AccessState> {
         val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val targetMenuNavigationGroup: List<MenuNavigation> =

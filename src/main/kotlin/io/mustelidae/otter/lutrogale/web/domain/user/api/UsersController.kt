@@ -4,6 +4,7 @@ import io.mustelidae.otter.lutrogale.api.common.Replies
 import io.mustelidae.otter.lutrogale.api.common.toReplies
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.UserInteraction
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 /**
  * Created by seooseok on 2016. 10. 6..
  */
+@LoginCheck
 @RestController
 @RequestMapping("/v1/maintenance/management/users")
 class UsersController(

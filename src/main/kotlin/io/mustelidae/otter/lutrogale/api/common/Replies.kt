@@ -1,6 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.util.Assert
 import java.util.ArrayList
 import java.util.Collections
@@ -23,6 +24,7 @@ constructor(content: Iterable<T>) : Iterable<T> {
         }
     }
 
+    @Schema(name = "result")
     @JsonProperty("result")
     open fun getContent(): Collection<T> {
         return Collections.unmodifiableCollection(content!!)

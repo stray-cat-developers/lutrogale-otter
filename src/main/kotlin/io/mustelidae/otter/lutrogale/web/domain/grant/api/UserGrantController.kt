@@ -3,6 +3,7 @@ package io.mustelidae.otter.lutrogale.web.domain.grant.api
 import io.mustelidae.otter.lutrogale.api.common.Reply
 import io.mustelidae.otter.lutrogale.api.common.toReply
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserGrantInteraction
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@LoginCheck
 @RestController
 @RequestMapping("/v1/maintenance/management/user")
 class UserGrantController(

@@ -1,7 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.bind.annotation.RequestMethod
 
 class MenuTreeResources {
@@ -15,17 +17,32 @@ class MenuTreeResources {
             val uriBlock: String,
             val type: OsoriConstant.NavigationType,
             val methodType: RequestMethod
-        )
+        ) {
+            @JsonIgnore
+            fun getRefineUriBlock(): String {
+                var block = uriBlock
+
+                if (uriBlock.first() != '/')
+                    block = "/$block"
+
+                if (uriBlock.last() == '/')
+                    block = block.substring(0, block.lastIndex)
+                return block
+            }
+        }
     }
 
     class Reply {
         class TreeBranch(
+            @Schema(name = "id")
             @JsonProperty(value = "id")
             val treeId: String,
+            @Schema(name = "parent")
             @JsonProperty(value = "parent")
             val parentTreeId: String,
             val text: String? = null,
             val type: String? = null,
+            @Schema(name = "a_attr")
             @JsonProperty(value = "a_attr")
             val replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation? = null
         ) {

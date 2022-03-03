@@ -1,42 +1,33 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
-import io.mustelidae.otter.lutrogale.web.commons.utils.DecryptUtil
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.bind.annotation.RequestMethod
 
 class AccessResources {
 
+    enum class CheckWay {
+        ID, URI
+    }
+
     class Request {
         @Schema(name = "Access.Request.UriBase")
         class UriBase(
-            val accessUris: List<AccessUri>
-        ) {
-            @Schema(name = "Access.Request.UriBase.AccessUri")
-            class AccessUri(
-                @JsonProperty("uri")
-                val encryptedUri: String,
-                val methodType: String
-            ) {
-                val requestMethod: RequestMethod
-                    get() = RequestMethod.valueOf(methodType)
-
-                @JsonIgnore
-                fun getDecryptedUri(apiKey: String): String {
-                    val key = apiKey.substring(0, 16)
-                    return DecryptUtil.aes128(key, encryptedUri)
-                }
-            }
-        }
+            val email: String,
+            val uris: List<AccessUri>
+        )
+        @Schema(name = "Access.Request.IdBase")
+        class IdBase(
+            val email: String,
+            val ids: List<Long>
+        )
     }
 
     class Reply {
         @Schema(name = "Access.Reply.AccessState")
         class AccessState(
             val target: String,
-            val accessResult: Boolean = false,
-            val checkWay: String,
+            val hasPermission: Boolean = false,
+            val checkWay: CheckWay,
             val cause: String? = null
         ) {
 
@@ -45,7 +36,7 @@ class AccessResources {
                     return AccessState(
                         targetMenuNavigationId.toString(),
                         true,
-                        "ID"
+                        CheckWay.ID
                     )
                 }
 
@@ -53,7 +44,7 @@ class AccessResources {
                     return AccessState(
                         targetMenuNavigationId.toString(),
                         false,
-                        "ID",
+                        CheckWay.ID,
                         cause
                     )
                 }
@@ -62,7 +53,7 @@ class AccessResources {
                     return AccessState(
                         targetUrl,
                         true,
-                        "URI"
+                        CheckWay.URI
                     )
                 }
 
@@ -70,10 +61,22 @@ class AccessResources {
                     return AccessState(
                         targetUrl,
                         false,
-                        "URI",
+                        CheckWay.URI,
                         cause
                     )
                 }
+            }
+        }
+    }
+
+    @Schema(name = "Access.AccessUri")
+    class AccessUri(
+        val uri: String,
+        val methodType: RequestMethod
+    ) {
+        companion object {
+            fun of(uri: String, requestMethod: RequestMethod): AccessUri {
+                return AccessUri(uri, requestMethod)
             }
         }
     }

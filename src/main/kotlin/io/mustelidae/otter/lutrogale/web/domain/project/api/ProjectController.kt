@@ -3,6 +3,7 @@ package io.mustelidae.otter.lutrogale.web.domain.project.api
 import io.mustelidae.otter.lutrogale.api.common.Reply
 import io.mustelidae.otter.lutrogale.api.common.toReply
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.commons.toApiRes
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 /**
  * Created by seooseok on 2016. 9. 20..
  */
+@LoginCheck
 @RestController
 @RequestMapping("/v1/maintenance")
 class ProjectController(

@@ -25,11 +25,9 @@ class NavigationResources {
 
             companion object {
                 fun from(menuNavigation: MenuNavigation, fullUrl: String): ReplyOfMenuNavigation {
-                    val url = fullUrl.replace("//*".toRegex(), "/")
-
                     return menuNavigation.run {
                         ReplyOfMenuNavigation(
-                            id!!, type, name, uriBlock, methodType, url
+                            id!!, type, name, uriBlock, methodType, fullUrl
                         )
                     }
                 }

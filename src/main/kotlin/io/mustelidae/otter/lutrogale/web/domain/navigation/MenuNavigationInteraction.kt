@@ -17,9 +17,13 @@ class MenuNavigationInteraction(
 ) {
 
     fun getFullUrl(menuNavigation: MenuNavigation?): String {
-        return if ("#" == menuNavigation!!.parentTreeId) menuNavigation.uriBlock else getFullUrl(
-            menuNavigation.parentMenuNavigation
-        ) + menuNavigation.uriBlock
+        val fullUrl = if ("#" == menuNavigation!!.parentTreeId)
+            "/"
+        else {
+            getFullUrl(menuNavigation.parentMenuNavigation) + menuNavigation.uriBlock
+        }
+
+        return fullUrl.replace("//*".toRegex(), "/")
     }
 
     fun modify(

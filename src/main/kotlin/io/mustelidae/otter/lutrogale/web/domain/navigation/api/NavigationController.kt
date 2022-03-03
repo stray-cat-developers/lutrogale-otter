@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 /**
  * Created by HanJaehyun on 2016. 9. 27..
  */
+@LoginCheck
 @RestController
 @RequestMapping(value = ["/project/{projectId}"])
 class NavigationController(

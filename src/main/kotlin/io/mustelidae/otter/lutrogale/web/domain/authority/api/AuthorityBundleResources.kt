@@ -25,6 +25,7 @@ class AuthorityBundleResources {
     class Reply {
         @Schema(name = "AuthorityBundle.Reply.AuthorityBundle")
         data class AuthorityBundle(
+            @Schema(name = "authId")
             @JsonProperty("authId")
             val id: Long,
             val name: String,

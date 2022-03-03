@@ -33,7 +33,7 @@ class NavigationTreeInteraction(
         val menuNavigation = MenuNavigation(
             branch.name,
             branch.type,
-            branch.uriBlock,
+            branch.getRefineUriBlock(),
             branch.methodType,
             branch.treeId,
             branch.parentTreeId

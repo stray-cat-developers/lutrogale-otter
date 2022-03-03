@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession
  * request를 이용한 각종 유틸 제공
  */
 object RequestHelper {
-    private val apiUriPattern = Pattern.compile("/api")
+    private val apiUriPattern = Pattern.compile("/v1")
     private val jsonPattern = Pattern.compile(MediaType.APPLICATION_JSON_VALUE)
     @JvmStatic
     fun isApiRequest(request: HttpServletRequest): Boolean {
@@ -42,9 +42,9 @@ object RequestHelper {
     @JvmStatic
     fun hasLoginCheckAnnotation(handlerMethod: HandlerMethod): Boolean {
         var loginCheck: LoginCheck? =
-            AnnotationUtils.findAnnotation<LoginCheck>(handlerMethod.beanType, LoginCheck::class.java)
+            AnnotationUtils.findAnnotation(handlerMethod.beanType, LoginCheck::class.java)
         if (loginCheck == null || !loginCheck.enable) loginCheck =
-            AnnotationUtils.findAnnotation<LoginCheck>(handlerMethod.method, LoginCheck::class.java)
+            AnnotationUtils.findAnnotation(handlerMethod.method, LoginCheck::class.java)
         return !(loginCheck == null || !loginCheck.enable)
     }
 

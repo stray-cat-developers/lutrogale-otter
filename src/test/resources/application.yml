@@ -11,7 +11,7 @@ logging:
     org.hibernate.tool.schema: error
     com.zaxxer.hikari: error
     io.swagger.models.parameters.AbstractSerializableParameter: error
-    io.mustelidae: debug
+    io.mustelidae.otter.lutrogale: debug
 
 server:
   error:
@@ -32,7 +32,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    platform: h2
     hikari:
       minimum-idle: 40
       maximum-pool-size: 60
@@ -41,6 +40,8 @@ spring:
     hibernate:
       ddl-auto: create
       use-new-id-generator-mappings: false
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         format_sql: false
@@ -61,9 +62,5 @@ spring:
   config:
     activate:
       on-profile: embedded
-  data:
-    mongodb:
-      database: smooth-coated-otter
-      host: localhost
 
 app:

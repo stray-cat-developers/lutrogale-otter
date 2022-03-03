@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AuthenticationResources
 import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
@@ -10,6 +9,7 @@ import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
+import io.mustelidae.otter.lutrogale.web.domain.user.UserInteraction
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,20 +21,26 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class ClientCertificationInteraction(
     private val userFinder: UserFinder,
+    private val userInteraction: UserInteraction,
     private val projectFinder: ProjectFinder,
     private val accessCheckerHandler: AccessCheckerHandler
 
 ) {
 
-    fun isAuthorizedUser(email: String): Boolean {
+    fun isAuthorizedUserIfAddNotFoundUser(email: String): Boolean {
         val user = userFinder.findBy(email)
-        return user.status === User.Status.allow
+        return if (user == null) {
+            userInteraction.createBy(email, "Known User", User.Status.wait)
+            false
+        } else {
+            user.status === User.Status.allow
+        }
     }
 
-    fun check(checkResource: AuthenticationResources.Reply.AccessGrant): List<AccessResources.Reply.AccessState> {
+    fun check(checkResource: AccessGrant): List<AccessResources.Reply.AccessState> {
         val project = projectFinder.findByLiveProjectOfApiKey(checkResource.apiKey)
 
-        val user: User = userFinder.findBy(checkResource.email)
+        val user: User = userFinder.findBy(checkResource.email)!!
 
         val menuNavigations = getNavigationsOfUser(user, project)
         for (menuNavigation in menuNavigations) {

@@ -1,8 +1,10 @@
 package io.mustelidae.otter.lutrogale.api.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import io.swagger.v3.oas.annotations.media.Schema
 
 open class Reply<T>() {
+    @Schema(name = "result")
     @JsonProperty("result")
     var content: T? = null
     var code: String = "0000"

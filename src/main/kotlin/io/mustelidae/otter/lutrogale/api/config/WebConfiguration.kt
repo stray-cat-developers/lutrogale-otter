@@ -24,11 +24,11 @@ import java.time.format.DateTimeFormatter
 @Configuration
 @ControllerAdvice
 class WebConfiguration(
-    private val osoriLoginHandlerInterceptor: OsoriLoginHandlerInterceptor
+    private val adminLoginHandlerInterceptor: AdminLoginHandlerInterceptor
 ) : DelegatingWebMvcConfiguration() {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(osoriLoginHandlerInterceptor)
+        registry.addInterceptor(adminLoginHandlerInterceptor)
         super.addInterceptors(registry)
     }
 

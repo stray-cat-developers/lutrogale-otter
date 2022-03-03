@@ -24,7 +24,7 @@ class UserFinder(
             ?: throw ApplicationException(HumanErr.IS_EMPTY)
     }
 
-    fun findBy(email: String): User {
+    fun findBy(email: String): User? {
         return userRepository.findByEmail(email)
     }
 

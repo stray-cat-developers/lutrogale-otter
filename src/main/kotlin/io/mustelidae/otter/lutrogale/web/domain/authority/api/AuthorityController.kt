@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.authority.api
 
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityBundleInteraction
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Reply.TreeBranch
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 /**
  * Created by seooseok on 2016. 9. 30..
  */
+@LoginCheck
 @RestController
 @RequestMapping("/v1/maintenance/project")
 class AuthorityController(

@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
     fun countAllByStatusIn(statuses: List<User.Status>): Int
-    fun findByEmail(email: String): User
+    fun findByEmail(email: String): User?
 }
