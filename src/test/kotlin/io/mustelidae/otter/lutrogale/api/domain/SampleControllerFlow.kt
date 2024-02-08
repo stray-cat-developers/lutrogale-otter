@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain
 
-import io.mustelidae.otter.lutrogale.api.common.Reply
 import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
+import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.utils.fromJson
 import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.MediaType

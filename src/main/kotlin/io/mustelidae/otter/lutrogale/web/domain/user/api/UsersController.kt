@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.user.api
 
-import io.mustelidae.otter.lutrogale.api.common.Replies
-import io.mustelidae.otter.lutrogale.api.common.toReplies
+import io.mustelidae.otter.lutrogale.common.Replies
+import io.mustelidae.otter.lutrogale.common.toReplies
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes
 import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck

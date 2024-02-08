@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer
 

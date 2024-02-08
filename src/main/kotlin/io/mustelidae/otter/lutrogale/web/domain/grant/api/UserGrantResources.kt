@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant.api
 
+import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.utils.toDateString
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.swagger.v3.oas.annotations.media.Schema
@@ -50,7 +50,7 @@ class UserGrantResources {
         @Schema(name = "UserGrant.Reply.PersonalGrant")
         data class PersonalGrant(
             val id: Long,
-            val type: OsoriConstant.NavigationType,
+            val type: Constant.NavigationType,
             val name: String,
             val uriBlock: String,
             val regDate: String,

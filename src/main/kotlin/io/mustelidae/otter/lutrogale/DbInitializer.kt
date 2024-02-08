@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale
 
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityBundleResources
@@ -73,7 +73,7 @@ class DbInitializer(
                 "1",
                 "Get Reviews",
                 "/applications/{name}/reviews",
-                OsoriConstant.NavigationType.menu,
+                Constant.NavigationType.menu,
                 RequestMethod.GET
             )
         )
@@ -85,7 +85,7 @@ class DbInitializer(
                 "j1_1",
                 "Personal Review",
                 "/{reviewId}",
-                OsoriConstant.NavigationType.function,
+                Constant.NavigationType.function,
                 RequestMethod.GET
             )
         )
@@ -97,7 +97,7 @@ class DbInitializer(
                 "1",
                 "Add Review",
                 "/applications/{name}/reviews",
-                OsoriConstant.NavigationType.function,
+                Constant.NavigationType.function,
                 RequestMethod.POST
             )
         )
@@ -109,7 +109,7 @@ class DbInitializer(
                 "j1_1",
                 "Modify Review",
                 "/{reviewId}",
-                OsoriConstant.NavigationType.function,
+                Constant.NavigationType.function,
                 RequestMethod.POST
             )
         )
@@ -121,7 +121,7 @@ class DbInitializer(
                 "j1_1",
                 "Delete Review",
                 "/{reviewId}",
-                OsoriConstant.NavigationType.function,
+                Constant.NavigationType.function,
                 RequestMethod.DELETE
             )
         )

@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.web.commons.filter
+package io.mustelidae.otter.lutrogale.config.filter
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletRequestWrapper

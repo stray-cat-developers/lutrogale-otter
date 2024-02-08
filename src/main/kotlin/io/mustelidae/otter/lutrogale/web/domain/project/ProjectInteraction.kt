@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.project
 
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.NavigationType
+import io.mustelidae.otter.lutrogale.common.Constant.NavigationType
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.repository.ProjectRepository
 import org.springframework.stereotype.Service

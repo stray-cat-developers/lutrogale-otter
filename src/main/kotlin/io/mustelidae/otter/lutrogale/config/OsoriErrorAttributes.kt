@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
 import org.springframework.context.annotation.Configuration

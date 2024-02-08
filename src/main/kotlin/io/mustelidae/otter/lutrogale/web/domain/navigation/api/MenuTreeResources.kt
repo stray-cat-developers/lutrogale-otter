@@ -2,7 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.common.Constant
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -15,7 +15,7 @@ class MenuTreeResources {
             val parentTreeId: String,
             val name: String,
             val uriBlock: String,
-            val type: OsoriConstant.NavigationType,
+            val type: Constant.NavigationType,
             val methodType: RequestMethod
         ) {
             @JsonIgnore

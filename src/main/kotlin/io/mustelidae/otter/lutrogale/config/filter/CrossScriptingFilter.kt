@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.web.commons.filter
+package io.mustelidae.otter.lutrogale.config.filter
 
 import java.io.IOException
 import javax.servlet.Filter

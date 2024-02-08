@@ -1,9 +1,10 @@
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import com.fasterxml.jackson.databind.DeserializationFeature
+import io.mustelidae.otter.lutrogale.config.filter.CrossScriptingFilter
+import io.mustelidae.otter.lutrogale.config.filter.RequestResponseLogFilter
+import io.mustelidae.otter.lutrogale.config.filter.UrlBaseLoginFilter
 import io.mustelidae.otter.lutrogale.utils.Jackson
-import io.mustelidae.otter.lutrogale.web.commons.filter.CrossScriptingFilter
-import io.mustelidae.otter.lutrogale.web.commons.filter.UrlBaseLoginFilter
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

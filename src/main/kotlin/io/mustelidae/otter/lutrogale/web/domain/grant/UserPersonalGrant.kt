@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant
 
-import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.common.Audit
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import javax.persistence.Entity

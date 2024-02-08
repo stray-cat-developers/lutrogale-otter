@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.common
+package io.mustelidae.otter.lutrogale.common
 
 class Error(
     errorCode: ErrorCode,

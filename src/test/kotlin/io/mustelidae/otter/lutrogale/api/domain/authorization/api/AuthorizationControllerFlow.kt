@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
-import io.mustelidae.otter.lutrogale.api.common.Replies
 import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
+import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.utils.fromJson
 import io.mustelidae.otter.lutrogale.utils.toJson
 import io.mustelidae.otter.lutrogale.web.domain.project.repository.ProjectRepository

@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import io.swagger.v3.core.converter.ModelConverters
 import org.springdoc.core.GroupedOpenApi

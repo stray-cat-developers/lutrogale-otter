@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.AuthenticationCheckType
+import io.mustelidae.otter.lutrogale.common.Constant.AuthenticationCheckType
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder

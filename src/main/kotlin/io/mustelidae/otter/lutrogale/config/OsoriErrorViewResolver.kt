@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver

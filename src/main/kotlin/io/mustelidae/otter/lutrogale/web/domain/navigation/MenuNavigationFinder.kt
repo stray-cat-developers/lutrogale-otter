@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.otter.lutrogale.api.config.DataNotFindException
+import io.mustelidae.otter.lutrogale.config.DataNotFindException
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository

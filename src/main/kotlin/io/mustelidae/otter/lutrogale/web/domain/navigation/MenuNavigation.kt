@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.otter.lutrogale.api.common.Audit
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.common.Audit
+import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import org.springframework.web.bind.annotation.RequestMethod
@@ -25,7 +25,7 @@ class MenuNavigation(
     @Column(nullable = false, length = 50)
     var name: String,
     @Enumerated(STRING)
-    var type: OsoriConstant.NavigationType,
+    var type: Constant.NavigationType,
     var uriBlock: String,
     @Enumerated(STRING)
     var methodType: RequestMethod,

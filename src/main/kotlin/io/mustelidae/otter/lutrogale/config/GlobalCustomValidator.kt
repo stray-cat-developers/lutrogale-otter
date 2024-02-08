@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired

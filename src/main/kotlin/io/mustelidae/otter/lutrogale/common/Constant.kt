@@ -1,9 +1,11 @@
-package io.mustelidae.otter.lutrogale.web.commons.constant
+package io.mustelidae.otter.lutrogale.common
 
-/**
- * Created by seooseok on 2016. 9. 8..
- */
-class OsoriConstant {
+object Constant {
+
+    object Redis {
+        const val USER_LOCK = "userLockTemplate"
+    }
+
     /**
      * Navigation Type
      */

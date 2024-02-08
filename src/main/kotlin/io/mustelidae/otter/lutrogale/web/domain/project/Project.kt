@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.project
 
-import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.common.Audit
 import io.mustelidae.otter.lutrogale.web.commons.utils.EncryptUtil
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation

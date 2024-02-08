@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.common
+package io.mustelidae.otter.lutrogale.common
 
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate

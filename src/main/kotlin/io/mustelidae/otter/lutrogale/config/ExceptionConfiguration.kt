@@ -1,11 +1,11 @@
 @file:Suppress("unused")
 
-package io.mustelidae.otter.lutrogale.api.config
+package io.mustelidae.otter.lutrogale.config
 
 import com.google.common.base.Strings
-import io.mustelidae.otter.lutrogale.api.common.Error
-import io.mustelidae.otter.lutrogale.api.common.ErrorCode
-import io.mustelidae.otter.lutrogale.api.common.ErrorSource
+import io.mustelidae.otter.lutrogale.common.Error
+import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.common.ErrorSource
 import io.mustelidae.otter.lutrogale.utils.Jackson
 import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
 import org.slf4j.LoggerFactory
