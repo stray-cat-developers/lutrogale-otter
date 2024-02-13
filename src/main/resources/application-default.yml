@@ -29,15 +29,12 @@ spring:
   freemarker:
     check-template-location: true
     cache: false
-  mvc:
-    throw-exception-if-no-handler-found: true
   jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: create
-      use-new-id-generator-mappings: false
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate:
         use_sql_comments: true
@@ -47,23 +44,20 @@ spring:
         dialect:
           storage_engine: innodb
     open-in-view: true
-
-
   datasource:
     hikari:
       connection-test-query: SELECT 1 FROM DUAL
       minimum-idle: 3
       maximum-pool-size: 30
       pool-name: SpirngBootHikariCP
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://127.0.0.1:3319/local?serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://127.0.0.1:3319/local?serverTimezone=Asia/Seoul
     username: local
     password: local
 
   session:
     timeout: 30m
-    store-type: jdbc
     jdbc:
       platform: mysql
   web:

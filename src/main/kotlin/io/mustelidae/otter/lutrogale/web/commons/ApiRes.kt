@@ -8,6 +8,7 @@ import java.time.ZoneId
  * Created by seooseok on 2016. 6. 30..
  * 공통 API 응답 클래스
  */
+@Deprecated("API 결과 통합", ReplaceWith("Reply"))
 class ApiRes<T> {
     val timestamp: Long
     val code: String
@@ -38,6 +39,7 @@ class ApiRes<T> {
     companion object {
         private const val okCode = "0000"
         private const val okMessage = "ok"
+
         @JvmStatic
         fun success(): ApiRes<*> {
             return ApiRes<Any?>(okCode, okMessage)

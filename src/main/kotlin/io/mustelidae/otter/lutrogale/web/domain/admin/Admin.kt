@@ -1,16 +1,17 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin
 
-import io.mustelidae.otter.lutrogale.web.commons.utils.EncryptUtil
+import io.mustelidae.otter.lutrogale.utils.Crypto
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import java.util.ArrayList
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
 
 /**
  * Created by HanJaehyun on 2016. 9. 20..
@@ -21,16 +22,16 @@ class Admin(
     val email: String,
     val name: String,
     var description: String? = null,
-    var img: String? = null
+    var img: String? = null,
 ) {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        protected set
+        private set
 
     @Column(nullable = false)
     var pw: String? = null
-        protected set
+        private set
 
     var status = false
 
@@ -41,7 +42,7 @@ class Admin(
     @OneToMany(
         mappedBy = "parentAdmin",
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH]
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH],
     )
     private val admins: MutableList<Admin> = ArrayList()
     fun setBy(parentAdmin: Admin) {
@@ -55,7 +56,7 @@ class Admin(
     }
 
     fun setPassword(pw: String) {
-        this.pw = EncryptUtil.sha256(pw)
+        this.pw = Crypto.sha256(pw)
     }
 
     companion object {
@@ -64,7 +65,7 @@ class Admin(
                 email,
                 name,
                 description,
-                img
+                img,
             ).apply {
                 setPassword(pw)
             }

@@ -1,8 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
-import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.common.DefaultError
+import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.config.InvalidArgumentException
+import io.mustelidae.otter.lutrogale.config.PolicyException
 import io.mustelidae.otter.lutrogale.web.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
@@ -12,13 +13,8 @@ import org.springframework.stereotype.Service
 @Service
 class UserInteraction(
     val userRepository: UserRepository,
-    val userFinder: UserFinder
+    val userFinder: UserFinder,
 ) {
-
-    fun createBy(email: String, name: String): User {
-        val user = User(name, email)
-        return userRepository.save(user)
-    }
 
     fun createBy(email: String, name: String, status: User.Status): User {
         val user: User = User(name, email).apply {
@@ -28,14 +24,13 @@ class UserInteraction(
     }
 
     fun createBy(email: String, name: String, accessPrivacyInformation: Boolean, department: String?): User {
-        val user = this.createBy(email, name, User.Status.allow)
+        val user = this.createBy(email, name, User.Status.ALLOW)
         user.department = department
         user.isPrivacy = accessPrivacyInformation
         return userRepository.save(user)
     }
 
     fun expireBy(userIdGroup: List<Long>) {
-
         val users = userIdGroup.map {
             userFinder.findBy(it)
         }
@@ -45,18 +40,15 @@ class UserInteraction(
     }
 
     fun modifyBy(userIds: List<Long>, status: User.Status) {
-        if (User.Status.expire === status) throw ApplicationException(
-            HumanErr.INVALID_ARGS,
-            "만료의 경우 별도 만료 API를 이용해주세요."
-        )
+        if (User.Status.EXPIRE === status) {
+            throw InvalidArgumentException("만료의 경우 별도 만료 API를 이용해주세요.")
+        }
 
         userIds.forEach {
             val user = userFinder.findBy(it)
-            if (User.Status.expire === user.status)
-                throw ApplicationException(
-                    ProcessErr.ALREADY_EXPIRED,
-                    arrayOf(user.email)
-                )
+            if (User.Status.EXPIRE === user.status) {
+                throw PolicyException(DefaultError(ErrorCode.PL02))
+            }
             user.status = status
 
             userRepository.save(user)

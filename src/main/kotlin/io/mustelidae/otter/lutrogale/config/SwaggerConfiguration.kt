@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.config
 
 import io.swagger.v3.core.converter.ModelConverters
-import org.springdoc.core.GroupedOpenApi
+import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -11,7 +11,7 @@ class SwaggerConfiguration {
     @Bean
     fun default(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("API")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
@@ -23,33 +23,11 @@ class SwaggerConfiguration {
     @Bean
     fun maintenance(): GroupedOpenApi = GroupedOpenApi.builder()
         .group("Maintenance")
-        .addOpenApiCustomiser {
+        .addOpenApiCustomizer {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
         .packagesToScan("io.mustelidae.otter.lutrogale")
         .pathsToMatch("/v1/maintenance/**")
-        .build()
-
-    @Bean
-    fun migration(): GroupedOpenApi = GroupedOpenApi.builder()
-        .group("Migration")
-        .addOpenApiCustomiser {
-            it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
-        }
-        .packagesToScan("io.mustelidae.otter.lutrogale")
-        .pathsToMatch("/v1/migration/**")
-        .build()
-
-    @Bean
-    fun bridge(): GroupedOpenApi = GroupedOpenApi.builder()
-        .group("Bridge")
-        .addOpenApiCustomiser {
-            it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
-        }
-        .packagesToScan("io.mustelidae.otter.lutrogale")
-        .pathsToMatch("/v1/bridge/**")
         .build()
 }

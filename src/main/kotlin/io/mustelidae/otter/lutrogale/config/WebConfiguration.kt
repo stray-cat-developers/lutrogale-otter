@@ -4,13 +4,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import io.mustelidae.otter.lutrogale.config.filter.CrossScriptingFilter
 import io.mustelidae.otter.lutrogale.config.filter.RequestResponseLogFilter
 import io.mustelidae.otter.lutrogale.config.filter.UrlBaseLoginFilter
+import io.mustelidae.otter.lutrogale.config.interceptor.AdminLoginHandlerInterceptor
 import io.mustelidae.otter.lutrogale.utils.Jackson
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
 import org.springframework.format.support.FormattingConversionService
+import org.springframework.http.converter.ByteArrayHttpMessageConverter
 import org.springframework.http.converter.HttpMessageConverter
+import org.springframework.http.converter.ResourceHttpMessageConverter
 import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -25,7 +28,7 @@ import java.time.format.DateTimeFormatter
 @Configuration
 @ControllerAdvice
 class WebConfiguration(
-    private val adminLoginHandlerInterceptor: AdminLoginHandlerInterceptor
+    private val adminLoginHandlerInterceptor: AdminLoginHandlerInterceptor,
 ) : DelegatingWebMvcConfiguration() {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
@@ -34,10 +37,17 @@ class WebConfiguration(
     }
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-        val objectMapper = Jackson.getMapper()
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        converters.add(ByteArrayHttpMessageConverter())
         converters.add(StringHttpMessageConverter())
-        converters.add(MappingJackson2HttpMessageConverter(objectMapper))
+        converters.add(ResourceHttpMessageConverter())
+
+        converters.add(
+            MappingJackson2HttpMessageConverter(
+                Jackson.getMapper().apply {
+                    configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                },
+            ),
+        )
         super.configureMessageConverters(converters)
     }
 

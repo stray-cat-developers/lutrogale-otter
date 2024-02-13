@@ -10,6 +10,8 @@ import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,18 +20,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
-/**
- * Created by seooseok on 2016. 9. 20..
- */
+@Tag(name = "프로젝트")
 @LoginCheck
 @RestController
 @RequestMapping("/v1/maintenance")
 class ProjectController(
     private val projectInteraction: ProjectInteraction,
     private val userFinder: UserFinder,
-    private val projectFinder: ProjectFinder
+    private val projectFinder: ProjectFinder,
 ) {
 
+    @Operation(summary = "프로젝트 전체 조회")
     @GetMapping("/projects")
     fun findAll(): ApiRes<*> {
         return projectFinder.findAllByLive()
@@ -37,14 +38,16 @@ class ProjectController(
             .toApiRes()
     }
 
+    @Operation(summary = "프로젝트 추가")
     @PostMapping("/project")
     fun create(
-        @RequestBody request: ProjectResources.Request
+        @RequestBody request: ProjectResources.Request,
     ): Reply<Long> {
         val id = projectInteraction.register(request.name, request.description)
         return id.toReply()
     }
 
+    @Operation(summary = "프로젝트 조회")
     @GetMapping(value = ["/project/{id}"])
     fun findOne(@PathVariable id: Long): ApiRes<*> {
         val project = projectFinder.findBy(id)
@@ -52,6 +55,7 @@ class ProjectController(
         return ApiRes<Any?>(reply)
     }
 
+    @Operation(summary = "프로젝트에 할당된 사용자 전체 조회")
     @GetMapping("/project/{id}/users")
     fun findUsersProject(@PathVariable id: Long): ApiRes<*> {
         val users = userFinder.findAllByJoinedProjectUsers(id)
@@ -60,13 +64,14 @@ class ProjectController(
                 it,
                 it.getProjects(),
                 it.userAuthorityGrants,
-                it.userPersonalGrants
+                it.userPersonalGrants,
             )
         }
 
         return ApiRes<Any?>(replies)
     }
 
+    @Operation(summary = "프로젝트에 할당된 메뉴 네비게이션 전체 조회")
     @GetMapping("/project/{id}/navigations")
     @ResponseBody
     fun findNavigationsProject(@PathVariable id: Long): ApiRes<*> {

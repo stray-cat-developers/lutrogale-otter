@@ -15,21 +15,26 @@ class AccessGrant(
 
     companion object {
         fun ofIdBase(email: String, apiKey: String, menuNavigationIdGroup: List<Long>): AccessGrant {
-
             return AccessGrant(
-                email, apiKey, Constant.AuthenticationCheckType.id, menuNavigationIdGroup
+                email,
+                apiKey,
+                Constant.AuthenticationCheckType.ID,
+                menuNavigationIdGroup,
             )
         }
 
         fun ofUrlBase(email: String, apiKey: String, accessUriGroup: List<AccessUri>): AccessGrant {
             return AccessGrant(
-                email, apiKey, Constant.AuthenticationCheckType.uri, accessUriGroup = accessUriGroup
+                email,
+                apiKey,
+                Constant.AuthenticationCheckType.URI,
+                accessUriGroup = accessUriGroup,
             )
         }
     }
 
     fun getUris(): List<String> {
-        require(authenticationCheckType === Constant.AuthenticationCheckType.uri) { "authentication check type is wrong" }
+        require(authenticationCheckType === Constant.AuthenticationCheckType.URI) { "authentication check type is wrong" }
         return this.accessUriGroup!!.map { it.uri }.toList()
     }
 }

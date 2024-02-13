@@ -5,18 +5,18 @@ import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 /**
  * Created by seooseok on 2016. 10. 12..
  */
-class OsoriSessionInfo(
+class SessionInfo(
     val adminId: Long,
     val adminEmail: String,
-    val adminName: String? = null
+    val adminName: String? = null,
 ) {
 
     companion object {
-        fun of(admin: Admin): OsoriSessionInfo {
-            return OsoriSessionInfo(
+        fun of(admin: Admin): SessionInfo {
+            return SessionInfo(
                 admin.id!!,
                 admin.email,
-                admin.name
+                admin.name,
             )
         }
     }

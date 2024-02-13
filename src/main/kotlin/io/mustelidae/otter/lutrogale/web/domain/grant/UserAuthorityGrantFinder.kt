@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class UserAuthorityGrantFinder(
-    private val userAuthorityGrantRepository: UserAuthorityGrantRepository
+    private val userAuthorityGrantRepository: UserAuthorityGrantRepository,
 ) {
 
     fun findByUserAndDefinition(userId: Long, authorityDefinitionIds: List<Long>): List<UserAuthorityGrant> {

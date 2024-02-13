@@ -9,9 +9,10 @@ import com.google.common.base.Joiner
 enum class SystemErr(private val code: String, private val message: String) : Err {
     ERROR_UNKNOWN(
         "S999",
-        "알 수 없는 오류가 발생하였습니다. 업주/업소 개발팀에 문의해주세요. 업무 JIRA: http://jira.woowa.in/secure/RapidBoard.jspa?rapidView=82&projectKey=TWOUPMNG "
+        "알 수 없는 오류가 발생하였습니다. 업주/업소 개발팀에 문의해주세요. 업무 JIRA: http://jira.woowa.in/secure/RapidBoard.jspa?rapidView=82&projectKey=TWOUPMNG ",
     ),
-    ERROR_ENCRYPT("S001", "암호화에 실패하였습니다. ");
+    ERROR_ENCRYPT("S001", "암호화에 실패하였습니다. "),
+    ;
 
     override fun code(): String {
         return code

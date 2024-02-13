@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 
 class AuthorizationControllerFlow(
     projectRepository: ProjectRepository,
-    private val mockMvc: MockMvc
+    private val mockMvc: MockMvc,
 ) {
 
     private val apiKey: String = projectRepository.findAll().first().apiKey
@@ -41,8 +41,8 @@ class AuthorizationControllerFlow(
         val request = AccessResources.Request.UriBase(
             email,
             listOf(
-                AccessResources.AccessUri(url, method)
-            )
+                AccessResources.AccessUri(url, method),
+            ),
         )
 
         val uri = linkTo<AuthorizationController> { urlCheck(apiKey, request) }.toUri()

@@ -6,12 +6,12 @@ import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInterac
 import org.springframework.util.AntPathMatcher
 
 class UriBaseAccessChecker(
-    private val menuNavigationInteraction: MenuNavigationInteraction
+    private val menuNavigationInteraction: MenuNavigationInteraction,
 ) : AccessChecker {
 
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        accessGrant: AccessGrant
+        accessGrant: AccessGrant,
     ): List<AccessResources.Reply.AccessState> {
         val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val antPathMatcher = AntPathMatcher()
@@ -30,7 +30,9 @@ class UriBaseAccessChecker(
             }
             if (isMatch) {
                 accessStates.add(AccessResources.Reply.AccessState.ofAccept(matchedSourceUrl!!))
-            } else accessStates.add(AccessResources.Reply.AccessState.ofDenied(accessUri.uri, "not matched"))
+            } else {
+                accessStates.add(AccessResources.Reply.AccessState.ofDenied(accessUri.uri, "not matched"))
+            }
         }
         return accessStates
     }

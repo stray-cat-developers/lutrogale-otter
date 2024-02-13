@@ -8,14 +8,14 @@
 	<body class="hold-transition skin-blue sidebar-mini">
 		<@layout.baseWrapper>
         <section class="content-header">
-            <h1>유저 정보 관리<small>오소리 권한 시스템을 이용하는 유저를 관리합니다.</small></h1>
+            <h1>사용자 정보 관리<small>오소리 권한 시스템을 이용하는 사용자를 관리합니다.</small></h1>
         </section>
 		<section class="content">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="box box-solid">
                         <div class="box-header">
-                            <h3 class="box-title">유저 정보</h3>
+                            <h3 class="box-title">사용자 정보</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -24,12 +24,12 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary" onclick="modifyUserInfo();">유저정보 수정</button>
-                                <button type="button" class="btn btn-primary" onclick="OsoriRoute.go('view.management.newMember');">유저 생성</button>
+                                <button type="button" class="btn btn-primary" onclick="modifyUserInfo();">사용자정보 수정</button>
+                                <button type="button" class="btn btn-primary" onclick="OsoriRoute.go('view.management.newMember');">사용자 생성</button>
                             </div>
 
                             <div class="btn-group pull-right">
-                                <button type="button" class="btn bg-orange">유저 상태 변경</button>
+                                <button type="button" class="btn bg-orange">사용자 상태 변경</button>
                                 <button type="button" class="btn bg-orange dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
@@ -95,7 +95,7 @@
                     <div class="col-md-9">
                         <div class="box box-info">
                             <div class="box-header with-border">
-                                <h3 class="box-title">선택된 유저</h3>
+                                <h3 class="box-title">선택된 사용자</h3>
                             </div>
                             <div class="box-body">
                                 <table class="table table-bordered table-striped"></table>
@@ -128,7 +128,7 @@
                     <div class="col-md-9">
                         <div class="box box-info">
                             <div class="box-header with-border">
-                                <h3 class="box-title">선택된 유저</h3>
+                                <h3 class="box-title">선택된 사용자</h3>
                             </div>
                             <div class="box-body">
                                 <table class="table table-bordered table-striped"></table>
@@ -388,7 +388,7 @@
                 var select_count = $('#tb-users input[type="checkbox"]:checked').length;
 
                 if (select_count < 1){
-                    alert("유저가 선택되어 있지 않습니다.");
+                    alert("사용자가 선택되어 있지 않습니다.");
                     return false;
                 }
 
@@ -399,7 +399,7 @@
 
                 var user_type = (select_count > 1)?'multi':'single';
 
-                $('#modal-modify-user').find('.modal-title').text('유저정보 수정');
+                $('#modal-modify-user').find('.modal-title').text('사용자정보 수정');
                 $('#modal-modify-user .modal-body').empty().append($('#modal-modify-'+user_type+'-user-content form').clone());
                 setTimeout(function() {
                     $('#modal-modify-user table').DataTable(OPTION.data_table(opt.tb_modal_user_status, checked_users));
@@ -451,7 +451,7 @@
                 var select_count = $('#tb-users input[type="checkbox"]:checked').length;
 
                 if (select_count < 1){
-                    alert("유저가 선택되어 있지 않습니다.");
+                    alert("사용자가 선택되어 있지 않습니다.");
                     return false;
                 }
 
@@ -474,7 +474,7 @@
             $('#modal-user-status-submit').click(function() {
                 var status_type = $(this).val();
 
-                if (!confirm('선택된 유저들을 ' + title[status_type] + '처리 하시겠습니까?'))
+                if (!confirm('선택된 사용자들을 ' + title[status_type] + '처리 하시겠습니까?'))
                     return false;
 
                 var tb_users = $('#tb-users').DataTable();

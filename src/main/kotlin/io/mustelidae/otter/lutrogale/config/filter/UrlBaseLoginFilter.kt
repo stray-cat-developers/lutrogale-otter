@@ -1,17 +1,15 @@
 package io.mustelidae.otter.lutrogale.config.filter
 
-import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
+import io.mustelidae.otter.lutrogale.web.AdminSession
+import jakarta.servlet.Filter
+import jakarta.servlet.FilterChain
+import jakarta.servlet.FilterConfig
+import jakarta.servlet.ServletException
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.FilterConfig
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import kotlin.Throws
 
 /**
  * Created by seooseok on 2016. 10. 31..
@@ -26,7 +24,7 @@ class UrlBaseLoginFilter : Filter {
         val servletRequest = request as HttpServletRequest
         if (servletRequest.requestURI.startsWith("/view")) {
             try {
-                RequestHelper.getSessionByAdmin(servletRequest)
+                AdminSession(request.session).infoOrThrow()
             } catch (e: IllegalArgumentException) {
                 (response as HttpServletResponse).sendRedirect("/login.html")
             }

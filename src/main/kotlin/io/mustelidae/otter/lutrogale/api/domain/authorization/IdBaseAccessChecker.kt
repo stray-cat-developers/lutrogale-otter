@@ -10,17 +10,19 @@ class IdBaseAccessChecker(
 
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        accessGrant: AccessGrant
+        accessGrant: AccessGrant,
     ): List<AccessResources.Reply.AccessState> {
         val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
         val targetMenuNavigationGroup: List<MenuNavigation> =
             menuNavigationFinder.findBy(accessGrant.menuNavigationIdGroup!!)
         for (menuNavigation in targetMenuNavigationGroup) {
-            if (sourceNavigationGroup.contains(menuNavigation) && menuNavigation.project!!.apiKey == accessGrant.apiKey) accessStates.add(
-                AccessResources.Reply.AccessState.ofAccept(
-                    menuNavigation.id!!
+            if (sourceNavigationGroup.contains(menuNavigation) && menuNavigation.project!!.apiKey == accessGrant.apiKey) {
+                accessStates.add(
+                    AccessResources.Reply.AccessState.ofAccept(
+                        menuNavigation.id!!,
+                    ),
                 )
-            ) else {
+            } else {
                 accessStates.add(AccessResources.Reply.AccessState.ofDenied(menuNavigation.id!!, "접근 할 수 없는 메뉴입니다."))
             }
         }

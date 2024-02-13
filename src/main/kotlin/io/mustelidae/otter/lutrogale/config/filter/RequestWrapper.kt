@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.config.filter
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletRequestWrapper
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequestWrapper
 
 /**
  * Request 파라미터 관련 처리
@@ -15,8 +15,9 @@ internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServlet
         if (values == null) {
             return null
         }
-        if ("pw" == parameter)
+        if ("pw" == parameter) {
             return values
+        }
 
         return values.map { cleanXSS(it) }
             .toTypedArray()
@@ -24,13 +25,16 @@ internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServlet
 
     override fun getParameter(parameter: String): String? {
         val value = super.getParameter(parameter)
-        if (value == null)
+        if (value == null) {
             return null
+        }
 
         // password는 cleanXss를 처리하지 않는다.
-        return if ("pw" == parameter)
+        return if ("pw" == parameter) {
             value
-        else cleanXSS(value)
+        } else {
+            cleanXSS(value)
+        }
     }
 
     /**
@@ -45,6 +49,6 @@ internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServlet
 
     companion object {
         private const val XSS_FORMAT =
-            "((<|<[/])script>)|((<|<[/])javascript>)|((<|<[/])vbscript>)|((<|<[/])alert>)|((<|<[/])confirm>)"
+            "((<|</)script>)|((<|</)javascript>)|((<|</)vbscript>)|((<|</)alert>)|((<|</)confirm>)"
     }
 }

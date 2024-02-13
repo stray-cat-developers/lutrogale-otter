@@ -9,31 +9,19 @@ import org.springframework.stereotype.Service
  */
 @Service
 class DashBoard(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
     fun countByLiveTotalUsers(): Int {
         val statusGroup: MutableList<User.Status> = ArrayList()
-        statusGroup.add(User.Status.allow)
-        statusGroup.add(User.Status.reject)
-        statusGroup.add(User.Status.wait)
+        statusGroup.add(User.Status.ALLOW)
+        statusGroup.add(User.Status.REJECT)
+        statusGroup.add(User.Status.WAIT)
         return userRepository.countAllByStatusIn(statusGroup)
     }
 
     fun countByLiveWaitUsers(): Int {
         val statusGroup: MutableList<User.Status> = ArrayList()
-        statusGroup.add(User.Status.wait)
-        return userRepository.countAllByStatusIn(statusGroup)
-    }
-
-    fun countByLiveRejectUsers(): Int {
-        val statusGroup: MutableList<User.Status> = ArrayList()
-        statusGroup.add(User.Status.reject)
-        return userRepository.countAllByStatusIn(statusGroup)
-    }
-
-    fun countByLiveAllowUsers(): Int {
-        val statusGroup: MutableList<User.Status> = ArrayList()
-        statusGroup.add(User.Status.allow)
+        statusGroup.add(User.Status.WAIT)
         return userRepository.countAllByStatusIn(statusGroup)
     }
 }

@@ -12,10 +12,11 @@ internal class MenuTreeResourcesTest {
         // Given
         val request = MenuTreeResources.Request.Branch(
             "",
-            "", "",
+            "",
+            "",
             "asdfasdf/adfasf/{fasdf}",
-            Constant.NavigationType.menu,
-            RequestMethod.DELETE
+            Constant.NavigationType.MENU,
+            RequestMethod.DELETE,
         )
         // When
         val refineBlock = request.getRefineUriBlock()
@@ -28,10 +29,11 @@ internal class MenuTreeResourcesTest {
         // Given
         val request = MenuTreeResources.Request.Branch(
             "",
-            "", "",
+            "",
+            "",
             "asdfasdf/adfasf/{fasdf}/",
-            Constant.NavigationType.menu,
-            RequestMethod.DELETE
+            Constant.NavigationType.MENU,
+            RequestMethod.DELETE,
         )
         // When
         val refineBlock = request.getRefineUriBlock()

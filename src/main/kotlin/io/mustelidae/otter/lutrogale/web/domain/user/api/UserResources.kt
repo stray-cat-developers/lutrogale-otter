@@ -15,19 +15,23 @@ class UserResources {
         val email: String,
         val name: String,
         val isPrivacy: Boolean,
-        val department: String? = null
+        val department: String? = null,
     )
 
     class Modify {
         data class Info(
             val isPrivacy: Boolean,
             val name: String,
-            val department: String
+            val department: String,
         )
 
         data class UserState(
-            val status: User.Status
-        )
+            val status: String,
+        ) {
+            fun getStatus(): User.Status {
+                return User.Status.valueOf(this.status.uppercase())
+            }
+        }
     }
 
     class Reply {
@@ -37,7 +41,7 @@ class UserResources {
             val name: String,
             val accessPrivacyInformation: Boolean,
             val regDate: LocalDateTime,
-            val status: User.Status,
+            val status: String,
             val department: String? = null,
         ) {
             companion object {
@@ -49,8 +53,8 @@ class UserResources {
                             name,
                             isPrivacy,
                             createdAt!!,
-                            status,
-                            department
+                            status.name.lowercase(),
+                            department,
                         )
                     }
                 }
@@ -63,20 +67,19 @@ class UserResources {
             val name: String,
             val accessPrivacyInformation: Boolean,
             val regDate: LocalDateTime,
-            val status: User.Status,
+            val status: String,
             val department: String? = null,
             val projects: List<ProjectResources.Reply>? = null,
             val authorityDefinitions: List<AuthorityGrant>? = null,
-            val menuNavigations: List<PersonalGrant>? = null
+            val menuNavigations: List<PersonalGrant>? = null,
         ) {
             companion object {
                 fun from(
                     user: User,
                     projects: List<Project>,
                     userAuthorityGrants: List<UserAuthorityGrant>,
-                    userPersonalGrants: List<UserPersonalGrant>
+                    userPersonalGrants: List<UserPersonalGrant>,
                 ): Detail {
-
                     val repliesOfProject = projects.map { ProjectResources.Reply.from(it) }
                     val authorityGrants = userAuthorityGrants.map { AuthorityGrant.from(it.authorityDefinition!!, it.createdAt!!) }
                     val personalGrants = userPersonalGrants.map { PersonalGrant.from(it.menuNavigation!!, it.createdAt!!) }
@@ -88,11 +91,11 @@ class UserResources {
                             name,
                             isPrivacy,
                             createdAt!!,
-                            status,
+                            status.name.lowercase(),
                             department,
                             repliesOfProject,
                             authorityGrants,
-                            personalGrants
+                            personalGrants,
                         )
                     }
                 }

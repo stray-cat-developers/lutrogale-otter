@@ -1,12 +1,13 @@
 package io.mustelidae.otter.lutrogale.utils
 
+import java.security.MessageDigest
 import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 class Crypto(
-    key: String
+    key: String,
 ) {
 
     private val iv = IvParameterSpec("cCaJdltxT15KxPw".toByteArray())
@@ -29,5 +30,14 @@ class Crypto(
         val decryptedText = String(cipher.doFinal(cipherText), Charsets.UTF_8)
 
         return jackson.readValue(decryptedText, valueType)
+    }
+
+    companion object {
+        fun sha256(value: String): String {
+            return MessageDigest
+                .getInstance("SHA-256")
+                .digest(value.toByteArray())
+                .fold("") { str, it -> str + "%02x".format(it) }
+        }
     }
 }

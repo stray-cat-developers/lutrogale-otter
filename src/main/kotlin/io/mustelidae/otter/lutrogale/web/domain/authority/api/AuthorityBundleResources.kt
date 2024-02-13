@@ -11,14 +11,14 @@ class AuthorityBundleResources {
         @Schema(name = "AuthorityBundle.Request.AuthorityBundle")
         data class AuthorityBundle(
             val groupName: String,
-            val naviId: List<Long>
+            val naviId: List<Long>,
         )
     }
 
     @Schema(name = "AuthorityBundle.Modify")
     class Modify {
         data class Tree(
-            val naviId: Long
+            val naviId: Long,
         )
     }
 
@@ -29,7 +29,7 @@ class AuthorityBundleResources {
             @JsonProperty("authId")
             val id: Long,
             val name: String,
-            val projectId: Long
+            val projectId: Long,
         ) {
             companion object {
                 fun from(authorityDefinition: AuthorityDefinition): AuthorityBundle {
@@ -37,7 +37,7 @@ class AuthorityBundleResources {
                         AuthorityBundle(
                             authorityDefinition.id!!,
                             name,
-                            authorityDefinition.project!!.id!!
+                            authorityDefinition.project!!.id!!,
                         )
                     }
                 }

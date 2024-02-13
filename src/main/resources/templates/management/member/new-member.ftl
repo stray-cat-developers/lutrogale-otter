@@ -8,14 +8,14 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <@layout.baseWrapper>
 <section class="content-header">
-    <h1>유저 생성</h1>
+    <h1>사용자 생성</h1>
 </section>
 
 <section class="content">
     <div class="create-user-wrap">
         <!-- Nav tabs -->
         <ul class="nav nav-pills nav-justified">
-            <li class="active">1. 신규 유저 생성</li>
+            <li class="active">1. 신규 사용자 생성</li>
             <li>2. 권한 그룹 설정</li>
             <li>3. 개인별 권한 설정</li>
             <li>4. 완료</li>
@@ -24,13 +24,13 @@
         <div class="tab-content box box-primary box-body">
             <div role="tabpanel" class="tab-pane active form-horizontal" id="tab1">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">유저 이메일</label>
+                    <label class="col-sm-2 control-label">사용자 이메일</label>
                     <div class="col-sm-10">
                         <input class="form-control" id="user-email" type="email" placeholder="email 주소를 입력해주세요">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">유저 이름</label>
+                    <label class="col-sm-2 control-label">사용자 이름</label>
                     <div class="col-sm-10">
                         <input class="form-control" id="user-name" type="text" placeholder="이름을 입력해주세요">
                     </div>

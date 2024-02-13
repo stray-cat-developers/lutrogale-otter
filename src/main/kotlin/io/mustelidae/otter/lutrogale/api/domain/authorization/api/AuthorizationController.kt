@@ -11,7 +11,9 @@ import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -28,26 +30,21 @@ class AuthorizationController(
     private val clientCertificationInteraction: ClientCertificationInteraction,
     private val userFinder: UserFinder,
     private val projectFinder: ProjectFinder,
-    private val menuNavigationInteraction: MenuNavigationInteraction
+    private val menuNavigationInteraction: MenuNavigationInteraction,
 ) {
 
-    /**
-     * @api {post} /v1/verification/user/{email}/authorization-check/id [Id based check]
-     * @apiVersion 0.1
-     * @apiGroup authorization
-     * @apiName 네비ID 권한 체크
-     * @apiDescription 오소리 admin에 등록된 메뉴 네비게이션 ID를 가지고 권한을 체크 합니다.
-     */
+    @Operation(summary = "메뉴ID 기반 권한 체크")
     @PostMapping("authorization-check/id")
     fun idChecks(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
-        @RequestBody request: AccessResources.Request.IdBase
+        @RequestBody @Valid
+        request: AccessResources.Request.IdBase,
     ): Replies<AccessResources.Reply.AccessState> {
         val ids = request.ids
         val email = request.email
         if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
             val accessStates = ids.map {
-                AccessResources.Reply.AccessState.ofDenied(it, "최초 접근한 유저이며 유저의 권한 등록이 필요합니다.")
+                AccessResources.Reply.AccessState.ofDenied(it, "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.")
             }
             return accessStates.toReplies()
         }
@@ -56,17 +53,19 @@ class AuthorizationController(
         return accessStates.toReplies()
     }
 
+    @Operation(summary = "호출 URL 기반 권한 체크")
     @PostMapping("authorization-check/uri")
     fun urlCheck(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
-        @RequestBody request: AccessResources.Request.UriBase
+        @RequestBody @Valid
+        request: AccessResources.Request.UriBase,
     ): Replies<AccessResources.Reply.AccessState> {
         val accessUris = request.uris.map { AccessResources.AccessUri.of(it.uri, it.methodType) }
         val email = request.email
         if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
             val accessStates: MutableList<AccessResources.Reply.AccessState> = ArrayList()
             accessStates.addAll(
-                accessUris.map { AccessResources.Reply.AccessState.ofDenied(it.uri, "최초 접근한 유저이며 유저의 권한 등록이 필요합니다.") }
+                accessUris.map { AccessResources.Reply.AccessState.ofDenied(it.uri, "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.") },
             )
             return accessStates.toReplies()
         }
@@ -76,6 +75,7 @@ class AuthorizationController(
         return accessStates.toReplies()
     }
 
+    @Operation(summary = "사용자의 권한이 있는 모든 메뉴 조회")
     @GetMapping("accessible-urls")
     fun findAllAccessibleGrant(
         @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,

@@ -30,11 +30,7 @@ class WebDataBindHandler {
  */
 class CollectionListValidator(localValidatorFactoryBean: LocalValidatorFactoryBean) : Validator {
 
-    private val validator: Validator
-
-    init {
-        this.validator = localValidatorFactoryBean
-    }
+    private val validator: Validator = localValidatorFactoryBean
 
     override fun supports(clazz: Class<*>): Boolean {
         return clazz.isAssignableFrom(clazz)
@@ -58,7 +54,6 @@ class CollectionListValidator(localValidatorFactoryBean: LocalValidatorFactoryBe
     }
 
     private fun validateOnProperty(target: Any, errors: Errors) {
-
         val propertyDescriptors = BeanUtils.getPropertyDescriptors(target.javaClass)
 
         for (descriptor in propertyDescriptors) {

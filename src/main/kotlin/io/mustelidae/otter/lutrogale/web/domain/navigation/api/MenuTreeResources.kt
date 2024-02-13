@@ -16,17 +16,19 @@ class MenuTreeResources {
             val name: String,
             val uriBlock: String,
             val type: Constant.NavigationType,
-            val methodType: RequestMethod
+            val methodType: RequestMethod,
         ) {
             @JsonIgnore
             fun getRefineUriBlock(): String {
                 var block = uriBlock
 
-                if (uriBlock.first() != '/')
+                if (uriBlock.first() != '/') {
                     block = "/$block"
+                }
 
-                if (uriBlock.last() == '/')
+                if (uriBlock.last() == '/') {
                     block = block.substring(0, block.lastIndex)
+                }
                 return block
             }
         }
@@ -44,21 +46,21 @@ class MenuTreeResources {
             val type: String? = null,
             @Schema(name = "a_attr")
             @JsonProperty(value = "a_attr")
-            val replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation? = null
+            val replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation? = null,
         ) {
 
             companion object {
                 fun of(
                     treeId: String,
                     parentTreeId: String,
-                    replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation
+                    replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation,
                 ): TreeBranch {
                     return TreeBranch(
                         treeId,
                         parentTreeId,
                         replyOfMenuNavigation.name,
                         replyOfMenuNavigation.type.name,
-                        replyOfMenuNavigation
+                        replyOfMenuNavigation,
                     )
                 }
             }

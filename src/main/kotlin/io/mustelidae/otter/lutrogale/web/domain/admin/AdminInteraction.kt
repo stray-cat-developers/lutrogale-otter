@@ -11,11 +11,15 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class AdminInteraction(
     private val adminRepository: AdminRepository,
-    private val adminFinder: AdminFinder
+    private val adminFinder: AdminFinder,
 ) {
     fun register(email: String, pw: String, name: String, description: String?, img: String?): Admin {
         val admin = Admin.of(
-            email, pw, name, description, img
+            email,
+            pw,
+            name,
+            description,
+            img,
         )
         return adminRepository.save(admin)
     }
@@ -28,8 +32,9 @@ class AdminInteraction(
             this.description = description
         }
 
-        if (pw.isNullOrEmpty().not())
+        if (pw.isNullOrEmpty().not()) {
             admin.setPassword(pw!!)
+        }
 
         adminRepository.save(admin)
     }

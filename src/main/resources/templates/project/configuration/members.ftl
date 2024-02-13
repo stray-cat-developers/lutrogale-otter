@@ -8,7 +8,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <@layout.baseWrapper>
 <section class="content-header">
-    <h1>유저 권한 관리<small>프로젝트에 접근 가능한 유저들을 관리합니다.</small></h1>
+    <h1>사용자 권한 관리<small>프로젝트에 접근 가능한 사용자들을 관리합니다.</small></h1>
 </section>
 <section class="content">
     <div class="row">
@@ -58,7 +58,7 @@
         <div class="col-md-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h4>유저리스트</h4>
+                    <h4>사용자리스트</h4>
                 </div>
                 <div class="box-body">
                     <table id="tb-user" class="table table-bordered table-striped"></table>
@@ -393,7 +393,7 @@
             var all_auth = all_auth[0].result;
             var user_auth = user_auth[0].result.authorityDefinitions;
 
-            $('#modal-modify-group .modal-title').text('유저 권한 그룹 수정');
+            $('#modal-modify-group .modal-title').text('사용자 권한 그룹 수정');
             $('#modal-modify-group .modal-body').empty().append($('#modal-modify-group-content form').clone());
 
             $('#modal-modify-group #tb-group-list').on('click', 'tr', function () {

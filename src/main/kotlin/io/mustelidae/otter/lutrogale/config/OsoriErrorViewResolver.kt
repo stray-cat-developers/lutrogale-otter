@@ -1,13 +1,13 @@
 package io.mustelidae.otter.lutrogale.config
 
-import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
+import io.mustelidae.otter.lutrogale.utils.RequestHelper
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
 import org.springframework.web.servlet.ModelAndView
 import java.time.LocalDateTime
 import java.time.ZoneId
-import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by seooseok on 2016. 9. 19..

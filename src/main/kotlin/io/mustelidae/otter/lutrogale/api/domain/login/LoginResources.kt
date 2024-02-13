@@ -7,6 +7,6 @@ class LoginResources {
     @Schema(name = "Login.Request")
     class Request(
         val email: String,
-        val password: String
+        val password: String,
     )
 }

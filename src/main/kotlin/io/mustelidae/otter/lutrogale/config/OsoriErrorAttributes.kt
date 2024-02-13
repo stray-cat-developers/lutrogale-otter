@@ -1,5 +1,6 @@
 package io.mustelidae.otter.lutrogale.config
 
+import jakarta.servlet.ServletException
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.BindingResult
@@ -7,7 +8,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.WebRequest
 import java.util.Date
-import javax.servlet.ServletException
 
 /**
  * Created by seooseok on 2016. 9. 29..
@@ -24,7 +24,7 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
     }
 
     private fun addCode(errorAttributes: MutableMap<String, Any?>, requestAttributes: RequestAttributes) {
-        val status = getAttribute<Int>(requestAttributes, "javax.servlet.error.status_code")
+        val status = getAttribute<Int>(requestAttributes, "jakarta.servlet.error.status_code")
         if (status == null) {
             errorAttributes["code"] = "S998"
             return
@@ -41,7 +41,7 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
             errorAttributes["exception"] = error!!.javaClass.name
             addErrorMessage(errorAttributes, error)
         }
-        val message = getAttribute<String>(requestAttributes, "javax.servlet.error.message") as String
+        val message = getAttribute<String>(requestAttributes, "jakarta.servlet.error.message") as String
         if ((message.isEmpty().not() || errorAttributes["message"] == null) &&
             error !is BindingResult
         ) {
@@ -67,12 +67,14 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
     }
 
     private fun extractBindingResult(error: Throwable?): BindingResult? {
+        if (error is MethodArgumentNotValidException) {
+            return (error as MethodArgumentNotValidException?)?.bindingResult
+        }
+
         if (error is BindingResult) {
             return error
         }
-        return if (error is MethodArgumentNotValidException) {
-            (error as MethodArgumentNotValidException?)?.bindingResult
-        } else null
+        return null
     }
 
     private fun <T> getAttribute(requestAttributes: RequestAttributes, name: String): Any? {

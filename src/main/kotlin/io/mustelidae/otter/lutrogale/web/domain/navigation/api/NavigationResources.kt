@@ -10,7 +10,7 @@ class NavigationResources {
         val name: String,
         val type: Constant.NavigationType,
         val methodType: RequestMethod,
-        val uriBlock: String
+        val uriBlock: String,
     )
 
     class Reply {
@@ -20,14 +20,19 @@ class NavigationResources {
             val name: String,
             val uriBlock: String,
             val methodType: RequestMethod,
-            val fullUrl: String? = null
+            val fullUrl: String? = null,
         ) {
 
             companion object {
                 fun from(menuNavigation: MenuNavigation, fullUrl: String): ReplyOfMenuNavigation {
                     return menuNavigation.run {
                         ReplyOfMenuNavigation(
-                            id!!, type, name, uriBlock, methodType, fullUrl
+                            id!!,
+                            type,
+                            name,
+                            uriBlock,
+                            methodType,
+                            fullUrl,
                         )
                     }
                 }

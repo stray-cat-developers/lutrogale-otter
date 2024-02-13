@@ -17,7 +17,7 @@ class UserGrantResources {
             val name: String,
             val regDate: String,
             val projectId: Long,
-            val projectName: String
+            val projectName: String,
         ) {
 
             companion object {
@@ -28,7 +28,7 @@ class UserGrantResources {
                             name,
                             regDate.toDateString(),
                             project!!.id!!,
-                            project!!.name
+                            project!!.name,
                         )
                     }
                 }
@@ -40,7 +40,7 @@ class UserGrantResources {
                             name,
                             createdAt!!.toDateString(),
                             project!!.id!!,
-                            project!!.name
+                            project!!.name,
                         )
                     }
                 }
@@ -56,7 +56,7 @@ class UserGrantResources {
             val regDate: String,
             val projectId: Long,
             val projectName: String,
-            val fullUrl: String? = null
+            val fullUrl: String? = null,
         ) {
 
             companion object {
@@ -69,7 +69,7 @@ class UserGrantResources {
                             uriBlock,
                             regDate.toDateString(),
                             project!!.id!!,
-                            project!!.name
+                            project!!.name,
                         )
                     }
                 }
@@ -84,7 +84,7 @@ class UserGrantResources {
                             regDate.toDateString(),
                             project!!.id!!,
                             project!!.name,
-                            fullUrl
+                            fullUrl,
                         )
                     }
                 }

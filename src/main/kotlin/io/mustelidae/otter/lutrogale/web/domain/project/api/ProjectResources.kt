@@ -7,7 +7,7 @@ class ProjectResources {
 
     data class Request(
         val name: String,
-        val description: String
+        val description: String,
     )
 
     class Reply(
@@ -16,7 +16,7 @@ class ProjectResources {
         val apiKey: String,
         val created: String,
         val status: Boolean,
-        val description: String? = null
+        val description: String? = null,
     ) {
 
         companion object {
@@ -29,7 +29,7 @@ class ProjectResources {
                         apiKey,
                         createdAt!!.toDateString(),
                         status,
-                        description
+                        description,
                     )
                 }
             }

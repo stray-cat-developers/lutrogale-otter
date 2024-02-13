@@ -1,6 +1,7 @@
 package io.mustelidae.otter.lutrogale.config
 
-import io.mustelidae.otter.lutrogale.web.commons.utils.RequestHelper
+import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
+import io.mustelidae.otter.lutrogale.web.AdminSession
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware
@@ -22,22 +23,23 @@ class AuditConfiguration {
 class AuditorAwareImpl : AuditorAware<String> {
 
     override fun getCurrentAuditor(): Optional<String> {
-        var auditor = unknownAuditor
-
         if (RequestContextHolder.getRequestAttributes() != null) {
             val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request
 
-            if (request.requestURI.startsWith("/api"))
-                return Optional.of("api@osori.com")
+            val session = AdminSession(request.session)
 
-            val osoriSessionInfo = RequestHelper.getSessionByAdmin(request)
-            auditor = osoriSessionInfo.adminEmail
+            // Admin인 경우
+            if (session.hasSession()) {
+                return Optional.of("A:${session.getAdminId()}.")
+            }
+
+            // API인 경우
+            val id = request.getHeader(RoleHeader.XSystem.KEY)
+            if (id.isNullOrBlank().not()) {
+                return Optional.of("K:$id")
+            }
         }
 
-        return Optional.of(auditor)
-    }
-
-    companion object {
-        const val unknownAuditor = "S:unknown"
+        return Optional.of("S:unknown")
     }
 }

@@ -11,12 +11,16 @@ object Constant {
      */
     enum class NavigationType {
         /* 카테고리 */
-        category, /* 메뉴 */
-        menu, /* 기능 */
-        function
+        CATEGORY,
+
+        /* 메뉴 */
+        MENU,
+
+        /* 기능 */
+        FUNCTION,
     }
 
     enum class AuthenticationCheckType {
-        uri, id
+        URI, ID
     }
 }

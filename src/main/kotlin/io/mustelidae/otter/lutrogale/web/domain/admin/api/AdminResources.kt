@@ -9,7 +9,7 @@ class AdminResources {
     class Modify(
         val description: String,
         val imageUrl: String,
-        val pw: String? = null
+        val pw: String? = null,
     )
 
     @Schema(name = "Admin.Reply")
@@ -18,7 +18,7 @@ class AdminResources {
         val email: String,
         val name: String,
         val description: String? = null,
-        val img: String? = null
+        val img: String? = null,
     ) {
 
         companion object {
@@ -30,7 +30,7 @@ class AdminResources {
                         email,
                         name,
                         description,
-                        img
+                        img,
                     )
                 }
             }

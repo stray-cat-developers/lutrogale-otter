@@ -5,7 +5,7 @@
         <ul class="sidebar-menu">
             <li class="header">Management<li>
                 <a id="members" href="#" onclick="OsoriRoute.go('view.management.members');">
-                    <i class="fa fa-users"></i> <span>유저 정보 관리</span>
+                    <i class="fa fa-users"></i> <span>사용자 정보 관리</span>
                 </a>
             </li>
             <li class="header">Projects</li>
@@ -27,7 +27,7 @@
                                     '<ul class="treeview-menu">' +
                                         '<li><a href="'+ OsoriRoute.getUri('view.project.configuration.navigation', {id: v.id}) + '"><i class="fa fa-circle-o"></i>메뉴 네비게이션 설정</a></li>' +
                                         '<li><a href="'+ OsoriRoute.getUri('view.project.configuration.authority', {id: v.id}) + '" ><i class="fa fa-circle-o"></i>권한 그룹 설정</a></li>' +
-                                        '<li><a href="'+ OsoriRoute.getUri('view.project.configuration.members', {id: v.id}) +'"><i class="fa fa-circle-o"></i>유저 권한 관리</a></li>' +
+                                        '<li><a href="'+ OsoriRoute.getUri('view.project.configuration.members', {id: v.id}) +'"><i class="fa fa-circle-o"></i>사용자 권한 관리</a></li>' +
                                     '</ul>' +
                                 '</li>');
             });

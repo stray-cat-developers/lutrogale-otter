@@ -18,9 +18,9 @@ class UserDSLRepository : QuerydslRepositorySupport(User::class.java) {
             .innerJoin(authorityDefinition.project, project).fetchJoin()
             .where(
                 project.id.eq(projectId),
-                user.status.eq(User.Status.allow),
+                user.status.eq(User.Status.ALLOW),
                 userAuthorityGrant.status.isTrue,
-                authorityDefinition.status.isTrue
+                authorityDefinition.status.isTrue,
             ).fetch()
             .distinct()
     }

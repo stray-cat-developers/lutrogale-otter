@@ -3,11 +3,11 @@
 package io.mustelidae.otter.lutrogale.config
 
 import com.google.common.base.Strings
-import io.mustelidae.otter.lutrogale.common.Error
+import io.mustelidae.otter.lutrogale.common.DefaultError
 import io.mustelidae.otter.lutrogale.common.ErrorCode
 import io.mustelidae.otter.lutrogale.common.ErrorSource
 import io.mustelidae.otter.lutrogale.utils.Jackson
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
+import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.error.ErrorAttributeOptions
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
@@ -27,11 +27,10 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.ServletWebRequest
 import java.time.LocalDateTime
-import javax.servlet.http.HttpServletRequest
 
 @ControllerAdvice(annotations = [RestController::class])
 class ExceptionConfiguration(
-    private val env: Environment
+    private val env: Environment,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -43,14 +42,14 @@ class ExceptionConfiguration(
     @ResponseBody
     fun handleGlobalException(e: RuntimeException, request: HttpServletRequest): GlobalErrorFormat {
         log.error("Unexpected error", e)
-        return errorForm(request, e, Error(ErrorCode.S000, "Oops, something went wrong."))
+        return errorForm(request, e, DefaultError(ErrorCode.S000, "Oops, something went wrong."))
     }
 
     @ExceptionHandler(value = [InvalidDataAccessApiUsageException::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
     fun handleInvalidDataAccessApiUsageException(e: InvalidDataAccessApiUsageException, request: HttpServletRequest): GlobalErrorFormat {
-        return errorForm(request, e, Error(ErrorCode.SD01, e.message!!))
+        return errorForm(request, e, DefaultError(ErrorCode.SD01, e.message!!))
     }
 
     /**
@@ -60,7 +59,7 @@ class ExceptionConfiguration(
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
     fun handleIllegalStateException(e: IllegalStateException, request: HttpServletRequest): GlobalErrorFormat {
-        return errorForm(request, e, Error(ErrorCode.P000, "Oops, something went wrong."))
+        return errorForm(request, e, DefaultError(ErrorCode.P000, "Oops, something went wrong."))
     }
 
     /**
@@ -81,7 +80,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun handleIllegalArgumentException(e: IllegalArgumentException, request: HttpServletRequest): GlobalErrorFormat {
         log.error("[T] wrong input.", e)
-        return errorForm(request, e, Error(ErrorCode.HI01, "Invalid input"))
+        return errorForm(request, e, DefaultError(ErrorCode.HI01, "Invalid input"))
     }
 
     @ExceptionHandler(value = [MethodArgumentNotValidException::class])
@@ -89,17 +88,17 @@ class ExceptionConfiguration(
     @ResponseBody
     fun handleMethodArgumentNotValidException(
         e: MethodArgumentNotValidException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(
             request,
             e,
-            Error(
+            DefaultError(
                 ErrorCode.HI00,
                 e.bindingResult.fieldError?.defaultMessage ?: run {
                     ErrorCode.HI00.summary
-                }
-            )
+                },
+            ),
         )
     }
 
@@ -108,7 +107,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun handleCommunicationException(
         e: CommunicationException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
     }
@@ -121,7 +120,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun handleHumanException(
         e: HumanException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
     }
@@ -134,7 +133,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun policyException(
         e: PolicyException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
     }
@@ -147,7 +146,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun unAuthorizedException(
         e: UnAuthorizedException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
     }
@@ -160,7 +159,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun dataNotFindException(
         e: DataNotFindException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
     }
@@ -170,7 +169,7 @@ class ExceptionConfiguration(
     @ResponseBody
     fun preconditionFailException(
         e: PreconditionFailException,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
     }
@@ -187,15 +186,16 @@ class ExceptionConfiguration(
             e.code!!,
             null,
             e.msg!!,
-            e.javaClass.simpleName
+            e.javaClass.simpleName,
         )
     }
 
     private fun errorForm(request: HttpServletRequest, e: Exception, error: ErrorSource): GlobalErrorFormat {
-
-        val errorAttributeOptions = if (env.activeProfiles.contains("prod").not())
+        val errorAttributeOptions = if (env.activeProfiles.contains("prod").not()) {
             ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)
-        else ErrorAttributeOptions.defaults()
+        } else {
+            ErrorAttributeOptions.defaults()
+        }
 
         val errorAttributes =
             DefaultErrorAttributes().getErrorAttributes(ServletWebRequest(request), errorAttributeOptions)
@@ -212,20 +212,20 @@ class ExceptionConfiguration(
 
     @Suppress(
         "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
-        "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"
+        "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
     )
     private fun methodArgumentNotValidExceptionErrorForm(errors: List<FieldError>) =
         errors.map {
             ValidationError(
                 field = it.field,
                 rejectedValue = it.rejectedValue.toString(),
-                message = it.defaultMessage
+                message = it.defaultMessage,
             )
         }.toList()
 
     private data class ValidationError(
         val field: String,
         val rejectedValue: String,
-        val message: String?
+        val message: String?,
     )
 }

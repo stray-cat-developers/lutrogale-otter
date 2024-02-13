@@ -2,8 +2,9 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
 import io.mustelidae.otter.lutrogale.common.Constant.AuthenticationCheckType
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.common.DefaultError
+import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.config.HumanException
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
@@ -23,17 +24,17 @@ class ClientCertificationInteraction(
     private val userFinder: UserFinder,
     private val userInteraction: UserInteraction,
     private val projectFinder: ProjectFinder,
-    private val accessCheckerHandler: AccessCheckerHandler
+    private val accessCheckerHandler: AccessCheckerHandler,
 
 ) {
 
     fun isAuthorizedUserIfAddNotFoundUser(email: String): Boolean {
         val user = userFinder.findBy(email)
         return if (user == null) {
-            userInteraction.createBy(email, "Known User", User.Status.wait)
+            userInteraction.createBy(email, "Known User", User.Status.WAIT)
             false
         } else {
-            user.status === User.Status.allow
+            user.status === User.Status.ALLOW
         }
     }
 
@@ -44,8 +45,9 @@ class ClientCertificationInteraction(
 
         val menuNavigations = getNavigationsOfUser(user, project)
         for (menuNavigation in menuNavigations) {
-            if (menuNavigation.project != project)
-                throw ApplicationException(HumanErr.INVALID_ACCESS)
+            if (menuNavigation.project != project) {
+                throw HumanException(DefaultError(ErrorCode.HA00, "해당 사용자는 권한 설정이 되어있지 않습니다."))
+            }
         }
         val checkType: AuthenticationCheckType = checkResource.authenticationCheckType
         val accessChecker = accessCheckerHandler.handle(checkType)
@@ -55,8 +57,9 @@ class ClientCertificationInteraction(
     private fun getNavigationsOfUser(user: User, project: Project): List<MenuNavigation> {
         val menuNavigations: MutableList<MenuNavigation> = ArrayList()
         val authorityDefinitions = user.authorityDefinitions
-        if (authorityDefinitions.isEmpty())
-            throw ApplicationException(HumanErr.INVALID_ACCESS, "해당 사용자는 권한 설정이 되어있지 않습니다.")
+        if (authorityDefinitions.isEmpty()) {
+            throw HumanException(DefaultError(ErrorCode.HA00, "해당 사용자는 권한 설정이 되어있지 않습니다."))
+        }
 
         menuNavigations.addAll(authorityDefinitions.flatMap { it.menuNavigations })
         menuNavigations.addAll(user.menuNavigations)

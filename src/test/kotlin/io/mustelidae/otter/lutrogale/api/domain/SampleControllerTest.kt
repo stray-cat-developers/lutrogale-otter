@@ -15,4 +15,14 @@ internal class SampleControllerTest : FlowTestSupport() {
         // Then
         reply shouldBe "Hello World"
     }
+
+    @Test
+    fun helloWorld2() {
+        // Given
+        val sampleControllerFlow = SampleControllerFlow(mockMvc)
+        // When
+        val replies = sampleControllerFlow.helloWorld2()
+        // Then
+        replies.joinToString(",") shouldBe "a,b,c"
+    }
 }
