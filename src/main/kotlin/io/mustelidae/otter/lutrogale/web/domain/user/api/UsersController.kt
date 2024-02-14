@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.user.api
 
 import io.mustelidae.otter.lutrogale.common.Replies
+import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReplies
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
-import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
@@ -44,15 +44,15 @@ class UsersController(
     fun modifyInfo(
         @PathVariable userIds: List<Long>,
         @RequestBody modify: UserResources.Modify.UserState,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         userInteraction.modifyBy(userIds, modify.getStatus())
-        return success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "사용자 정보 일괄 만료")
     @DeleteMapping("/{userIds}")
-    fun expireStatus(@PathVariable userIds: List<Long>): ApiRes<*> {
+    fun expireStatus(@PathVariable userIds: List<Long>): Reply<Unit> {
         userInteraction.expireBy(userIds)
-        return success()
+        return Unit.toReply()
     }
 }
