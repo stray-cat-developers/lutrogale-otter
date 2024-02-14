@@ -105,4 +105,6 @@ class MenuNavigation(
         }
         status = false
     }
+
+    companion object
 }

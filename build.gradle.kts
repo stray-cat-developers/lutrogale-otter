@@ -57,6 +57,7 @@ dependencies {
     implementation("com.google.guava:guava:32.0.0-android")
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    testImplementation("io.mockk:mockk:1.13.9")
 }
 
 tasks.withType<KotlinCompile>().all {
