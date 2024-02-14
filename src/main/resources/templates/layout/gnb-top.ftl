@@ -40,15 +40,12 @@
 
     <script>
         AJAX.getData(OsoriRoute.getUri('admin.findOne')).done(function(data){
-            if(data.code == "0000"){
-                $('#admin-profile').show();
-                $('.user-menu img').attr('src',data.result.img);
-                $('.user-menu span').text(data.result.email);
-                $('.user-header p').html(data.result.name + '<small>' + data.result.description + '</small>');
-
-            } else {
-                $('#admin-profile').hide();
-            }
+            $('#admin-profile').show();
+            $('.user-menu img').attr('src',data.img);
+            $('.user-menu span').text(data.email);
+            $('.user-header p').html(data.name + '<small>' + data.description + '</small>');
+        }).fail(function(){
+            $('#admin-profile').hide();
         });
     </script>
 </nav>

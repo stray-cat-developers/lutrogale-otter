@@ -1,8 +1,8 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
+import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.AdminSession
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
-import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminFinder
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminInteraction
@@ -26,20 +26,19 @@ class AdminController(
 ) {
     @Operation(summary = "어드민 정보 조회")
     @GetMapping
-    fun findOne(): ApiRes<*> {
+    fun findOne(): Reply<AdminResources.Reply> {
         val sessionInfo = AdminSession(httpSession).infoOrThrow()
         val admin = adminFinder.findBy(sessionInfo.adminId)
-        val replyOfAdmin = AdminResources.Reply.from(admin)
-        return ApiRes<Any?>(replyOfAdmin)
+        return AdminResources.Reply.from(admin).toReply()
     }
 
     @Operation(summary = "어드민 정보 수정", description = "admin의 경우 별도 ID를 받지 않는데 이는 profile 수정의 대상은 무조건 로그인 된 대상만 처리 할 수 있도록 하기 위함이다.")
     @PutMapping
     fun modifyInfo(
         @RequestBody modify: AdminResources.Modify,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         val sessionInfo = AdminSession(httpSession).infoOrThrow()
         adminInteraction.modifyBy(sessionInfo.adminId, modify.imageUrl, modify.description, modify.pw!!)
-        return success()
+        return Unit.toReply()
     }
 }
