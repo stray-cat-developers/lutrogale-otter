@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <@layout.baseHeader "New Project">
     <link rel="stylesheet" href="/static/plugins/select2/select2.css">
     <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
@@ -26,24 +26,28 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">사용자 이메일</label>
                     <div class="col-sm-10">
+                        <label for="user-email"></label>
                         <input class="form-control" id="user-email" type="email" placeholder="email 주소를 입력해주세요">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">사용자 이름</label>
                     <div class="col-sm-10">
+                        <label for="user-name"></label>
                         <input class="form-control" id="user-name" type="text" placeholder="이름을 입력해주세요">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">소속 부서</label>
                     <div class="col-sm-10">
+                        <label for="user-dept"></label>
                         <input class="form-control" id="user-dept" type="text" placeholder="부서를 입력해주세요">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">개인 정보 노출 여부</label>
                     <div class="col-sm-10">
+                        <label for="user-privacy"></label>
                         <select id="user-privacy" class="form-control">
                             <option value="true">yes</option>
                             <option value="false">no</option>
@@ -77,12 +81,12 @@
     });
 
     function nextStep(){
-        var email = $('#user-email').val();
-        var name = $('#user-name').val();
-        var dept = $('#user-dept').val();
-        var privacy = $('#user-privacy').val();
+        let email = $('#user-email').val();
+        let name = $('#user-name').val();
+        let dept = $('#user-dept').val();
+        let privacy = $('#user-privacy').val();
 
-        var param = {
+        let param = {
             email: email,
             name: name,
             department: dept,
@@ -92,7 +96,7 @@
         AJAX.postData(OsoriRoute.getUri('user.create'), param).done(function(data){
             OsoriRoute.go(
                 'view.management.newMember.authorityGrant',
-                {userId: data.result}, {projectId: $('.select2').val().join()}
+                {userId: data.content}, {projectId: $('.select2').val().join()}
             );
         });
     }

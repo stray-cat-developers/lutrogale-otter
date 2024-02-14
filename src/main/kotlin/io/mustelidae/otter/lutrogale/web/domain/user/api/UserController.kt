@@ -4,8 +4,6 @@ import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReplies
 import io.mustelidae.otter.lutrogale.common.toReply
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
-import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.UserInteraction
@@ -48,9 +46,9 @@ class UserController(
     fun modifyInfo(
         @PathVariable userId: Long,
         @RequestBody modify: UserResources.Modify.Info,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         userInteraction.modifyBy(userId, modify.name, modify.department, modify.isPrivacy)
-        return success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "사용자가 할당된 프로젝트 리스트 조회")

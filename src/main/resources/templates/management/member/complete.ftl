@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <@layout.baseHeader "New Project">
 
 </@layout.baseHeader>
@@ -79,20 +79,19 @@
 
     $(document).ready(function() {
         AJAX.getData(OsoriRoute.getUri('user.findOne', {userId: user_id}))
-        .done(function (user) {
-            var user = user.result;
+        .done(function (data) {
 
-            $('#user-email').text(user.email);
-            $('#user-name').text(user.name);
-            $('#user-dept').text(user.department);
-            $('#user-privacy').text(user.accessPrivacyInformation);
+            $('#user-email').text(data.email);
+            $('#user-name').text(data.name);
+            $('#user-dept').text(data.department);
+            $('#user-privacy').text(data.accessPrivacyInformation);
         });
 
         var box;
         AJAX.getData(OsoriRoute.getUri('user.findUsersProjects', {userId: user_id}))
         .done(function(data){
 
-            $.each(data.result, function(index, project) {
+            $.each(data.content, function(index, project) {
                 box = $('<div/>', {class: 'box box-solid'});
 
                 AJAX.getData(
