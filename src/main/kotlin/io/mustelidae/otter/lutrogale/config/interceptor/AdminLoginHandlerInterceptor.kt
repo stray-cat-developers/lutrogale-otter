@@ -1,5 +1,8 @@
 package io.mustelidae.otter.lutrogale.config.interceptor
 
+import io.mustelidae.otter.lutrogale.common.DefaultError
+import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.config.HumanException
 import io.mustelidae.otter.lutrogale.utils.RequestHelper
 import io.mustelidae.otter.lutrogale.web.AdminSession
 import jakarta.servlet.http.HttpServletRequest
@@ -23,6 +26,10 @@ class AdminLoginHandlerInterceptor : HandlerInterceptor {
         try {
             AdminSession(request.session).infoOrThrow()
         } catch (e: IllegalArgumentException) {
+            if (RequestHelper.isApiRequest(request)) {
+                throw HumanException(DefaultError(ErrorCode.HA00, "로그인을 해야만 사용할 수 있는 API 입니다."))
+            }
+
             response.sendRedirect("/login.html")
             return false
         }
