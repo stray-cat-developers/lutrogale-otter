@@ -1,14 +1,14 @@
 package io.mustelidae.otter.lutrogale.common
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonUnwrapped
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.xml.bind.annotation.XmlAnyElement
 
-@Schema(name = "Common.Reply", description = "Http Json Response Base Format (Class 형태의 리소스를 반환할 때 사용)")
+@Schema(name = "Lutrogale.Common.Reply", description = "Http Json Response Base Format (Class 형태의 리소스를 반환할 때 사용)")
 open class Reply<T>() {
-    @Schema(name = "result")
-    @JsonProperty("result")
+    @get:JsonUnwrapped
+    @get:XmlAnyElement
     var content: T? = null
-    var code: String = "0000"
 
     constructor(content: T) : this() {
         this.content = content

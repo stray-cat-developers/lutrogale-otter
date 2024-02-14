@@ -2,7 +2,7 @@ package io.mustelidae.otter.lutrogale.config
 
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(name = "Common.Error")
+@Schema(name = "Lutrogale.Common.Error")
 data class GlobalErrorFormat(
     val timestamp: String,
     @Schema(description = "Http Status Code")

@@ -11,7 +11,7 @@ class UserGrantResources {
 
     class Reply {
 
-        @Schema(name = "UserGrant.Reply.AuthorityGrant")
+        @Schema(name = "Lutrogale.UserGrant.Reply.AuthorityGrant")
         data class AuthorityGrant(
             val id: Long,
             val name: String,
@@ -47,7 +47,7 @@ class UserGrantResources {
             }
         }
 
-        @Schema(name = "UserGrant.Reply.PersonalGrant")
+        @Schema(name = "Lutrogale.UserGrant.Reply.PersonalGrant")
         data class PersonalGrant(
             val id: Long,
             val type: Constant.NavigationType,

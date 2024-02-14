@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 
 class AccessResources {
 
+    @Schema(name = "Lutrogale.Access.CheckWay")
     enum class CheckWay {
         ID, URI
     }
@@ -73,7 +74,7 @@ class AccessResources {
         }
     }
 
-    @Schema(name = "Access.AccessUri")
+    @Schema(name = "Lutrogale.Access.AccessUri")
     class AccessUri(
         val uri: String,
         val methodType: RequestMethod,

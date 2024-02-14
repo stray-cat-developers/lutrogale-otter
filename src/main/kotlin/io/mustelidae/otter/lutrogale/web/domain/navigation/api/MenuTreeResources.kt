@@ -10,6 +10,7 @@ class MenuTreeResources {
 
     class Request {
 
+        @Schema(name = "Lutrogale.MenuTree.Request.Branch")
         class Branch(
             val treeId: String,
             val parentTreeId: String,
@@ -35,6 +36,7 @@ class MenuTreeResources {
     }
 
     class Reply {
+        @Schema(name = "Lutrogale.MenuTree.Reply.TreeBranch")
         class TreeBranch(
             @Schema(name = "id")
             @JsonProperty(value = "id")

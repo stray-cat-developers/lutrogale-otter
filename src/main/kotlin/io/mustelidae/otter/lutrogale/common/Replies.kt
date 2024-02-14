@@ -1,11 +1,11 @@
 package io.mustelidae.otter.lutrogale.common
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.util.Assert
 import java.util.Collections
 
+@Schema(name = "Lutrogale.Common.Replies")
 open class Replies<T>(content: Iterable<T>) : Iterable<T> {
 
     @JsonIgnore
@@ -24,8 +24,6 @@ open class Replies<T>(content: Iterable<T>) : Iterable<T> {
         }
     }
 
-    @Schema(name = "result")
-    @JsonProperty("result")
     open fun getContent(): Collection<T> {
         return Collections.unmodifiableCollection(collection!!)
     }
