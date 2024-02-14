@@ -15,9 +15,7 @@ class SwaggerConfiguration {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
-        .packagesToScan("io.mustelidae.otter.lutrogale")
-        .pathsToMatch("/v1/**")
-        .pathsToExclude("/v1/maintenance/**", "/v1/migration/**", "/v1/bridge/**")
+        .packagesToScan("io.mustelidae.otter.lutrogale.api")
         .build()
 
     @Bean
@@ -27,7 +25,6 @@ class SwaggerConfiguration {
             it.info.version("v1")
             it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
         }
-        .packagesToScan("io.mustelidae.otter.lutrogale")
-        .pathsToMatch("/v1/maintenance/**")
+        .packagesToScan("io.mustelidae.otter.lutrogale.web")
         .build()
 }
