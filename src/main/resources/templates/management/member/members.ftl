@@ -111,7 +111,7 @@
                             <div class="box-body">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>부서</label>
+                                    <label for="user_department">부서</label>
                                     <input id="user_department" type="text" class="form-control">
                                 </div>
                             </div>
@@ -144,15 +144,15 @@
                             <div class="box-body">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>이름</label>
+                                    <label for="user_name">이름</label>
                                     <input id="user_name" type="text" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label>부서</label>
+                                    <label for="user_department">부서</label>
                                     <input id="user_department" type="text" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label>개인정보열람 가능</label>
+                                    <label for="user_privacy">개인정보열람 가능</label>
                                     <select id="user_privacy" class="form-control">
                                         <option value="true">가능</option>
                                         <option value="false">불가</option>
@@ -367,7 +367,7 @@
                                    $('#modal-group-detail #modal-menu-tree')
                                    .jstree('destroy')
                                    .jstree(OPTION.jstree(opt.menu_tree, all_branch))
-                                   .on('loaded.jstree', function (event, data) {
+                                   .on('loaded.jstree', function () {
                                        $(this).jstree("open_all");
                                    });
 
@@ -408,7 +408,7 @@
 
                 if(select_count === 1){
                     $('#modal-modify-user #user_name').val(checked_users[0].name);
-                    $('#modal-modify-user #user_department').val(checked_users[0].department),
+                    $('#modal-modify-user #user_department').val(checked_users[0].department);
                     $('#modal-modify-user #user_privacy').val(checked_users[0].accessPrivacyInformation+"");
                 }
 
@@ -500,7 +500,7 @@
                         {'status': status_type}
                     )
                     .done(after_func)
-                    .fail(function(res, text){
+                    .fail(function(res){
                         alert(res.responseJSON.message);
                     });
                 }
