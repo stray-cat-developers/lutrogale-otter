@@ -2,7 +2,7 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.common.Constant.AuthenticationCheckType
 import io.mustelidae.otter.lutrogale.config.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.web.common.exception.ProcessErr
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.stereotype.Service

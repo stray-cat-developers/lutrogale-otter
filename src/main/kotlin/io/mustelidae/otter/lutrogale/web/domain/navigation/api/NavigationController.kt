@@ -1,8 +1,8 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.web.commons.annotations
+package io.mustelidae.otter.lutrogale.web.common.annotation
 
 /**
  * Created by seooseok on 2016. 9. 8..

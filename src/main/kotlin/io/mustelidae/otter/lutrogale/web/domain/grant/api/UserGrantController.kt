@@ -2,8 +2,8 @@ package io.mustelidae.otter.lutrogale.web.domain.grant.api
 
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReply
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserGrantInteraction
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources

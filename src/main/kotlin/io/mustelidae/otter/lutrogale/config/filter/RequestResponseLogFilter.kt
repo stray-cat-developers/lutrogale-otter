@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.http.MediaType
 import org.springframework.http.server.ServletServerHttpRequest
 import org.springframework.util.StreamUtils
 import org.springframework.web.filter.OncePerRequestFilter
@@ -124,6 +125,11 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
     }
 
     private fun appendResponseBody(messageMap: MutableMap<String, Any?>, wrappedResponse: ContentCachingResponseWrapper) {
+        // Web Page는 로그에서 제외한다.
+        if (wrappedResponse.contentType != MediaType.APPLICATION_JSON_VALUE) {
+            return
+        }
+
         val responseBody = wrappedResponse.contentAsByteArray.toString(defaultCharset)
         messageMap["responseBody"] = PrivacyLogFilter.masking(responseBody)
     }

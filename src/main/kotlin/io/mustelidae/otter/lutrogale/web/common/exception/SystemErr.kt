@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.web.commons.exception
+package io.mustelidae.otter.lutrogale.web.common.exception
 
 import com.google.common.base.Joiner
 

@@ -4,7 +4,7 @@ logging:
     org.springframework.boot.actuate: off
     org.springframework.web: debug
     org.springframework.boot: info
-    org.springframework.session: debug
+    org.springframework.session: trace
     org.springframework.orm.jpa: debug
     org.springframework.transaction: debug
     org.hibernate.SQL: debug
@@ -32,7 +32,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -60,13 +60,13 @@ spring:
     timeout: 30m
     jdbc:
       platform: mysql
+      initialize-schema: always
   web:
     resources:
       add-mappings: false
-
-
 springdoc:
   show-actuator: false
   swagger-ui:
     enabled: true
     tagsSorter: alpha
+app:

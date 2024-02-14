@@ -32,9 +32,4 @@ class AccessGrant(
             )
         }
     }
-
-    fun getUris(): List<String> {
-        require(authenticationCheckType === Constant.AuthenticationCheckType.URI) { "authentication check type is wrong" }
-        return this.accessUriGroup!!.map { it.uri }.toList()
-    }
 }

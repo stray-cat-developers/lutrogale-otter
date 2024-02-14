@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.login
 
 import io.mustelidae.otter.lutrogale.web.AdminSession
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import io.mustelidae.otter.lutrogale.web.domain.session.SessionInfo
 import io.swagger.v3.oas.annotations.Operation

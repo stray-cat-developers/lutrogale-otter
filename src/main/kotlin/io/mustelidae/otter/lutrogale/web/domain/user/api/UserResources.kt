@@ -41,7 +41,7 @@ class UserResources {
             val name: String,
             val accessPrivacyInformation: Boolean,
             val regDate: LocalDateTime,
-            val status: String,
+            val status: User.Status,
             val department: String? = null,
         ) {
             companion object {
@@ -53,7 +53,7 @@ class UserResources {
                             name,
                             isPrivacy,
                             createdAt!!,
-                            status.name.lowercase(),
+                            status,
                             department,
                         )
                     }
@@ -67,7 +67,7 @@ class UserResources {
             val name: String,
             val accessPrivacyInformation: Boolean,
             val regDate: LocalDateTime,
-            val status: String,
+            val status: User.Status,
             val department: String? = null,
             val projects: List<ProjectResources.Reply>? = null,
             val authorityDefinitions: List<AuthorityGrant>? = null,
@@ -91,7 +91,7 @@ class UserResources {
                             name,
                             isPrivacy,
                             createdAt!!,
-                            status.name.lowercase(),
+                            status,
                             department,
                             repliesOfProject,
                             authorityGrants,

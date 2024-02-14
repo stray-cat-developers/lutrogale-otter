@@ -2,9 +2,9 @@ package io.mustelidae.otter.lutrogale.web.domain.project.api
 
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReply
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
-import io.mustelidae.otter.lutrogale.web.commons.toApiRes
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.toApiRes
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction

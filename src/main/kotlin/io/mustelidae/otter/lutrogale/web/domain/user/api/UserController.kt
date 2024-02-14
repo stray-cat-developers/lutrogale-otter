@@ -4,8 +4,8 @@ import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReplies
 import io.mustelidae.otter.lutrogale.common.toReply
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.UserInteraction

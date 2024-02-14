@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.session
 
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.ForeignKey
 import jakarta.persistence.Id
@@ -19,7 +18,6 @@ import java.io.Serializable
  * @link org/springframework/session/jdbc/schema-h2.sql
  */
 
-@Entity
 @Table(
     name = "SPRING_SESSION_ATTRIBUTES",
 )

@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.config
 
-import io.mustelidae.otter.lutrogale.OsoriApplication
+import io.mustelidae.otter.lutrogale.Application
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc
 @ActiveProfiles("embedded")
 @ExtendWith(SpringExtension::class)
 @ComponentScan(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator::class)
-@SpringBootTest(classes = [OsoriApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = [Application::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class FlowTestSupport {
 

@@ -1,9 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
 import io.mustelidae.otter.lutrogale.web.AdminSession
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminFinder
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminInteraction
 import io.swagger.v3.oas.annotations.Operation

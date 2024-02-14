@@ -2,7 +2,7 @@ package io.mustelidae.otter.lutrogale.config
 
 import io.mustelidae.otter.lutrogale.common.DefaultError
 import io.mustelidae.otter.lutrogale.common.ErrorCode
-import io.mustelidae.otter.lutrogale.web.commons.exception.Err
+import io.mustelidae.otter.lutrogale.web.common.exception.Err
 
 /**
  * 어플리케이션에서 사용 할 Exception

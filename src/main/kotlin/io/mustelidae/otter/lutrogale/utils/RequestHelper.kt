@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.utils
 
 import com.google.common.base.Strings
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.annotation.AnnotationUtils
 import org.springframework.http.HttpHeaders

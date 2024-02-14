@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.session
 
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
@@ -12,7 +11,6 @@ import jakarta.persistence.Table
  * @link org/springframework/session/jdbc/schema-h2.sql
  */
 
-@Entity
 @Table(
     name = "SPRING_SESSION",
     indexes = [

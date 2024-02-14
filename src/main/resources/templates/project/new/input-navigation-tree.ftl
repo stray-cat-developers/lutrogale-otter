@@ -47,13 +47,13 @@
                                 <div id="info_radio_group" class="form-group">
                                     <label>네비게이션 타입</label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup1" value="category" checked>카테고리
+                                        <input type="radio" name="navTypeGroup1" value="CATEGORY" checked>카테고리
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup1" value="menu">메뉴
+                                        <input type="radio" name="navTypeGroup1" value="MENU">메뉴
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup1" value="function">기능
+                                        <input type="radio" name="navTypeGroup1" value="FUNCTION">기능
                                     </label>
                                 </div>
                                 <!-- text input -->
@@ -77,6 +77,7 @@
                                         <option>GET</option>
                                         <option>POST</option>
                                         <option>PUT</option>
+                                        <option>PATCH</option>
                                         <option>DELETE</option>
                                     </select>
                                 </div>
@@ -113,13 +114,13 @@
                                     <div id="nav_radio_group" class="form-group">
                                         <label>네비게이션 타입</label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="navTypeGroup2" value="category" checked>카테고리
+                                            <input type="radio" name="navTypeGroup2" value="CATEGORY" checked>카테고리
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="navTypeGroup2" value="menu">메뉴
+                                            <input type="radio" name="navTypeGroup2" value="MENU">메뉴
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="navTypeGroup2" value="function">기능
+                                            <input type="radio" name="navTypeGroup2" value="FUNCTION">기능
                                         </label>
                                     </div>
                                     <!-- text input -->
@@ -139,6 +140,7 @@
                                             <option>GET</option>
                                             <option>POST</option>
                                             <option>PUT</option>
+                                            <option>PATCH</option>
                                             <option>DELETE</option>
                                         </select>
                                     </div>

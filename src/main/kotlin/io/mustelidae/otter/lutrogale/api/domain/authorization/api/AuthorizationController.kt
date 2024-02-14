@@ -7,7 +7,7 @@ import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.common.toReplies
 import io.mustelidae.otter.lutrogale.config.DataNotFindException
 import io.mustelidae.otter.lutrogale.utils.toDecode
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder

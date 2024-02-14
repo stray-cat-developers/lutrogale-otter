@@ -1,6 +1,6 @@
-package io.mustelidae.otter.lutrogale.web.commons
+package io.mustelidae.otter.lutrogale.web.common
 
-import io.mustelidae.otter.lutrogale.web.commons.exception.Err
+import io.mustelidae.otter.lutrogale.web.common.exception.Err
 import java.time.LocalDateTime
 import java.time.ZoneId
 

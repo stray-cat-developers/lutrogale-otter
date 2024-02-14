@@ -368,7 +368,7 @@
 
         $.when(
             AJAX.getData(OsoriRoute.getUri('project.findUsersProject', {id: project_id})),
-            AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'allow'})
+            AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'ALLOW'})
         ).done(function(project_user, all_user){
             var project_user = project_user[0].result;
             var all_user = all_user[0].result;

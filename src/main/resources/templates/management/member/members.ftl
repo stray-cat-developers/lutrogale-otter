@@ -35,10 +35,10 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#" onclick="changeUserStatus('allow');">허용</a></li>
-                                    <li><a href="#" onclick="changeUserStatus('reject');">불가</a></li>
+                                    <li><a href="#" onclick="changeUserStatus('ALLOW');">허용</a></li>
+                                    <li><a href="#" onclick="changeUserStatus('REJECT');">불가</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#" onclick="changeUserStatus('expire');">만료</a></li>
+                                    <li><a href="#" onclick="changeUserStatus('EXPIRE');">만료</a></li>
                                 </ul>
                             </div>
 						</div>
@@ -213,7 +213,7 @@
         <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
 		<script>
             var projectId = extractByWord('project');
-            var title = {'allow':'허용', 'reject':'불가', 'expire':'만료'};
+            var title = {'ALLOW':'허용', 'REJECT':'불가', 'EXPIRE':'만료'};
             var opt = {
                 'tb_users': {
                     'info': true,
@@ -491,7 +491,7 @@
                     });
                 }
 
-                if(status_type == 'expire'){
+                if(status_type == 'EXPIRE'){
                     AJAX.deleteData(
                         OsoriRoute.getUri('users.expireStatus',{userIdGroup: target_id.join()})
                     ).done(after_func);

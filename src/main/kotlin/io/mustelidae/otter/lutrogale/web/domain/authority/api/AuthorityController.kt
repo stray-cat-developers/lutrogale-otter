@@ -1,8 +1,8 @@
 package io.mustelidae.otter.lutrogale.web.domain.authority.api
 
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes
-import io.mustelidae.otter.lutrogale.web.commons.ApiRes.Companion.success
-import io.mustelidae.otter.lutrogale.web.commons.annotations.LoginCheck
+import io.mustelidae.otter.lutrogale.web.common.ApiRes
+import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityBundleInteraction
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Reply.TreeBranch
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation

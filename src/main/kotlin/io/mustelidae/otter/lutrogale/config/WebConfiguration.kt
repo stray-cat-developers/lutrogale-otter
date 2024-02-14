@@ -16,6 +16,7 @@ import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.ResourceHttpMessageConverter
 import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
@@ -27,6 +28,7 @@ import java.time.format.DateTimeFormatter
 
 @Configuration
 @ControllerAdvice
+@EnableJdbcHttpSession
 class WebConfiguration(
     private val adminLoginHandlerInterceptor: AdminLoginHandlerInterceptor,
 ) : DelegatingWebMvcConfiguration() {
@@ -78,6 +80,8 @@ class WebConfiguration(
     override fun addViewControllers(registry: ViewControllerRegistry) {
         registry.addViewController("/swagger-ui/")
             .setViewName("forward:/swagger-ui/index.html")
+        registry.addViewController("/")
+            .setViewName("forward:/dashboard")
 
         registry.addViewController("/view/management/members").setViewName("management/member/members")
         registry.addViewController("/view/management/new-member").setViewName("management/member/new-member")
