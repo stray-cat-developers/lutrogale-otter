@@ -192,10 +192,6 @@ class ExceptionConfiguration(
         return Jackson.getMapper().convertValue(errorAttributes, GlobalErrorFormat::class.java)
     }
 
-    @Suppress(
-        "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
-        "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
-    )
     private fun methodArgumentNotValidExceptionErrorForm(errors: List<FieldError>) =
         errors.map {
             ValidationError(
