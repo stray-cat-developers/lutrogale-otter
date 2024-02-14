@@ -2,7 +2,6 @@
 
 package io.mustelidae.otter.lutrogale.config
 
-import com.google.common.base.Strings
 import io.mustelidae.otter.lutrogale.common.DefaultError
 import io.mustelidae.otter.lutrogale.common.ErrorCode
 import io.mustelidae.otter.lutrogale.common.ErrorSource
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.ServletWebRequest
-import java.time.LocalDateTime
 
 @ControllerAdvice(annotations = [RestController::class])
 class ExceptionConfiguration(
@@ -172,22 +170,6 @@ class ExceptionConfiguration(
         request: HttpServletRequest,
     ): GlobalErrorFormat {
         return errorForm(request, e, e.error)
-    }
-
-    @ExceptionHandler(ApplicationException::class)
-    @ResponseStatus(INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    fun handleApplicationException(e: ApplicationException, request: HttpServletRequest): GlobalErrorFormat {
-        if (Strings.isNullOrEmpty(e.loggingMsg)) log.error(e.loggingMsg)
-
-        return GlobalErrorFormat(
-            LocalDateTime.now().toString(),
-            500,
-            e.code!!,
-            null,
-            e.msg!!,
-            e.javaClass.simpleName,
-        )
     }
 
     private fun errorForm(request: HttpServletRequest, e: Exception, error: ErrorSource): GlobalErrorFormat {

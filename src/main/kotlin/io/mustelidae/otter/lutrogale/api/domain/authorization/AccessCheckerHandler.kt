@@ -1,8 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import io.mustelidae.otter.lutrogale.common.Constant.AuthenticationCheckType
-import io.mustelidae.otter.lutrogale.config.ApplicationException
-import io.mustelidae.otter.lutrogale.web.common.exception.ProcessErr
+import io.mustelidae.otter.lutrogale.config.DevelopMistakeException
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import org.springframework.stereotype.Service
@@ -24,6 +23,6 @@ class AccessCheckerHandler(
         if (checkType === AuthenticationCheckType.URI) {
             return UriBaseAccessChecker(menuNavigationInteraction)
         }
-        throw ApplicationException(ProcessErr.WRONG_DEVELOP_PROCESS)
+        throw DevelopMistakeException("해당 요청이 잘못된 작업을 수행하고 있습니다.")
     }
 }
