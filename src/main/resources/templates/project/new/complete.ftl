@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 	<@layout.baseHeader "New Project"/>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<@layout.baseWrapper>
@@ -81,7 +81,7 @@
                     </div>
                     <!-- /.box -->
                     <div class="col-xs-12">
-                        <button onclick="javascipt:OsoriRoute.go('dashBoard')" class="btn btn-info pull-right">완료</button>
+                        <button onclick="OsoriRoute.go('dashBoard')" class="btn btn-info pull-right">완료</button>
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
 
                     $('#tree-navigation').jstree(
                         OPTION.jstree(opt.tree_navigation, navigation_list)
-                    ).on('loaded.jstree', function (event, data) {
+                    ).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
                     });
 

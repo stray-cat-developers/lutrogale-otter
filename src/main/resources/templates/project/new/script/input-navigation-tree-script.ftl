@@ -44,13 +44,13 @@
                 AJAX.putData(
                     OsoriRoute.getUri('menuTree.moveBranch', {id:SS.project_id, nodeId:data.node.a_attr.id}),
                     param
-                ).done(function(data){
+                ).done(function(){
                     $('#popover_result').fadeTo(800, 500).slideUp(500, function(){
                         $("#success-alert").slideUp(500);
                     });
                 });
 
-            }).on("loaded.jstree", function (event, data) {
+            }).on("loaded.jstree", function () {
                 $(this).jstree("open_all");
             });
 
@@ -88,7 +88,7 @@
         AJAX.putData(
             OsoriRoute.getUri('navigation.modifyInfo', {id:SS.project_id,nodeId:SS.selected_node_id}),
             param
-        ).done(function(data){
+        ).done(function(){
             var tree = $('#menuNaviTree').jstree(true);
             var this_node = tree.get_node(SS.selected_tree_id);
 
@@ -111,12 +111,12 @@
         var nav_url_path = $('#nav_url_path').val();
         var nav_method   = $('#nav_method').val();
 
-        if(nav_type == ""){
+        if(nav_type === ""){
             alert("네비게이션 타입을 선택해주세요.");
             return false;
         }
 
-        if(nav_name == "") {
+        if(nav_name === "") {
             alert("네비게이션명을 입력해주세요.");
             return false;
         }

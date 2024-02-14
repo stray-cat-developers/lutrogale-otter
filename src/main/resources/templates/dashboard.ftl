@@ -1,6 +1,6 @@
 <#import "mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 	<@layout.baseHeader "Dashboard">
 		<link rel="stylesheet" href="/static/plugins/datatables/extensions/Select/select.dataTables.min.css">
 	</@layout.baseHeader>

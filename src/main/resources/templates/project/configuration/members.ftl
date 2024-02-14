@@ -336,7 +336,7 @@
                                 _.each($('#modal-modify-user #tb-group input[name="is-avail"]'), function (v) {
                                     let auth_obj = tb_group.row($(v).parents('tr')).data();
 
-                                    if (_.indexOf(_.pluck(own_group, 'id'), auth_obj.authId) != -1)
+                                    if (_.indexOf(_.pluck(own_group, 'id'), auth_obj.authId) !== -1)
                                         $(v).bootstrapSwitch('state', true);
                                     else
                                         $(v).bootstrapSwitch('state', false);
@@ -420,7 +420,7 @@
                 _.each($('#modal-modify-group #tb-group-list input[name="is-avail"]'), function (v) {
                     let tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
                     let row_data = tb_group_list.row($(v).parents('tr')).data();
-                    if (_.indexOf(_.pluck(user_auth, 'id'), row_data.authId) != -1)
+                    if (_.indexOf(_.pluck(user_auth, 'id'), row_data.authId) !== -1)
                         $(v).bootstrapSwitch('state', true);
                     else
                         $(v).bootstrapSwitch('state', false);
@@ -526,7 +526,7 @@
             $('#modal-menu-tree')
             .jstree('destroy')
             .jstree(OPTION.jstree(opt.menu_tree, all_branch))
-            .on('loaded.jstree', function (event, data) {
+            .on('loaded.jstree', function () {
                 $(this).jstree("open_all");
             });
 

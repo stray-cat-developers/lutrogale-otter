@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 	<@layout.baseHeader "New Project"/>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<@layout.baseWrapper>
@@ -19,7 +19,7 @@
                             <div class="box-body">
                                 <form role="form">
                                     <div class="form-group">
-                                        <label>권한 그룹 명</label>
+                                        <label for="group-name">권한 그룹 명</label>
                                         <input id="group-name" type="text" class="form-control" placeholder="권한들을 대표하는 이름을 입력하세요. ex) 일반 관리자, 고객센터 기본 권한 그룹 등등.. ">
                                     </div>
                                     <hr style="border: none; border-bottom: 1px solid dimgrey;">
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="col-xs-12">
-                        <button onclick="javascript:OsoriRoute.go('view.newProject.complete',{id:SS.project_id})" class="btn btn-info pull-right">다음</button>
+                        <button onclick="OsoriRoute.go('view.newProject.complete',{id:SS.project_id})" class="btn btn-info pull-right">다음</button>
                     </div>
 				</div>
 
@@ -112,7 +112,7 @@
 
                     AJAX.deleteData(
                         OsoriRoute.getUri('authority.expire', {id:SS.project_id, authId:data.authId})
-                    ).done(function(data){
+                    ).done(function(){
                         getAuthGroup();
                     });
                 });
@@ -152,7 +152,7 @@
 
                         data_table.draw();
 
-                    }).on('loaded.jstree', function (event, data) {
+                    }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
                     });
 
@@ -163,7 +163,7 @@
                 var data_table = $('#table-selected').DataTable();
                 var group_name = $('#group-name').val();
 
-                if(group_name == ""){
+                if(group_name === ""){
                     alert('그룹명을 입력해주세요.');
                     return false;
                 }
