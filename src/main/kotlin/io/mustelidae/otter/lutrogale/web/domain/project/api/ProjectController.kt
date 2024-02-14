@@ -1,10 +1,10 @@
 package io.mustelidae.otter.lutrogale.web.domain.project.api
 
+import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReplies
 import io.mustelidae.otter.lutrogale.common.toReply
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
-import io.mustelidae.otter.lutrogale.web.common.toApiRes
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
@@ -32,10 +32,10 @@ class ProjectController(
 
     @Operation(summary = "프로젝트 전체 조회")
     @GetMapping("/projects")
-    fun findAll(): ApiRes<*> {
+    fun findAll(): Replies<ProjectResources.Reply> {
         return projectFinder.findAllByLive()
             .map { ProjectResources.Reply.from(it) }
-            .toApiRes()
+            .toReplies()
     }
 
     @Operation(summary = "프로젝트 추가")
@@ -49,34 +49,30 @@ class ProjectController(
 
     @Operation(summary = "프로젝트 조회")
     @GetMapping(value = ["/project/{id}"])
-    fun findOne(@PathVariable id: Long): ApiRes<*> {
+    fun findOne(@PathVariable id: Long): Reply<ProjectResources.Reply> {
         val project = projectFinder.findBy(id)
-        val reply = ProjectResources.Reply.from(project)
-        return ApiRes<Any?>(reply)
+        return ProjectResources.Reply.from(project).toReply()
     }
 
     @Operation(summary = "프로젝트에 할당된 사용자 전체 조회")
     @GetMapping("/project/{id}/users")
-    fun findUsersProject(@PathVariable id: Long): ApiRes<*> {
+    fun findUsersProject(@PathVariable id: Long): Replies<UserResources.Reply.Detail> {
         val users = userFinder.findAllByJoinedProjectUsers(id)
-        val replies = users.map {
+        return users.map {
             UserResources.Reply.Detail.from(
                 it,
                 it.getProjects(),
                 it.userAuthorityGrants,
                 it.userPersonalGrants,
             )
-        }
-
-        return ApiRes<Any?>(replies)
+        }.toReplies()
     }
 
     @Operation(summary = "프로젝트에 할당된 메뉴 네비게이션 전체 조회")
     @GetMapping("/project/{id}/navigations")
     @ResponseBody
-    fun findNavigationsProject(@PathVariable id: Long): ApiRes<*> {
-        val replyOfMenuNavigations: List<ReplyOfMenuNavigation> =
-            projectFinder.findAllByIncludeNavigationsProject(id)
-        return ApiRes<Any?>(replyOfMenuNavigations)
+    fun findNavigationsProject(@PathVariable id: Long): Replies<ReplyOfMenuNavigation> {
+        return projectFinder.findAllByIncludeNavigationsProject(id)
+            .toReplies()
     }
 }

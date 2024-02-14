@@ -97,9 +97,9 @@
             $.when(
                 AJAX.getData(OsoriRoute.getUri('project.findOne', {id: project_id}), {}, {async:false}),
                 AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: project_id}), {}, {async:false})
-            ).done(function(projects, authorityBundle) {
-                let project = projects[0].result;
-                let authority = authorityBundle[0].result;
+            ).done(function(first, second) {
+                let project = first[0];
+                let authority = second[0].result;
 
                 $('<div/>', {class: 'col-md-4'}).append(
                     $('<div/>', {class: 'box box-solid'}).append(

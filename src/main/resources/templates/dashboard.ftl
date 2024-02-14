@@ -62,7 +62,7 @@
                 "ajax": {
                     "url": OsoriRoute.getUri("project.findAll"),
                     "dataSrc": function ( json ) {
-                        return json.result;
+                        return json.content;
                     }
                 },
                 "columns": [

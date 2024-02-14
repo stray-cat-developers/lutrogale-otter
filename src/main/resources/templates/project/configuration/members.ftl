@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <@layout.baseHeader "Project Users">
 <link rel="stylesheet" href="/static/plugins/datatables/extensions/Select/select.dataTables.min.css">
 </@layout.baseHeader>
@@ -271,11 +271,11 @@
         AJAX.getData(
             OsoriRoute.getUri('project.findUsersProject', {id: project_id})
         ).done(function(data){
-            _.map(data.result, function(v){
+            _.map(data.content, function(v){
                 return _.extend(v, {DT_RowId: v.id});
             });
 
-            tb_users.rows.add(data.result).draw();
+            tb_users.rows.add(data.content).draw();
 
             tb_users
             .on('click', 'tr', function(){
@@ -298,7 +298,7 @@
             }).on('click', 'button', function(){
                 var user_data = tb_users.row($(this).parents('tr')).data();
 
-                if($(this).prop('id') == 'btn_group')
+                if($(this).prop('id') === 'btn_group')
                     modifyGroup(user_data);
                 else
                     modifyPersonal(user_data);
@@ -313,28 +313,28 @@
         $('#modal-modify-user .modal-title').text('프로젝트 할당');
         $('#modal-modify-user .modal-body').empty().append($('#modal-modify-user-content form').clone());
 
-        var tb_group = $('#modal-modify-user #tb-group')
+        let tb_group = $('#modal-modify-user #tb-group')
                         .DataTable(OPTION.data_table(opt.tb_modal_group));
 
-        var tb_user = $('#modal-modify-user #tb-user')
+        let tb_user = $('#modal-modify-user #tb-user')
                         .DataTable(OPTION.data_table(opt.tb_modal_users))
                         .on('click', 'tr', function(){
                             $('#modal-modify-user #tb-user tr.active').removeClass('active');
                             $(this).addClass('active');
 
-                            var user = $('#modal-modify-user #tb-user').DataTable().row($(this)).data();
+                            let user = $('#modal-modify-user #tb-user').DataTable().row($(this)).data();
 
                             $.when(
                                 AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: project_id})),
                                 AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId: user.id, projectId: project_id}))
-                            ).done(function(all_group, own_group){
-                                var all_group = all_group[0].result;
-                                var own_group = own_group[0].result.authorityDefinitions;
+                            ).done(function(first, second){
+                                let all_group = first[0].result;
+                                let own_group = second[0].result.authorityDefinitions;
 
                                 tb_group.clear().rows.add(all_group).draw();
 
                                 _.each($('#modal-modify-user #tb-group input[name="is-avail"]'), function (v) {
-                                    var auth_obj = tb_group.row($(v).parents('tr')).data();
+                                    let auth_obj = tb_group.row($(v).parents('tr')).data();
 
                                     if (_.indexOf(_.pluck(own_group, 'id'), auth_obj.authId) != -1)
                                         $(v).bootstrapSwitch('state', true);
@@ -343,13 +343,13 @@
                                 });
 
                                 $('#modal-modify-user #tb-group input[name="is-avail"]').on('switchChange.bootstrapSwitch', function () {
-                                    var auth_obj = tb_group.row($(this).parents('tr')).data();
+                                    let auth_obj = tb_group.row($(this).parents('tr')).data();
 
-                                    var after_func = function(){
+                                    let after_func = function(){
                                         AJAX.getData(
                                             OsoriRoute.getUri('project.findUsersProject', {id: project_id})
                                         ).done(function(data){
-                                            $('#tb-users').DataTable().clear().rows.add(data.result).draw();
+                                            $('#tb-users').DataTable().clear().rows.add(data.content).draw();
                                         });
                                     };
 
@@ -369,12 +369,12 @@
         $.when(
             AJAX.getData(OsoriRoute.getUri('project.findUsersProject', {id: project_id})),
             AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'ALLOW'})
-        ).done(function(project_user, all_user){
-            var project_user = project_user[0].result;
-            var all_user = all_user[0].result;
+        ).done(function(first, second){
+            let user_projects = first[0].content;
+            let all_user = second[0].result;
 
-            var filtered_user = _.filter(all_user, function(v){
-                return _.indexOf(_.pluck(project_user, 'id'), v.id) == -1;
+            let filtered_user = _.filter(all_user, function(v){
+                return _.indexOf(_.pluck(user_projects, 'id'), v.id) === -1;
             });
 
             setTimeout(function() {
@@ -389,17 +389,17 @@
         $.when(
             AJAX.getData(OsoriRoute.getUri("authority.findAll", {id: project_id})),
             AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId: user_data.id, projectId: project_id}))
-        ).done(function (all_auth, user_auth) {
-            var all_auth = all_auth[0].result;
-            var user_auth = user_auth[0].result.authorityDefinitions;
+        ).done(function (first, second) {
+            let all_auth = first[0].result;
+            let user_auth = second[0].result.authorityDefinitions;
 
             $('#modal-modify-group .modal-title').text('사용자 권한 그룹 수정');
             $('#modal-modify-group .modal-body').empty().append($('#modal-modify-group-content form').clone());
 
             $('#modal-modify-group #tb-group-list').on('click', 'tr', function () {
 
-                var tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
-                var auth_obj = tb_group_list.row($(this)).data();
+                let tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
+                let auth_obj = tb_group_list.row($(this)).data();
 
                 $('#modal-modify-group #tb-group-list tr.active').removeClass('active');
                 $(this).addClass('active');
@@ -418,8 +418,8 @@
 
             setTimeout(function(){
                 _.each($('#modal-modify-group #tb-group-list input[name="is-avail"]'), function (v) {
-                    var tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
-                    var row_data = tb_group_list.row($(v).parents('tr')).data();
+                    let tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
+                    let row_data = tb_group_list.row($(v).parents('tr')).data();
                     if (_.indexOf(_.pluck(user_auth, 'id'), row_data.authId) != -1)
                         $(v).bootstrapSwitch('state', true);
                     else
@@ -427,10 +427,10 @@
                 });
 
                 $('#modal-modify-group #tb-group-list input[name="is-avail"]').on('switchChange.bootstrapSwitch', function () {
-                    var tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
-                    var auth_obj = tb_group_list.row($(this).parents('tr')).data();
+                    let tb_group_list = $('#modal-modify-group #tb-group-list').DataTable();
+                    let auth_obj = tb_group_list.row($(this).parents('tr')).data();
 
-                    var after_func = function(){
+                    let after_func = function(){
 
                         AJAX.getData(
                             OsoriRoute.getUri('user.findGrantsForUser', {projectId: project_id, userId: user_data.id})
@@ -440,7 +440,7 @@
                             AJAX.getData(
                                 OsoriRoute.getUri('project.findUsersProject', {id: project_id})
                             ).done(function(data) {
-                                tb_users.clear().rows.add(data.result).draw();
+                                tb_users.clear().rows.add(data.content).draw();
                             });
                         });
                     };
@@ -515,9 +515,9 @@
         $.when(
             AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:project_id})),
             AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:project_id, authId:auth_id}))
-        ).done(function(branch, bundleBranches){
-            var all_branch = branch[0].result;
-            var bundleBranches = bundleBranches[0].result;
+        ).done(function(first, second){
+            let all_branch = first[0].result;
+            let bundleBranches = second[0].result;
 
             setTimeout(function(){
                 $('#modal-selected').DataTable(OPTION.data_table(opt.tb_api_list, _.pluck(bundleBranches, 'a_attr')));
@@ -542,9 +542,9 @@
         $.when(
             AJAX.getData(OsoriRoute.getUri('project.findNavigationsProject', {id:project_id})),
             AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId : user_data.id, projectId: project_id}))
-        ).done(function(api_list, user_api){
-            var api_list = api_list[0].result;
-            var user_api = user_api[0].result.menuNavigations;
+        ).done(function(first, second){
+            let api_list = first[0].content;
+            let user_api = second[0].result.menuNavigations;
 
             $('#modal-modify-personal .modal-title').text('개인권한 수정');
             $('#modal-modify-personal .modal-body').empty().append($('#modal-modify-personal-content form').clone());
@@ -557,18 +557,18 @@
 
             setTimeout(function () {
                 _.each($('#modal-modify-personal #tb-api-list input[name="is-avail"]'), function (v) {
-                    var tb_api_list = $('#modal-modify-personal #tb-api-list').DataTable();
-                    var row_data = tb_api_list.row($(v).parents('tr')).data();
+                    let tb_api_list = $('#modal-modify-personal #tb-api-list').DataTable();
+                    let row_data = tb_api_list.row($(v).parents('tr')).data();
 
-                    if (_.indexOf(_.pluck(user_api, 'id'), row_data.id) != -1)
+                    if (_.indexOf(_.pluck(user_api, 'id'), row_data.id) !== -1)
                         $(v).bootstrapSwitch('state', true);
                     else
                         $(v).bootstrapSwitch('state', false);
                 });
 
                 $('#modal-modify-personal #tb-api-list input[name="is-avail"]').on('switchChange.bootstrapSwitch', function () {
-                    var tb_api_list = $('#modal-modify-personal #tb-api-list').DataTable();
-                    var navi_obj = tb_api_list.row($(this).parents('tr')).data();
+                    let tb_api_list = $('#modal-modify-personal #tb-api-list').DataTable();
+                    let navi_obj = tb_api_list.row($(this).parents('tr')).data();
 
                     if ($(this).bootstrapSwitch('state'))
                         assignPersonalGrant(project_id, user_data.id, navi_obj.id, this);

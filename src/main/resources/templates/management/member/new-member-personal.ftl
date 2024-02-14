@@ -96,9 +96,9 @@
             $.when(
                 AJAX.getData(OsoriRoute.getUri('project.findOne', {id: project_id}), {}, {async:false}),
                 AJAX.getData(OsoriRoute.getUri('project.findNavigationsProject', {id: project_id}), {}, {async:false})
-            ).done(function(projects, apis) {
-                let project = projects[0].result;
-                let api_list = _.map(apis[0].result, function(v){
+            ).done(function(first, second) {
+                let project = first[0];
+                let api_list = _.map(second[0].content, function(v){
                                     return _.extend(v, {projectId: project.id})
                                 });
 

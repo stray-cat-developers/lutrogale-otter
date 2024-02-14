@@ -121,8 +121,8 @@
                     AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})),
                     getAuthGroup()
-                ).done(function(p, n){
-                    var project_obj = p[0].result;
+                ).done(function(first, n){
+                    var project_obj = first[0];
                     var navigation_list = n[0].result;
 
                     $('#project_name').text(project_obj.name);

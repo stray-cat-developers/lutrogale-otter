@@ -74,7 +74,7 @@
     $(document).ready(function(){
         AJAX.getData(OsoriRoute.getUri('project.findAll')).done(function(data){
             $(".select2").select2({
-                data: _.map(data.result, function(v){ return {id: v.id, text: v.name};})
+                data: _.map(data.content, function(v){ return {id: v.id, text: v.name};})
             });
         });
 
