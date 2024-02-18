@@ -352,9 +352,9 @@
                                $.when(
                                    AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:group_obj.projectId})),
                                    AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:group_obj.projectId, authId:group_obj.id}))
-                               ).done(function(branch, bundleBranches){
-                                   let all_branch = branch[0].result;
-                                   let bundleBranch = bundleBranches[0].result;
+                               ).done(function(first, second){
+                                   let all_branch = first[0].content;
+                                   let bundleBranch = second[0].result;
 
                                    $('#modal-group-detail .modal-title').text('권한그룹 상세');
                                    $('#modal-group-detail .modal-body').empty().append($('#modal-group-detail-content form').clone());

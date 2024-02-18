@@ -121,15 +121,15 @@
                     AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})),
                     getAuthGroup()
-                ).done(function(first, n){
-                    var project_obj = first[0];
-                    var navigation_list = n[0].result;
+                ).done(function(first, second){
+                    let project_obj = first[0];
+                    let navigation_list = second[0].content;
 
                     $('#project_name').text(project_obj.name);
                     $('#project_desc').html(project_obj.description);
                     $('#project_apiKey').text(project_obj.apiKey);
 
-                    var tree_opt = {
+                    let tree_opt = {
                         'plugins': ['sort', 'types', 'checkbox'],
                         'checkbox' : {
                             three_state : false,

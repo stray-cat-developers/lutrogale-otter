@@ -195,9 +195,9 @@
                     AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})),
                     getAuthGroup()
-                ).done(function(first, n){
+                ).done(function(first, second){
                     let project_obj = first[0];
-                    let navigation_list = n[0].result;
+                    let navigation_list = second[0].content;
 
                     $('#project_name').text(project_obj.name);
                     $('#project_desc').html(project_obj.description);
@@ -262,7 +262,7 @@
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:auth_obj.projectId})),
                     AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:auth_obj.projectId, authId:auth_obj.authId}))
                 ).done(function(first, second){
-                    let all_branch = first[0].result;
+                    let all_branch = first[0].content;
                     let bundleBranches = second[0].result;
 
                     _.map(all_branch, function(v){

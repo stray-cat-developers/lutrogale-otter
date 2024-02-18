@@ -101,12 +101,12 @@
                     AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('authority.findAll', {id:SS.project_id}))
-                ).done(function(first, n, g){
-                    var project_obj = first[0];
-                    var navigation_list = n[0].result;
-                    var group_list = g[0].result;
+                ).done(function(first, second, g){
+                    let project_obj = first[0];
+                    let navigation_list = second[0].content;
+                    let group_list = g[0].result;
 
-                    var opt = {
+                    let opt = {
                         'tree_navigation': {
                             'plugins': ['sort', 'types']
                         },

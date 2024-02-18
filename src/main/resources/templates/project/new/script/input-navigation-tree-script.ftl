@@ -5,9 +5,9 @@
         $.when(
             AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
             AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id}))
-        ).done(function(first, n){
-            var project_obj = first[0];
-            var navigation_list = n[0].result;
+        ).done(function(first, second){
+            let project_obj = first[0];
+            let navigation_list = second[0].content;
 
             $('#project_name').text(project_obj.name);
             $('#project_desc').html(project_obj.description);
@@ -25,7 +25,7 @@
                 ).done(function(data){
                     clearNavInfoArea();
 
-                    var navi_obj = data.result;
+                    let navi_obj = data;
                     $('#info_radio_group :input:radio[value='+navi_obj.type+']').prop('checked', true);
                     $('#full_url').val(navi_obj.a_attr.fullUrl);
                     $('#info_name').val(navi_obj.a_attr.name);
@@ -37,7 +37,7 @@
                 });
 
             }).on('move_node.jstree', function(e, data){
-                var param = {
+                let param = {
                     parentTreeId : data.parent
                 };
 
@@ -59,7 +59,7 @@
     });
 
     $('#btn_modal_close').click(function(){
-        var tree = $('#menuNaviTree').jstree(true);
+        let tree = $('#menuNaviTree').jstree(true);
 
         tree.delete_node([SS.node_id]);
         clearModalData();
@@ -135,11 +135,11 @@
             OsoriRoute.getUri('menuTree.createBranch', {id:SS.project_id}),
             param
         ).done(function(data){
-            var tree = $('#menuNaviTree').jstree(true);
-            var this_node = tree.get_node(SS.node_id);
+            let tree = $('#menuNaviTree').jstree(true);
+            let this_node = tree.get_node(SS.node_id);
 
             this_node.a_attr.uriBlock = param.uriBlock;
-            this_node.a_attr.id = data.result;
+            this_node.a_attr.id = data.content;
 
             tree.set_type(this_node, nav_type);
             tree.rename_node(this_node, nav_name);

@@ -171,8 +171,8 @@
 
             AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id}))
             .done(function(data){
-                var navigation_list = data.result;
-                var table_api_opt = {
+                let navigation_list = data.content;
+                let table_api_opt = {
                     'searching': true,
                     'data': _.pluck(navigation_list, 'a_attr'),
                     'columns': [
@@ -198,7 +198,7 @@
                     ).done(function(data){
                         clearNavInfoArea();
 
-                        var navi_obj = data.result;
+                        let navi_obj = data;
                         $('#info_radio_group :input:radio[value='+navi_obj.type+']').prop('checked', true);
                         $('#full_url').val(navi_obj.a_attr.fullUrl);
                         $('#info_name').val(navi_obj.a_attr.name);
@@ -217,7 +217,7 @@
                     AJAX.putData(
                         OsoriRoute.getUri('menuTree.moveBranch', {id:SS.project_id, nodeId:data.node.a_attr.id}),
                         param
-                    ).done(function(data){
+                    ).done(function(){
                         refreshApiList();
 
                         $('#popover_result').fadeTo(800, 500).slideUp(500, function(){
@@ -225,7 +225,7 @@
                         });
                     });
 
-                }).on("loaded.jstree", function (event, data) {
+                }).on("loaded.jstree", function () {
                     $(this).jstree("open_all");
                 });
 
@@ -311,11 +311,11 @@
                 OsoriRoute.getUri('menuTree.createBranch', {id:SS.project_id}),
                 param
             ).done(function(data){
-                var tree = $('#menuNaviTree').jstree(true);
-                var this_node = tree.get_node(SS.node_id);
+                let tree = $('#menuNaviTree').jstree(true);
+                let this_node = tree.get_node(SS.node_id);
 
                 this_node.a_attr.uriBlock = param.uriBlock;
-                this_node.a_attr.id = data.result;
+                this_node.a_attr.id = data.content;
 
                 tree.set_type(this_node, nav_type);
                 tree.rename_node(this_node, nav_name);
@@ -347,8 +347,8 @@
             AJAX.getData(
                 OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})
             ).done(function(data){
-                var data_table = $('#table-api').DataTable();
-                data_table.clear().rows.add(_.pluck(data.result, 'a_attr')).draw();
+                let data_table = $('#table-api').DataTable();
+                data_table.clear().rows.add(_.pluck(data.content, 'a_attr')).draw();
             });
         }
 

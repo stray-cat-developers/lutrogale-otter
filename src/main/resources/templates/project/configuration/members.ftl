@@ -516,7 +516,7 @@
             AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:project_id})),
             AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:project_id, authId:auth_id}))
         ).done(function(first, second){
-            let all_branch = first[0].result;
+            let all_branch = first[0].content;
             let bundleBranches = second[0].result;
 
             setTimeout(function(){
