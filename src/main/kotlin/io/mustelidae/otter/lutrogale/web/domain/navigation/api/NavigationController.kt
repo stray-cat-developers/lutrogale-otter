@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
-import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationInteraction
 import io.swagger.v3.oas.annotations.Operation
@@ -26,8 +26,8 @@ class NavigationController(
         @PathVariable projectId: String,
         @PathVariable menuNavigationId: Long,
         @RequestBody modify: NavigationResources.Modify,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         menuNavigationInteraction.modify(menuNavigationId, modify.name, modify.type, modify.methodType, modify.uriBlock)
-        return success()
+        return Unit.toReply()
     }
 }

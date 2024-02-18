@@ -76,7 +76,7 @@
             return false;
         }
 
-        var param = {
+        let param = {
             id : SS.selected_node_id,
             projectId : SS.project_id,
             type : info_type,
@@ -89,8 +89,8 @@
             OsoriRoute.getUri('navigation.modifyInfo', {id:SS.project_id,nodeId:SS.selected_node_id}),
             param
         ).done(function(){
-            var tree = $('#menuNaviTree').jstree(true);
-            var this_node = tree.get_node(SS.selected_tree_id);
+            let tree = $('#menuNaviTree').jstree(true);
+            let this_node = tree.get_node(SS.selected_tree_id);
 
             this_node.a_attr.uriBlock = param.uriBlock;
             tree.set_type(this_node, info_type);
