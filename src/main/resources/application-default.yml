@@ -69,4 +69,3 @@ springdoc:
   swagger-ui:
     enabled: true
     tagsSorter: alpha
-app:

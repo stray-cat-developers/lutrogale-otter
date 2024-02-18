@@ -57,6 +57,7 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile>().all {

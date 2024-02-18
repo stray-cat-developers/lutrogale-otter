@@ -1,6 +1,5 @@
 package io.mustelidae.otter.lutrogale
 
-import io.mustelidae.otter.lutrogale.config.AppEnvironment
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.session.JdbcSessionProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -9,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator
 
 @SpringBootApplication
-@EnableConfigurationProperties(AppEnvironment::class, JdbcSessionProperties::class)
+@EnableConfigurationProperties(JdbcSessionProperties::class)
 @ComponentScan(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator::class)
 class Application
 

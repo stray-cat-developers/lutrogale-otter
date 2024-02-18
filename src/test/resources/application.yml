@@ -60,5 +60,3 @@ spring:
   config:
     activate:
       on-profile: embedded
-
-app:
