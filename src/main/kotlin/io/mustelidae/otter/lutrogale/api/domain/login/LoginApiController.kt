@@ -1,7 +1,8 @@
 package io.mustelidae.otter.lutrogale.api.domain.login
 
+import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.AdminSession
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import io.mustelidae.otter.lutrogale.web.domain.session.SessionInfo
 import io.swagger.v3.oas.annotations.Operation
@@ -21,10 +22,10 @@ class LoginApiController(
 
     @Operation(hidden = true)
     @PostMapping("/v1/check-login")
-    fun checkLogin(@RequestBody request: LoginResources.Request, httpServletRequest: HttpServletRequest): ApiRes<*> {
+    fun checkLogin(@RequestBody request: LoginResources.Request, httpServletRequest: HttpServletRequest): Reply<String> {
         val admin: Admin = adminLoginInteraction.loginCheck(request.email, request.password)
         val sessionInfo = SessionInfo.of(admin)
         AdminSession(httpSession).add(sessionInfo)
-        return ApiRes<Any?>(admin.email)
+        return admin.email.toReply()
     }
 }

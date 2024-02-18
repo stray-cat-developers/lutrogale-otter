@@ -75,9 +75,9 @@
                    password: $('#password').val()
                }
            )
-        }).done(function(data){
+        }).done(function(){
             window.location = "/dashboard";
-        }).fail(function(xhr, status){
+        }).fail(function(xhr){
             $('.form-group').removeClass('has-feedback').addClass('has-error');
             $('.help-block').text(JSON.parse(xhr.responseText).message);
             $('.help-block').show();
