@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <button onclick="javascript:OsoriRoute.go('view.newProject.authGroup', {id:SS.project_id});" class="btn btn-info pull-right">다음</button>
+                        <button onclick="OsoriRoute.go('view.newProject.authGroup', {id:SS.project_id});" class="btn btn-info pull-right">다음</button>
                     </div>
                 </div>
             </div>

@@ -1339,7 +1339,7 @@ $.fn.position = function( options ) {
 					feedback.important = "vertical";
 				}
 				options.using.call( this, props, feedback );
-			};
+			}
 		}
 
 		elem.offset( $.extend( position, { using: using } ) );

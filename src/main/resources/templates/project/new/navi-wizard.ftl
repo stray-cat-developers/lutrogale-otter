@@ -1,6 +1,6 @@
 <ul class="nav nav-wizard">
     <li class="">
-        <a href="#" onclick="javascript:OsoriRoute.go('view.newProject');" data-toggle="tab">Step1. 프로젝트 기본 정보 입력</a>
+        <a href="#" onclick="OsoriRoute.go('view.newProject');" data-toggle="tab">Step1. 프로젝트 기본 정보 입력</a>
     </li>
     <li class="">
         <a href="#">Step2. 메뉴 네비게이션 등록</a>
