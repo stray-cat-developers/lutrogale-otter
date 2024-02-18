@@ -287,16 +287,16 @@
                 AJAX.getData(
                     OsoriRoute.getUri('user.findGrantsForUser', {userId : user.id, projectId: project_id})
                 ).done(function(data){
-                    tb_authorized_group.clear().rows.add(data.result.authorityDefinitions).draw();
-                    tb_authorized_personal.clear().rows.add(data.result.menuNavigations).draw();
+                    tb_authorized_group.clear().rows.add(data.authorityDefinitions).draw();
+                    tb_authorized_personal.clear().rows.add(data.menuNavigations).draw();
 
                     tb_authorized_group.on('click', 'button', function(){
-                        var auth_obj = tb_authorized_group.row($(this).parents('tr')).data();
+                        let auth_obj = tb_authorized_group.row($(this).parents('tr')).data();
                         openGroupDetailModal(auth_obj.projectId, auth_obj.id, auth_obj.name);
                     });
                 });
             }).on('click', 'button', function(){
-                var user_data = tb_users.row($(this).parents('tr')).data();
+                let user_data = tb_users.row($(this).parents('tr')).data();
 
                 if($(this).prop('id') === 'btn_group')
                     modifyGroup(user_data);
@@ -329,7 +329,7 @@
                                 AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId: user.id, projectId: project_id}))
                             ).done(function(first, second){
                                 let all_group = first[0].content;
-                                let own_group = second[0].result.authorityDefinitions;
+                                let own_group = second[0].authorityDefinitions;
 
                                 tb_group.clear().rows.add(all_group).draw();
 
@@ -391,7 +391,7 @@
             AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId: user_data.id, projectId: project_id}))
         ).done(function (first, second) {
             let all_auth = first[0].content;
-            let user_auth = second[0].result.authorityDefinitions;
+            let user_auth = second[0].authorityDefinitions;
 
             $('#modal-modify-group .modal-title').text('사용자 권한 그룹 수정');
             $('#modal-modify-group .modal-body').empty().append($('#modal-modify-group-content form').clone());
@@ -435,7 +435,7 @@
                         AJAX.getData(
                             OsoriRoute.getUri('user.findGrantsForUser', {projectId: project_id, userId: user_data.id})
                         ).done(function(data){
-                            tb_authorized_group.clear().rows.add(data.result.authorityDefinitions).draw();
+                            tb_authorized_group.clear().rows.add(data.authorityDefinitions).draw();
 
                             AJAX.getData(
                                 OsoriRoute.getUri('project.findUsersProject', {id: project_id})
@@ -486,7 +486,7 @@
             AJAX.getData(
                 OsoriRoute.getUri('user.findGrantsForUser', {projectId: project_id, userId: user_id})
             ).done(function(data){
-                tb_authorized_personal.clear().rows.add(data.result.menuNavigations).draw();
+                tb_authorized_personal.clear().rows.add(data.menuNavigations).draw();
             });
 
         })
@@ -503,7 +503,7 @@
             AJAX.getData(
                 OsoriRoute.getUri('user.findGrantsForUser', {projectId: project_id, userId: user_id})
             ).done(function(data){
-                tb_authorized_personal.clear().rows.add(data.result.menuNavigations).draw();
+                tb_authorized_personal.clear().rows.add(data.menuNavigations).draw();
             });
         })
         .fail(function(){
@@ -544,7 +544,7 @@
             AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId : user_data.id, projectId: project_id}))
         ).done(function(first, second){
             let api_list = first[0].content;
-            let user_api = second[0].result.menuNavigations;
+            let user_api = second[0].menuNavigations;
 
             $('#modal-modify-personal .modal-title').text('개인권한 수정');
             $('#modal-modify-personal .modal-body').empty().append($('#modal-modify-personal-content form').clone());

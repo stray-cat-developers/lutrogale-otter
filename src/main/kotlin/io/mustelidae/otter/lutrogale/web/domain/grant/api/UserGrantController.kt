@@ -2,7 +2,6 @@ package io.mustelidae.otter.lutrogale.web.domain.grant.api
 
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReply
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserGrantInteraction
 import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
@@ -78,12 +77,13 @@ class UserGrantController(
 
     @Operation(summary = "사용자의 모든 권한 조회")
     @GetMapping("/{userId}/grant/project/{projectId}")
-    fun findGrantsForUser(@PathVariable projectId: Long, @PathVariable userId: Long): ApiRes<*> {
+    fun findGrantsForUser(@PathVariable projectId: Long, @PathVariable userId: Long): Reply<UserGrantResources.Reply.UserGrant> {
         val authorityGrantResources = userGrantInteraction.getUserAuthorityGrants(userId, projectId)
         val personalGrantResources = userGrantInteraction.getUserPersonalGrants(userId, projectId)
-        val map: MutableMap<String, Any> = HashMap()
-        map["authorityDefinitions"] = authorityGrantResources
-        map["menuNavigations"] = personalGrantResources
-        return ApiRes<Any?>(map)
+
+        return UserGrantResources.Reply.UserGrant(
+            authorityGrantResources,
+            personalGrantResources,
+        ).toReply()
     }
 }

@@ -55,6 +55,3 @@ class ApiRes<T> {
         }
     }
 }
-
-fun <T> T.toApiRes(): ApiRes<T> = ApiRes(this)
-fun <T> List<T>.toApiRes(): ApiRes<List<T>> = ApiRes(this)

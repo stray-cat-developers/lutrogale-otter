@@ -90,5 +90,11 @@ class UserGrantResources {
                 }
             }
         }
+
+        @Schema(name = "Lutrogale.UserGrant.Reply.UserGrant")
+        data class UserGrant(
+            val authorityDefinitions: List<AuthorityGrant>,
+            val menuNavigations: List<PersonalGrant>,
+        )
     }
 }

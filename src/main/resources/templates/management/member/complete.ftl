@@ -99,8 +99,8 @@
                     , {}
                     , {async: false}
                 ).done(function (data) {
-                    var group = data.result.authorityDefinitions;
-                    var personal = data.result.menuNavigations;
+                    let group = data.authorityDefinitions;
+                    let personal = data.menuNavigations;
 
                     $('<div/>', {class: 'box-header with-border'}).append(
                         $('<h4/>', {text: project.name}),
