@@ -371,7 +371,7 @@
             AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'ALLOW'})
         ).done(function(first, second){
             let user_projects = first[0].content;
-            let all_user = second[0].result;
+            let all_user = second[0].content;
 
             let filtered_user = _.filter(all_user, function(v){
                 return _.indexOf(_.pluck(user_projects, 'id'), v.id) === -1;

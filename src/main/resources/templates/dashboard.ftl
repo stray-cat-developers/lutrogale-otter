@@ -80,8 +80,8 @@
                     AJAX.getData(OsoriRoute.getUri('users.findAll')),
                     AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'WAIT'})
                 ).done(function(all_user, wait_user){
-                    all_user = all_user[0].result;
-                    wait_user = wait_user[0].result;
+                    all_user = all_user[0].content;
+                    wait_user = wait_user[0].content;
 
                     $('#total_count').text(_.isUndefined(all_user)?0:all_user.length);
                     $('#wait_count').text(_.isUndefined(wait_user)?0:wait_user.length);
