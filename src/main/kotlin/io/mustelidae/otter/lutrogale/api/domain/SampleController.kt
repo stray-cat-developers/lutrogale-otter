@@ -1,8 +1,10 @@
 package io.mustelidae.otter.lutrogale.api.domain
 
-import io.mustelidae.otter.lutrogale.api.common.Reply
-import io.mustelidae.otter.lutrogale.api.common.toReply
 import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
+import io.mustelidae.otter.lutrogale.common.Replies
+import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReplies
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
@@ -16,9 +18,17 @@ class SampleController {
     @Operation(hidden = true)
     @GetMapping
     fun helloWorld(
-        @RequestHeader(RoleHeader.XUser.KEY) userId: Long
+        @RequestHeader(RoleHeader.XUser.KEY) userId: Long,
     ): Reply<String> {
         return "Hello World"
             .toReply()
+    }
+
+    @Operation(hidden = true)
+    @GetMapping("/list")
+    fun helloWorld2(
+        @RequestHeader(RoleHeader.XUser.KEY) userId: Long,
+    ): Replies<String> {
+        return listOf("a", "b", "c").toReplies()
     }
 }

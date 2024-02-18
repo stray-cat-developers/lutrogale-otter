@@ -5,17 +5,17 @@ package io.mustelidae.otter.lutrogale.utils
  * @ref https://github.com/consoleau/kotlin-jpa-specification-dsl
  */
 
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.From
+import jakarta.persistence.criteria.Join
+import jakarta.persistence.criteria.JoinType
+import jakarta.persistence.criteria.JoinType.INNER
+import jakarta.persistence.criteria.JoinType.LEFT
+import jakarta.persistence.criteria.JoinType.RIGHT
+import jakarta.persistence.criteria.Path
+import jakarta.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Root
 import org.springframework.data.jpa.domain.Specification
-import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.From
-import javax.persistence.criteria.Join
-import javax.persistence.criteria.JoinType
-import javax.persistence.criteria.JoinType.INNER
-import javax.persistence.criteria.JoinType.LEFT
-import javax.persistence.criteria.JoinType.RIGHT
-import javax.persistence.criteria.Path
-import javax.persistence.criteria.Predicate
-import javax.persistence.criteria.Root
 import kotlin.reflect.KProperty1
 
 // Helper to allow joining to Properties
@@ -42,9 +42,14 @@ fun <T, R> KProperty1<T, R?>.equal(x: R): Specification<T> = spec { equal(it, x)
 fun <T, R> KProperty1<T, R?>.notEqual(x: R): Specification<T> = spec { notEqual(it, x) }
 
 // Ignores empty collection otherwise an empty 'in' predicate will be generated which will never match any results
-fun <T, R : Any> KProperty1<T, R?>.`in`(values: Collection<R>): Specification<T> = if (values.isNotEmpty()) spec { path ->
-    `in`(path).apply { values.forEach { this.value(it) } }
-} else Specification.where(null)
+fun <T, R : Any> KProperty1<T, R?>.`in`(values: Collection<R>): Specification<T> = if (values.isNotEmpty()) {
+    spec { path ->
+        `in`(path).apply { values.forEach { this.value(it) } }
+    }
+} else {
+    Specification.where(null)
+}
+
 // Comparison
 fun <T> KProperty1<T, Number?>.le(x: Number) = spec { le(it, x) }
 
@@ -109,7 +114,7 @@ operator fun <T> Specification<T>.not(): Specification<T> = Specification.not(th
 // Combines Specification with an operation
 inline fun <reified T> combineSpecification(
     specs: Iterable<Specification<T>?>,
-    operation: Specification<T>.(Specification<T>) -> Specification<T>
+    operation: Specification<T>.(Specification<T>) -> Specification<T>,
 ): Specification<T> {
     return specs.filterNotNull().fold(emptySpecification()) { existing, new -> existing.operation(new) }
 }

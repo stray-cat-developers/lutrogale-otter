@@ -1,6 +1,6 @@
 <#import "mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 	<@layout.baseHeader "Dashboard">
 		<link rel="stylesheet" href="/static/plugins/datatables/extensions/Select/select.dataTables.min.css">
 	</@layout.baseHeader>
@@ -9,7 +9,7 @@
 		<@layout.baseWrapper>
 			<section class="content-header">
 				<h1>Dashboard</h1>
-                <button type="button" class="btn btn-primary pull-right" onclick="OsoriRoute.go('view.management.newMember',{});">신규 유저 생성</button>
+                <button type="button" class="btn btn-primary pull-right" onclick="OsoriRoute.go('view.management.newMember',{});">신규 사용자 생성</button>
                 <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;" onclick="OsoriRoute.go('view.newProject',{});">신규 프로젝트 생성</button>
 			</section>
 			<section class="content">
@@ -19,7 +19,7 @@
                             <span class="info-box-icon bg-aqua"><i class="ion ion-ios-people-outline"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">전체 유저</span>
+                                <span class="info-box-text">전체 사용자</span>
                                 <span id="total_count" class="info-box-number"></span>
                             </div>
                             <!-- /.info-box-content -->
@@ -31,7 +31,7 @@
                             <span class="info-box-icon bg-yellow"><i class="ion ion-person-stalker"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">권한 세팅 대기 유저</span>
+                                <span class="info-box-text">권한 세팅 대기 사용자</span>
                                 <span id="wait_count" class="info-box-number"></span>
                             </div>
                             <!-- /.info-box-content -->
@@ -62,7 +62,7 @@
                 "ajax": {
                     "url": OsoriRoute.getUri("project.findAll"),
                     "dataSrc": function ( json ) {
-                        return json.result;
+                        return json.content;
                     }
                 },
                 "columns": [
@@ -78,10 +78,10 @@
 
                 $.when(
                     AJAX.getData(OsoriRoute.getUri('users.findAll')),
-                    AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'wait'})
+                    AJAX.getData(OsoriRoute.getUri('users.findAll'), {status: 'WAIT'})
                 ).done(function(all_user, wait_user){
-                    all_user = all_user[0].result;
-                    wait_user = wait_user[0].result;
+                    all_user = all_user[0].content;
+                    wait_user = wait_user[0].content;
 
                     $('#total_count').text(_.isUndefined(all_user)?0:all_user.length);
                     $('#wait_count').text(_.isUndefined(wait_user)?0:wait_user.length);

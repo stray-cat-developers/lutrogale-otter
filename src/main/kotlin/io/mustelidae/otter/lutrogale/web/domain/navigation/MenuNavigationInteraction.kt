@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant.NavigationType
+import io.mustelidae.otter.lutrogale.common.Constant.NavigationType
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod
 @Transactional
 class MenuNavigationInteraction(
     private val menuNavigationRepository: MenuNavigationRepository,
-    private val menuNavigationFinder: MenuNavigationFinder
+    private val menuNavigationFinder: MenuNavigationFinder,
 ) {
 
     fun getFullUrl(menuNavigation: MenuNavigation?): String {
-        val fullUrl = if ("#" == menuNavigation!!.parentTreeId)
+        val fullUrl = if ("#" == menuNavigation!!.parentTreeId) {
             "/"
-        else {
+        } else {
             getFullUrl(menuNavigation.parentMenuNavigation) + menuNavigation.uriBlock
         }
 
@@ -31,7 +31,7 @@ class MenuNavigationInteraction(
         name: String,
         type: NavigationType,
         methodType: RequestMethod,
-        uriBlock: String
+        uriBlock: String,
     ) {
         val menuNavigation = menuNavigationFinder.findByLive(menuNavigationId).apply {
             this.type = type

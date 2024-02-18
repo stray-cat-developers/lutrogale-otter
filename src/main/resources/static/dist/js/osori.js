@@ -92,12 +92,12 @@ var OPTION = (function() {
                         '_disabled': false,
                         'label': '제거',
                         'action': function (data) {
-                            var inst = $.jstree.reference(data.reference),
+                            let inst = $.jstree.reference(data.reference),
                                 obj = inst.get_node(data.reference);
                             if (confirm('[' + obj.text + ']을 삭제하시겠습니까?')) {
                                 AJAX.deleteData(
                                     OsoriRoute.getUri('menuTree.deleteBranch', {id: SS.project_id, nodeId: obj.a_attr.id})
-                                ).done(function(result){
+                                ).done(function(){
                                     if (inst.is_selected(obj)) {
                                         inst.delete_node(inst.get_selected());
                                     }else {

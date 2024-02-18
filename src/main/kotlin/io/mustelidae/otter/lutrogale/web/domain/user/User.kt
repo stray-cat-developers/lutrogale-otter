@@ -1,38 +1,38 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
-import io.mustelidae.otter.lutrogale.api.common.Audit
-import io.mustelidae.otter.lutrogale.api.config.InvalidArgumentException
+import io.mustelidae.otter.lutrogale.common.Audit
+import io.mustelidae.otter.lutrogale.config.InvalidArgumentException
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
-import org.hibernate.annotations.Where
-import java.util.function.Consumer
-import javax.persistence.CascadeType.ALL
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.FetchType.LAZY
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import jakarta.persistence.CascadeType.ALL
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType.LAZY
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
+import org.hibernate.annotations.SQLRestriction
 
 /**
- * Created by HanJaehyun on 2016. 9. 21..
+ * 어드민의 권한을 체크해야 하는 운영자의 정보
  */
 @Entity
 class User(
     @Column(nullable = false, length = 30)
     var name: String,
     @Column(unique = true, nullable = false, length = 50)
-    val email: String
+    val email: String,
 ) : Audit() {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        protected set
+        private set
 
     @Column(length = 50)
     var department: String? = null
@@ -41,36 +41,39 @@ class User(
 
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
-    var status: Status = Status.wait
+    var status: Status = Status.WAIT
 
-    @Where(clause = "status = true")
+    @SQLRestriction("status = true")
     @OneToMany(mappedBy = "user", fetch = LAZY, cascade = [ALL])
     var userAuthorityGrants: MutableList<UserAuthorityGrant> = arrayListOf()
-        protected set
+        private set
 
     val authorityDefinitions: List<AuthorityDefinition>
         get() = userAuthorityGrants.map { it.authorityDefinition!! }
 
     fun addBy(userAuthorityGrant: UserAuthorityGrant) {
-        if (this.userAuthorityGrants.contains(userAuthorityGrant))
+        if (this.userAuthorityGrants.contains(userAuthorityGrant)) {
             throw InvalidArgumentException("이미 해당 권한 그룹은 허용되어 있습니다.")
+        }
 
         userAuthorityGrants.add(userAuthorityGrant)
-        if (userAuthorityGrant.user != this)
+        if (userAuthorityGrant.user != this) {
             userAuthorityGrant.setBy(this)
+        }
     }
 
-    @Where(clause = "status = true")
+    @SQLRestriction("status = true")
     @OneToMany(mappedBy = "user", fetch = LAZY, cascade = [ALL])
     var userPersonalGrants: MutableList<UserPersonalGrant> = arrayListOf()
-        protected set
+        private set
 
     val menuNavigations: List<MenuNavigation>
         get() = userPersonalGrants.map { it.menuNavigation!! }
 
     fun addBy(menuNavigation: MenuNavigation) {
-        if (this.menuNavigations.contains(menuNavigation))
+        if (this.menuNavigations.contains(menuNavigation)) {
             throw IllegalStateException("이미 해당 권한 그룹은 허용되어 있습니다.")
+        }
 
         val userPersonalGrant = UserPersonalGrant()
         userPersonalGrant.setBy(this)
@@ -81,38 +84,30 @@ class User(
 
     fun addBy(userPersonalGrant: UserPersonalGrant) {
         this.userPersonalGrants.add(userPersonalGrant)
-        if (userPersonalGrant.user != this)
+        if (userPersonalGrant.user != this) {
             userPersonalGrant.setBy(this)
-    }
-
-    fun removeBy(menuNavigation: MenuNavigation?) {
-        this.userPersonalGrants.forEach(
-            Consumer { grant: UserPersonalGrant ->
-                if (grant.menuNavigation!! == menuNavigation)
-                    grant.expire()
-            }
-        )
+        }
     }
 
     fun expire() {
-        status = Status.expire
+        status = Status.EXPIRE
     }
 
     fun getProjects(): List<Project> {
         return this.authorityDefinitions.map { it.project!! }
     }
 
-    /**
-     * Client_User Status
-     */
     enum class Status {
         /* 허가 */
-        allow,
+        ALLOW,
+
         /* 불가 */
-        reject,
+        REJECT,
+
         /* 대기 */
-        wait,
+        WAIT,
+
         /* 만료 */
-        expire
+        EXPIRE,
     }
 }

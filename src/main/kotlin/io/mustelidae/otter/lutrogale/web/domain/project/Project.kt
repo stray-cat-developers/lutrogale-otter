@@ -1,21 +1,22 @@
 package io.mustelidae.otter.lutrogale.web.domain.project
 
-import io.mustelidae.otter.lutrogale.api.common.Audit
-import io.mustelidae.otter.lutrogale.web.commons.utils.EncryptUtil
+import io.mustelidae.otter.lutrogale.common.Audit
+import io.mustelidae.otter.lutrogale.utils.Crypto
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
-import org.hibernate.annotations.Where
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Index
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
+import org.hibernate.annotations.SQLRestriction
 import java.time.LocalDateTime
 import java.time.ZoneId
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Index
-import javax.persistence.OneToMany
-import javax.persistence.Table
 
 /**
  * Created by HanJaehyun on 2016. 9. 21..
@@ -28,33 +29,33 @@ class Project(
     @Column(length = 500)
     var description: String? = null,
     @Column(length = 100)
-    var apiKey: String
+    var apiKey: String,
 ) : Audit() {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        protected set
+        private set
 
     var status = true
-        protected set
+        private set
 
-    @Where(clause = "status = true")
+    @SQLRestriction("status = true")
     @OneToMany(
         mappedBy = "project",
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH]
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH],
     )
     var menuNavigations: MutableList<MenuNavigation> = arrayListOf()
-        protected set
+        private set
 
-    @Where(clause = "status = true")
+    @SQLRestriction("status = true")
     @OneToMany(
         mappedBy = "project",
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH]
+        cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH],
     )
     var authorityDefinitions: MutableList<AuthorityDefinition> = arrayListOf()
-        protected set
+        private set
 
     fun expire() {
         status = false
@@ -62,14 +63,16 @@ class Project(
 
     fun addBy(menuNavigation: MenuNavigation) {
         menuNavigations.add(menuNavigation)
-        if (this != menuNavigation.project)
+        if (this != menuNavigation.project) {
             menuNavigation.setBy(this)
+        }
     }
 
     fun addBy(authorityDefinition: AuthorityDefinition) {
         authorityDefinitions.add(authorityDefinition)
-        if (authorityDefinition.project != this)
+        if (authorityDefinition.project != this) {
             authorityDefinition.setBy(this)
+        }
     }
 
     companion object {
@@ -78,7 +81,7 @@ class Project(
             return Project(
                 name,
                 description,
-                EncryptUtil.sha256(name + time)
+                Crypto.sha256(name + time),
             )
         }
     }

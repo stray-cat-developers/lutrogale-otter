@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldBe
 import io.mustelidae.otter.lutrogale.api.config.EmbeddedDbInitializer
 import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
 import io.mustelidae.otter.lutrogale.web.domain.project.repository.ProjectRepository
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +17,7 @@ internal class AuthorizationControllerTest : FlowTestSupport() {
 
     @Test
     fun idChecks() {
-        val userEmail = EmbeddedDbInitializer.userEmail
+        val userEmail = EmbeddedDbInitializer.USER_EMAIL
         val authFlow = AuthorizationControllerFlow(projectRepository, mockMvc)
         val accessStates = authFlow.idCheck(userEmail, listOf(1, 2, 3))
 
@@ -33,14 +32,17 @@ internal class AuthorizationControllerTest : FlowTestSupport() {
     fun idChecksNotUser() {
         val userEmail = "abc@test.com"
         val authFlow = AuthorizationControllerFlow(projectRepository, mockMvc)
-        assertThrows(AssertionError::class.java) {
-            authFlow.idCheck(userEmail, listOf(1))
-        }
+        val firstAccess = authFlow.idCheck(userEmail, listOf(1))
+
+        firstAccess.first().hasPermission shouldBe false
+
+        val secondAccess = authFlow.idCheck(userEmail, listOf(1))
+        secondAccess.first().hasPermission shouldBe false
     }
 
     @Test
     fun idChecksNoPermission() {
-        val userEmail = EmbeddedDbInitializer.userEmail
+        val userEmail = EmbeddedDbInitializer.USER_EMAIL
         val authFlow = AuthorizationControllerFlow(projectRepository, mockMvc)
         val replies = authFlow.idCheck(userEmail, listOf(4))
 
@@ -51,7 +53,7 @@ internal class AuthorizationControllerTest : FlowTestSupport() {
     fun urlCheck() {
         // Given
         val url = "/applications/1234/reviews/1234"
-        val userEmail = EmbeddedDbInitializer.userEmail
+        val userEmail = EmbeddedDbInitializer.USER_EMAIL
         val authFlow = AuthorizationControllerFlow(projectRepository, mockMvc)
 
         // When
@@ -65,7 +67,7 @@ internal class AuthorizationControllerTest : FlowTestSupport() {
     fun urlCheck2() {
         // Given
         val url = "/applications/1234/reviews/abcd/adf"
-        val userEmail = EmbeddedDbInitializer.userEmail
+        val userEmail = EmbeddedDbInitializer.USER_EMAIL
         val authFlow = AuthorizationControllerFlow(projectRepository, mockMvc)
 
         // When
@@ -78,7 +80,7 @@ internal class AuthorizationControllerTest : FlowTestSupport() {
     @Test
     fun accessibleList() {
         // Given
-        val userEmail = EmbeddedDbInitializer.userEmail
+        val userEmail = EmbeddedDbInitializer.USER_EMAIL
         val authFlow = AuthorizationControllerFlow(projectRepository, mockMvc)
 
         // When

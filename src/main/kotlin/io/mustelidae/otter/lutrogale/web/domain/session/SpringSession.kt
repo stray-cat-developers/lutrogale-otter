@@ -1,10 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.session
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Index
-import javax.persistence.Table
+import jakarta.persistence.Column
+import jakarta.persistence.Id
+import jakarta.persistence.Index
+import jakarta.persistence.Table
 
 /**
  * Created by seooseok on 2016. 9. 28..
@@ -12,7 +11,6 @@ import javax.persistence.Table
  * @link org/springframework/session/jdbc/schema-h2.sql
  */
 
-@Entity
 @Table(
     name = "SPRING_SESSION",
     indexes = [
@@ -20,7 +18,7 @@ import javax.persistence.Table
         Index(name = "SPRING_SESSION_IX1", columnList = "SESSION_ID", unique = true),
         Index(name = "SPRING_SESSION_IX2", columnList = "EXPIRY_TIME"),
         Index(name = "SPRING_SESSION_IX3", columnList = "PRINCIPAL_NAME"),
-    ]
+    ],
 )
 class SpringSession {
     @Id

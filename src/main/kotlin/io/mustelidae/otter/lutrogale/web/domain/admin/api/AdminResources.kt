@@ -5,20 +5,20 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 class AdminResources {
 
-    @Schema(name = "Admin.Modify")
+    @Schema(name = "Lutrogale.Admin.Modify")
     class Modify(
         val description: String,
         val imageUrl: String,
-        val pw: String? = null
+        val pw: String? = null,
     )
 
-    @Schema(name = "Admin.Reply")
+    @Schema(name = "Lutrogale.Admin.Reply")
     class Reply(
         val id: Long,
         val email: String,
         val name: String,
         val description: String? = null,
-        val img: String? = null
+        val img: String? = null,
     ) {
 
         companion object {
@@ -30,7 +30,7 @@ class AdminResources {
                         email,
                         name,
                         description,
-                        img
+                        img,
                     )
                 }
             }

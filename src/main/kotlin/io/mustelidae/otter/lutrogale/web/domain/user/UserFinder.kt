@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.user
 
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.config.DataNotFindException
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserAuthorityGrant
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserPersonalGrant
 import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources
@@ -16,12 +15,12 @@ import java.util.stream.Collectors
 @Transactional(readOnly = true)
 class UserFinder(
     val userRepository: UserRepository,
-    val userDSLRepository: UserDSLRepository
+    val userDSLRepository: UserDSLRepository,
 ) {
 
     fun findBy(id: Long): User {
         return userRepository.findByIdOrNull(id)
-            ?: throw ApplicationException(HumanErr.IS_EMPTY)
+            ?: throw DataNotFindException("사용자 정보가 없습니다.")
     }
 
     fun findBy(email: String): User? {
@@ -36,13 +35,14 @@ class UserFinder(
     }
 
     fun findByLive(): List<User> {
-        return findAll().filter { it.status != User.Status.expire }
+        return findAll().filter { it.status != User.Status.EXPIRE }
     }
 
     fun findByStatusAllow(id: Long): User {
         val user = this.findBy(id)
-        if (user.status != User.Status.allow)
-            throw IllegalStateException("해당 유저는 허가된 유저가 아닙니다")
+        if (user.status != User.Status.ALLOW) {
+            throw IllegalStateException("해당 사용자는 허가된 사용자가 아닙니다")
+        }
 
         return user
     }

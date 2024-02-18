@@ -13,12 +13,12 @@ import org.springframework.stereotype.Repository
 interface AuthorityNavigationUnitRepository : JpaRepository<AuthorityNavigationUnit, Long> {
     fun findByStatusTrueAndAuthorityDefinitionIdAndMenuNavigationId(
         authorityDefinitionId: Long,
-        menuNavigationId: Long
+        menuNavigationId: Long,
     ): AuthorityNavigationUnit?
 
     fun findByStatusTrueAndAuthorityDefinitionIdAndMenuNavigationIdIn(
         authorityDefinitionId: Long,
-        menuNavigationIdGroup: List<Long>
+        menuNavigationIdGroup: List<Long>,
     ): List<AuthorityNavigationUnit>?
 
     fun findByStatusTrueAndMenuNavigationId(menuNavigationId: Long): List<AuthorityNavigationUnit>
@@ -27,7 +27,7 @@ interface AuthorityNavigationUnitRepository : JpaRepository<AuthorityNavigationU
         "SELECT DISTINCT an " +
             " FROM AuthorityNavigationUnit an JOIN FETCH an.authorityDefinition ad JOIN FETCH an.menuNavigation mn " +
             "WHERE an.status = true " +
-            "AND an.authorityDefinition.id = :authorityDefinitionId"
+            "AND an.authorityDefinition.id = :authorityDefinitionId",
     )
     fun findByStatusTrueAndAuthorityDefinitionId(@Param("authorityDefinitionId") authorityDefinitionId: Long): List<AuthorityNavigationUnit>?
 
@@ -35,7 +35,7 @@ interface AuthorityNavigationUnitRepository : JpaRepository<AuthorityNavigationU
         "SELECT DISTINCT an " +
             "FROM AuthorityNavigationUnit an JOIN FETCH an.authorityDefinition ad JOIN FETCH an.menuNavigation mn " +
             "WHERE an.status = true " +
-            "AND an.authorityDefinition.id in (:authorityDefinitionIdGroup)"
+            "AND an.authorityDefinition.id in (:authorityDefinitionIdGroup)",
     )
     fun findByStatusTrueAndAuthorityDefinitionIdGroup(@Param("authorityDefinitionIdGroup") authorityDefinitionIdGroup: List<Long>): List<AuthorityNavigationUnit>?
 }

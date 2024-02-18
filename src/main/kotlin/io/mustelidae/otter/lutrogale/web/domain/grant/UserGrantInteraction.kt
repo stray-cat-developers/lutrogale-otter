@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.grant
 
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.config.DataPermissionException
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinitionFinder
 import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Reply.AuthorityGrant
 import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Reply.PersonalGrant
@@ -24,7 +23,7 @@ class UserGrantInteraction(
     private val userPersonalGrantRepository: UserPersonalGrantRepository,
     private val userAuthorityGrantFinder: UserAuthorityGrantFinder,
     private val userPersonalGrantFinder: UserPersonalGrantFinder,
-    private val menuNavigationFinder: MenuNavigationFinder
+    private val menuNavigationFinder: MenuNavigationFinder,
 ) {
 
     fun getUserAuthorityGrants(id: Long, projectId: Long): List<AuthorityGrant> {
@@ -45,7 +44,7 @@ class UserGrantInteraction(
                 PersonalGrant.from(
                     it.menuNavigation!!,
                     it.createdAt!!,
-                    menuNavigationInteraction.getFullUrl(it.menuNavigation!!)
+                    menuNavigationInteraction.getFullUrl(it.menuNavigation!!),
                 )
             }
     }
@@ -55,11 +54,13 @@ class UserGrantInteraction(
         val authorityDefinitions = authorityDefinitionFinder.findByLive(authorityDefinitionIds)
 
         for (authorityDefinition in authorityDefinitions) {
-            if (authorityDefinition.project!!.id!! != projectId)
-                throw ApplicationException(HumanErr.INVALID_INCLUDE)
+            if (authorityDefinition.project!!.id!! != projectId) {
+                throw DataPermissionException("해당 프로젝트의 권한 그룹이 아닙니다.")
+            }
 
-            if (user.authorityDefinitions.contains(authorityDefinition))
+            if (user.authorityDefinitions.contains(authorityDefinition)) {
                 throw IllegalStateException("이미 해당 권한 그룹은 허용되어 있습니다.")
+            }
         }
 
         val mappingGrants = authorityDefinitions.map {
@@ -77,8 +78,9 @@ class UserGrantInteraction(
         val authorityDefinitions = authorityDefinitionFinder.findByLive(authorityDefinitionIdGroup)
 
         for (authorityDefinition in authorityDefinitions) {
-            if (authorityDefinition.project!!.id != projectId)
-                throw ApplicationException(HumanErr.INVALID_INCLUDE)
+            if (authorityDefinition.project!!.id != projectId) {
+                throw DataPermissionException("해당 프로젝트의 권한그룹이 아닙니다.")
+            }
         }
 
         val mappingGrants = userAuthorityGrantFinder.findByUserAndDefinition(userId, authorityDefinitionIdGroup)
@@ -91,11 +93,13 @@ class UserGrantInteraction(
         val user = userFinder.findByStatusAllow(userId)
         val menuNavigations: List<MenuNavigation> = menuNavigationFinder.findByLive(menuNavigationIds)
         for (menuNavigation in menuNavigations) {
-            if (menuNavigation.project!!.id != projectId)
-                throw ApplicationException(HumanErr.INVALID_INCLUDE)
+            if (menuNavigation.project!!.id != projectId) {
+                throw DataPermissionException("해당 프로젝트의 메뉴가 아닙니다.")
+            }
 
-            if (user.menuNavigations.contains(menuNavigation))
+            if (user.menuNavigations.contains(menuNavigation)) {
                 throw IllegalStateException("이미 해당 권한 메뉴는 허용되어 있습니다.")
+            }
         }
 
         val mappingGrants = menuNavigations.map {
@@ -112,8 +116,9 @@ class UserGrantInteraction(
         val menuNavigations: List<MenuNavigation> = menuNavigationFinder.findByLive(menuNavigationIds)
 
         for (menuNavigation in menuNavigations) {
-            if (menuNavigation.project!!.id != projectId)
-                throw ApplicationException(HumanErr.INVALID_INCLUDE)
+            if (menuNavigation.project!!.id != projectId) {
+                throw DataPermissionException("해당 프로젝트의 메뉴가 아닙니다.")
+            }
         }
         val mappingGrants = userPersonalGrantFinder.findByUserAndMenu(userId, menuNavigationIds)
 

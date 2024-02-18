@@ -5,9 +5,9 @@
         $.when(
             AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
             AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id}))
-        ).done(function(p, n){
-            var project_obj = p[0].result;
-            var navigation_list = n[0].result;
+        ).done(function(first, second){
+            let project_obj = first[0];
+            let navigation_list = second[0].content;
 
             $('#project_name').text(project_obj.name);
             $('#project_desc').html(project_obj.description);
@@ -25,7 +25,7 @@
                 ).done(function(data){
                     clearNavInfoArea();
 
-                    var navi_obj = data.result;
+                    let navi_obj = data;
                     $('#info_radio_group :input:radio[value='+navi_obj.type+']').prop('checked', true);
                     $('#full_url').val(navi_obj.a_attr.fullUrl);
                     $('#info_name').val(navi_obj.a_attr.name);
@@ -37,20 +37,20 @@
                 });
 
             }).on('move_node.jstree', function(e, data){
-                var param = {
+                let param = {
                     parentTreeId : data.parent
                 };
 
                 AJAX.putData(
                     OsoriRoute.getUri('menuTree.moveBranch', {id:SS.project_id, nodeId:data.node.a_attr.id}),
                     param
-                ).done(function(data){
+                ).done(function(){
                     $('#popover_result').fadeTo(800, 500).slideUp(500, function(){
                         $("#success-alert").slideUp(500);
                     });
                 });
 
-            }).on("loaded.jstree", function (event, data) {
+            }).on("loaded.jstree", function () {
                 $(this).jstree("open_all");
             });
 
@@ -59,24 +59,24 @@
     });
 
     $('#btn_modal_close').click(function(){
-        var tree = $('#menuNaviTree').jstree(true);
+        let tree = $('#menuNaviTree').jstree(true);
 
         tree.delete_node([SS.node_id]);
         clearModalData();
     });
 
     $('#btn_info_modify').click(function(){
-        var info_type     = $('#info_radio_group :radio:checked').val();
-        var info_name     = $('#info_name').val();
-        var info_url_path = $('#info_url_path').val();
-        var info_method   = $('#info_method').val();
+        let info_type     = $('#info_radio_group :radio:checked').val();
+        let info_name     = $('#info_name').val();
+        let info_url_path = $('#info_url_path').val();
+        let info_method   = $('#info_method').val();
 
         if(!SS.hasOwnProperty('selected_node_id')){
             alert('대상을 선택해주세요.');
             return false;
         }
 
-        var param = {
+        let param = {
             id : SS.selected_node_id,
             projectId : SS.project_id,
             type : info_type,
@@ -88,9 +88,9 @@
         AJAX.putData(
             OsoriRoute.getUri('navigation.modifyInfo', {id:SS.project_id,nodeId:SS.selected_node_id}),
             param
-        ).done(function(data){
-            var tree = $('#menuNaviTree').jstree(true);
-            var this_node = tree.get_node(SS.selected_tree_id);
+        ).done(function(){
+            let tree = $('#menuNaviTree').jstree(true);
+            let this_node = tree.get_node(SS.selected_tree_id);
 
             this_node.a_attr.uriBlock = param.uriBlock;
             tree.set_type(this_node, info_type);
@@ -106,22 +106,22 @@
     });
 
     $('#btn_modal_submit').click(function(){
-        var nav_type     = $('#nav_radio_group :radio:checked').val();
-        var nav_name     = $('#nav_name').val();
-        var nav_url_path = $('#nav_url_path').val();
-        var nav_method   = $('#nav_method').val();
+        let nav_type     = $('#nav_radio_group :radio:checked').val();
+        let nav_name     = $('#nav_name').val();
+        let nav_url_path = $('#nav_url_path').val();
+        let nav_method   = $('#nav_method').val();
 
-        if(nav_type == ""){
+        if(nav_type === ""){
             alert("네비게이션 타입을 선택해주세요.");
             return false;
         }
 
-        if(nav_name == "") {
+        if(nav_name === "") {
             alert("네비게이션명을 입력해주세요.");
             return false;
         }
 
-        var param = {
+        let param = {
             projectId : SS.project_id,
             treeId : SS.node_id,
             parentTreeId : SS.node_parent,
@@ -135,11 +135,11 @@
             OsoriRoute.getUri('menuTree.createBranch', {id:SS.project_id}),
             param
         ).done(function(data){
-            var tree = $('#menuNaviTree').jstree(true);
-            var this_node = tree.get_node(SS.node_id);
+            let tree = $('#menuNaviTree').jstree(true);
+            let this_node = tree.get_node(SS.node_id);
 
             this_node.a_attr.uriBlock = param.uriBlock;
-            this_node.a_attr.id = data.result;
+            this_node.a_attr.id = data.content;
 
             tree.set_type(this_node, nav_type);
             tree.rename_node(this_node, nav_name);
@@ -152,13 +152,13 @@
     });
 
     function getFullUrl(node){
-        var id_list = _.flatten([node.id, node.parents]);
+        let id_list = _.flatten([node.id, node.parents]);
 
         return _.chain(id_list)
                 .without(id_list, '#')
                 .map(function(treeId){
-                    var tree = $('#menuNaviTree').jstree(true);
-                    var this_node = tree.get_node(treeId);
+                    let tree = $('#menuNaviTree').jstree(true);
+                    let this_node = tree.get_node(treeId);
                     return this_node.a_attr.uriBlock;
                 })
                 .reverse()

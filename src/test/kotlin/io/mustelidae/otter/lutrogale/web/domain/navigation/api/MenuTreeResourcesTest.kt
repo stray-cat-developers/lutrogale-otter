@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation.api
 
 import io.kotest.matchers.shouldBe
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.common.Constant
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -12,10 +12,11 @@ internal class MenuTreeResourcesTest {
         // Given
         val request = MenuTreeResources.Request.Branch(
             "",
-            "", "",
+            "",
+            "",
             "asdfasdf/adfasf/{fasdf}",
-            OsoriConstant.NavigationType.menu,
-            RequestMethod.DELETE
+            Constant.NavigationType.MENU,
+            RequestMethod.DELETE,
         )
         // When
         val refineBlock = request.getRefineUriBlock()
@@ -28,10 +29,11 @@ internal class MenuTreeResourcesTest {
         // Given
         val request = MenuTreeResources.Request.Branch(
             "",
-            "", "",
+            "",
+            "",
             "asdfasdf/adfasf/{fasdf}/",
-            OsoriConstant.NavigationType.menu,
-            RequestMethod.DELETE
+            Constant.NavigationType.MENU,
+            RequestMethod.DELETE,
         )
         // When
         val refineBlock = request.getRefineUriBlock()

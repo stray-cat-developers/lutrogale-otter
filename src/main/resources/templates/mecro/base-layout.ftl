@@ -19,9 +19,9 @@
 	<#nested />
 
     <!-- jQuery 2.2.3 -->
-    <script src="//code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- jQuery UI 1.11.4 -->
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="/static/plugins/jQueryUI/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button);

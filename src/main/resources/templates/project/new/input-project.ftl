@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <@layout.baseHeader "New Project"/>
     <body class="hold-transition skin-blue sidebar-mini">
         <@layout.baseWrapper>
@@ -48,14 +48,14 @@
             $("#inputProjectDescription").wysihtml5();
 
             $('#btn_submit').click(function(){
-                if($('#inputProjectName').val() == ""){
+                if($('#inputProjectName').val() === ""){
                     $('.form-group:first').removeClass('has-feedback').addClass('has-error');
                     $('.help-block').show();
 
                     return false;
                 }
 
-                var param = {
+                let param = {
                     url: OsoriRoute.getUri("project.create"),
                     data: {
                         name: $('#inputProjectName').val(),
@@ -64,7 +64,7 @@
                 };
 
                 AJAX.postData(param.url, param.data).done(function(data){
-                    OsoriRoute.go("view.newProject.navi", {id: data.result});
+                    OsoriRoute.go("view.newProject.navi", {id: data.content});
                 }).fail(function(xhr, status){
                     console.log(xhr);
                     console.log(status);

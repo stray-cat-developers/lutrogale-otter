@@ -1,14 +1,15 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.otter.lutrogale.api.common.Audit
+import io.mustelidae.otter.lutrogale.common.Audit
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 
 /**
  * Created by seooseok on 2016. 9. 29..
@@ -19,19 +20,19 @@ import javax.persistence.Table
 class AuthorityNavigationUnit : Audit() {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        protected set
+        private set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authorityDefinitionId", updatable = false, nullable = false)
     var authorityDefinition: AuthorityDefinition? = null
-        protected set
+        private set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menuNavigationId", updatable = false, nullable = false)
     var menuNavigation: MenuNavigation? = null
-        protected set
+        private set
 
     private var status = true
 
@@ -42,13 +43,15 @@ class AuthorityNavigationUnit : Audit() {
     fun setBy(authorityDefinition: AuthorityDefinition) {
         this.authorityDefinition = authorityDefinition
 
-        if (authorityDefinition.authorityNavigationUnits.contains(this).not())
+        if (authorityDefinition.authorityNavigationUnits.contains(this).not()) {
             authorityDefinition.addBy(this)
+        }
     }
 
     fun setBy(menuNavigation: MenuNavigation) {
         this.menuNavigation = menuNavigation
-        if (menuNavigation.authorityNavigationUnits.contains(this).not())
+        if (menuNavigation.authorityNavigationUnits.contains(this).not()) {
             menuNavigation.addBy(this)
+        }
     }
 }

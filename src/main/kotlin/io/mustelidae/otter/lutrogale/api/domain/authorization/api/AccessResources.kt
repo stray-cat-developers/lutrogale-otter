@@ -1,34 +1,39 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.Email
 import org.springframework.web.bind.annotation.RequestMethod
 
 class AccessResources {
 
+    @Schema(name = "Lutrogale.Access.CheckWay")
     enum class CheckWay {
         ID, URI
     }
 
     class Request {
-        @Schema(name = "Access.Request.UriBase")
+        @Schema(name = "Lutrogale.Access.Request.UriBase")
         class UriBase(
+            @Email
             val email: String,
-            val uris: List<AccessUri>
+            val uris: List<AccessUri>,
         )
-        @Schema(name = "Access.Request.IdBase")
+
+        @Schema(name = "Lutrogale.Access.Request.IdBase")
         class IdBase(
+            @Email
             val email: String,
-            val ids: List<Long>
+            val ids: List<Long>,
         )
     }
 
     class Reply {
-        @Schema(name = "Access.Reply.AccessState")
+        @Schema(name = "Lutrogale.Access.Reply.AccessState")
         class AccessState(
             val target: String,
             val hasPermission: Boolean = false,
             val checkWay: CheckWay,
-            val cause: String? = null
+            val cause: String? = null,
         ) {
 
             companion object {
@@ -36,7 +41,7 @@ class AccessResources {
                     return AccessState(
                         targetMenuNavigationId.toString(),
                         true,
-                        CheckWay.ID
+                        CheckWay.ID,
                     )
                 }
 
@@ -45,7 +50,7 @@ class AccessResources {
                         targetMenuNavigationId.toString(),
                         false,
                         CheckWay.ID,
-                        cause
+                        cause,
                     )
                 }
 
@@ -53,7 +58,7 @@ class AccessResources {
                     return AccessState(
                         targetUrl,
                         true,
-                        CheckWay.URI
+                        CheckWay.URI,
                     )
                 }
 
@@ -62,17 +67,17 @@ class AccessResources {
                         targetUrl,
                         false,
                         CheckWay.URI,
-                        cause
+                        cause,
                     )
                 }
             }
         }
     }
 
-    @Schema(name = "Access.AccessUri")
+    @Schema(name = "Lutrogale.Access.AccessUri")
     class AccessUri(
         val uri: String,
-        val methodType: RequestMethod
+        val methodType: RequestMethod,
     ) {
         companion object {
             fun of(uri: String, requestMethod: RequestMethod): AccessUri {

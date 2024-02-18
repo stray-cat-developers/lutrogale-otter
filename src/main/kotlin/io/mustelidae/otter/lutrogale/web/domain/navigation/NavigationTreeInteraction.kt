@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.navigation
 
-import io.mustelidae.otter.lutrogale.web.commons.exception.ApplicationException
-import io.mustelidae.otter.lutrogale.web.commons.exception.HumanErr
+import io.mustelidae.otter.lutrogale.config.DataNotFindException
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Request.Branch
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation.Companion.from
@@ -10,7 +9,6 @@ import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNaviga
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.ArrayList
 
 /**
  * Created by HanJaehyun on 2016. 9. 22..
@@ -22,7 +20,7 @@ class NavigationTreeInteraction(
     private val authorityNavigationUnitRepository: AuthorityNavigationUnitRepository,
     private val menuNavigationInteraction: MenuNavigationInteraction,
     private val menuNavigationFinder: MenuNavigationFinder,
-    private val projectFinder: ProjectFinder
+    private val projectFinder: ProjectFinder,
 ) {
 
     fun createBranch(projectId: Long, branch: Branch): Long {
@@ -36,7 +34,7 @@ class NavigationTreeInteraction(
             branch.getRefineUriBlock(),
             branch.methodType,
             branch.treeId,
-            branch.parentTreeId
+            branch.parentTreeId,
         ).apply {
             setBy(project)
         }
@@ -52,8 +50,9 @@ class NavigationTreeInteraction(
         val treeBranches: MutableList<MenuTreeResources.Reply.TreeBranch> = ArrayList()
         val project = projectFinder.findByLive(projectId)
         val menuNavigations: List<MenuNavigation> = project.menuNavigations
-        if (menuNavigations.isEmpty())
-            throw ApplicationException(HumanErr.IS_EMPTY)
+        if (menuNavigations.isEmpty()) {
+            throw DataNotFindException("메뉴네비게이션 정보가 없습니다.")
+        }
 
         for (menuNavigation in menuNavigations) {
             treeBranches.add(this.getTreeBranch(menuNavigation))
@@ -73,7 +72,6 @@ class NavigationTreeInteraction(
     }
 
     fun moveBranch(projectId: Long, nodeId: Long, newParentId: String?): Boolean {
-
         val navigation = menuNavigationFinder.findByMenuNavigationId(projectId, nodeId)
         navigation.parentTreeId = newParentId!!
         val parentMenuNavigation = menuNavigationFinder.findByTreeId(projectId, newParentId)

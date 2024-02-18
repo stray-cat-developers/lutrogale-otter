@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <@layout.baseHeader "권한 그룹 설정"/>
     <body class="hold-transition skin-blue sidebar-mini">
         <@layout.baseWrapper>
@@ -19,7 +19,7 @@
                             <div class="box-body">
                                 <form role="form">
                                     <div class="form-group">
-                                        <label>권한 그룹 명</label>
+                                        <label for="group-name">권한 그룹 명</label>
                                         <input id="group-name" type="text" class="form-control" placeholder="권한들을 대표하는 이름을 입력하세요. ex) 일반 관리자, 고객센터 기본 권한 그룹 등등.. ">
                                     </div>
                                     <hr style="border: none; border-bottom: 1px solid dimgrey;">
@@ -158,66 +158,67 @@
             $(document).ready(function() {
                 $('#table-selected').DataTable(OPTION.data_table(opt.table_selected));
                 $('#table-group-api').DataTable(OPTION.data_table(opt.table_selected));
-                $('#table-groups').DataTable(OPTION.data_table(opt.table_groups)).on('click', 'button', function(e){
-                    var table_groups = $('#table-groups').DataTable();
-                    var auth_obj = table_groups.row($(this).parents('tr')).data();
+                $('#table-groups').DataTable(OPTION.data_table(opt.table_groups)).on('click', 'button', function(){
+                    let table_groups = $('#table-groups').DataTable();
+                    let auth_obj = table_groups.row($(this).parents('tr')).data();
 
-                    var btn_type = $(this).prop('id');
-                    if(btn_type == 'btn_modify'){
+                    let btn_type = $(this).prop('id');
+                    if(btn_type === 'btn_modify'){
                         openModifyModal(auth_obj);
                     }else{
-                        var data = table_groups.row($(this).parents('tr')).data();
+                        let data = table_groups.row($(this).parents('tr')).data();
 
                         if(!confirm('['+data.name+'] 권한그룹을 삭제하시겠습니까?'))
                             return false;
 
                         AJAX.deleteData(
                             OsoriRoute.getUri('authority.expire', {id:SS.project_id, authId:data.authId})
-                        ).done(function(data){
+                        ).done(function(){
                             $('#table-group-api').DataTable().clear().draw();
                             getAuthGroup();
                         });
                     }
                 }).on('click', 'tr', function(){
-                    var table_groups = $('#table-groups').DataTable();
-                    var table_group_api = $('#table-group-api').DataTable();
-                    var data = table_groups.row($(this)).data();
+                    let table_groups = $('#table-groups').DataTable();
+                    let table_group_api = $('#table-group-api').DataTable();
+                    let data = table_groups.row($(this)).data();
 
                     table_groups.$('tr.active').removeClass('active');
                     $(this).addClass('active');
 
-                    AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {id:data.projectId, authId:data.authId})).done(function(obj){
-                        table_group_api.clear().rows.add(obj.result).draw();
-                    });
+                    AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {id:data.projectId, authId:data.authId}))
+                        .done(function(data){
+                            table_group_api.clear().rows.add(data.content).draw();
+                        });
                 });
 
                 $.when(
                     AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})),
                     getAuthGroup()
-                ).done(function(p, n){
-                    var project_obj = p[0].result;
-                    var navigation_list = n[0].result;
+                ).done(function(first, second){
+                    let project_obj = first[0];
+                    let navigation_list = second[0].content;
 
                     $('#project_name').text(project_obj.name);
                     $('#project_desc').html(project_obj.description);
                     $('#project_apiKey').text(project_obj.apiKey);
 
                     $('#menuNaviTree').jstree(OPTION.jstree(opt.menu_tree, navigation_list)).on('check_node.jstree uncheck_node.jstree', function (event, data) {
-                        var data_table = $('#table-selected').DataTable();
-                        var node = data.node.a_attr;
+                        let data_table = $('#table-selected').DataTable();
+                        let node = data.node.a_attr;
 
                         if(data.node.state.checked){
                             node.DT_RowId = node.id;
                             data_table.row.add(node);
                         }else{
-                            var target_row = $('#table-selected > tbody tr[id="'+node.id+'"]');
+                            let target_row = $('#table-selected > tbody tr[id="'+node.id+'"]');
                             data_table.row($(target_row[0])).remove();
                         }
 
                         data_table.draw();
 
-                    }).on('loaded.jstree', function (event, data) {
+                    }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
                     });
 
@@ -225,10 +226,10 @@
             });
 
             $('#btn_create').click(function(){
-                var data_table = $('#table-selected').DataTable();
-                var group_name = $('#group-name').val();
+                let data_table = $('#table-selected').DataTable();
+                let group_name = $('#group-name').val();
 
-                if(group_name == ""){
+                if(group_name === ""){
                     alert('그룹명을 입력해주세요.');
                     return false;
                 }
@@ -238,7 +239,7 @@
                     return false;
                 }
 
-                var param = {
+                let param = {
                     groupName : group_name,
                     naviId : _.pluck(data_table.data(), 'id')
                 };
@@ -261,9 +262,9 @@
                 $.when(
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:auth_obj.projectId})),
                     AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:auth_obj.projectId, authId:auth_obj.authId}))
-                ).done(function(branch, bundleBranches){
-                    var all_branch = branch[0].result;
-                    var bundleBranches = bundleBranches[0].result;
+                ).done(function(first, second){
+                    let all_branch = first[0].content;
+                    let bundleBranches = second[0].content;
 
                     _.map(all_branch, function(v){
                         if(!_.isUndefined(_.findWhere(bundleBranches, {id:v.id})))
@@ -282,15 +283,15 @@
                     .jstree('destroy')
                     .jstree(OPTION.jstree(opt.menu_tree, all_branch))
                     .on('check_node.jstree uncheck_node.jstree', function (event, data) {
-                        var data_table = $('#modal-selected').DataTable();
-                        var node = data.node.a_attr;
+                        let data_table = $('#modal-selected').DataTable();
+                        let node = data.node.a_attr;
 
                         if(data.node.state.checked){
                             AJAX.putData(
                                 OsoriRoute.getUri('authority.modifyInfo', {id:Number(auth_obj.projectId), authId:Number(auth_obj.authId)}),
                                 {'naviId': node.id},
                                 {async: false}
-                            ).done(function(data){
+                            ).done(function(){
                                 node.DT_RowId = node.id;
                                 data_table.row.add(node);
                             });
@@ -306,19 +307,19 @@
                                 OsoriRoute.getUri('authority.expireNavigations', param),
                                 {},
                                 {async: false}
-                            ).done(function(data){
-                                var target_row = $('#modal-selected > tbody tr[id="'+node.id+'"]');
+                            ).done(function(){
+                                let target_row = $('#modal-selected > tbody tr[id="'+node.id+'"]');
                                 data_table.row($(target_row[0])).remove();
                             });
 
                         }
 
                         data_table.draw();
-                    }).on('loaded.jstree', function (event, data) {
+                    }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
                     });
 
-                    var modal_tree = $('#modal-menu-tree').jstree(true);
+                    let modal_tree = $('#modal-menu-tree').jstree(true);
                     $.each(_.pluck(bundleBranches, 'id'), function(i,v){
                         modal_tree.check_node(v);
                     });
@@ -335,8 +336,8 @@
                 return AJAX.getData(
                     OsoriRoute.getUri('authority.findAll', {id:SS.project_id})
                 ).done(function(data){
-                    var group_table = $('#table-groups').DataTable();
-                    group_table.clear().rows.add(data.result).draw();
+                    let group_table = $('#table-groups').DataTable();
+                    group_table.clear().rows.add(data.content).draw();
                 });
             }
 

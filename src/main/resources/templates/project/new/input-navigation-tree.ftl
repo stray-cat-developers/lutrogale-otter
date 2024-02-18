@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <@layout.baseHeader "New Project"/>
     <body class="hold-transition skin-blue sidebar-mini">
     <@layout.baseWrapper>
@@ -47,36 +47,37 @@
                                 <div id="info_radio_group" class="form-group">
                                     <label>네비게이션 타입</label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup1" value="category" checked>카테고리
+                                        <input type="radio" name="navTypeGroup1" value="CATEGORY" checked>카테고리
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup1" value="menu">메뉴
+                                        <input type="radio" name="navTypeGroup1" value="MENU">메뉴
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup1" value="function">기능
+                                        <input type="radio" name="navTypeGroup1" value="FUNCTION">기능
                                     </label>
                                 </div>
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>전체 경로</label>
+                                    <label for="full_url">전체 경로</label>
                                     <input id="full_url" type="text" class="form-control" disabled>
                                 </div>
                                 <div class="form-group">
-                                    <label>네비게이션 명</label>
+                                    <label for="info_name">네비게이션 명</label>
                                     <input id="info_name" type="text" class="form-control" placeholder="메뉴 수정">
                                 </div>
                                 <div class="form-group">
-                                    <label>URL Path Block</label>
+                                    <label for="info_url_path">URL Path Block</label>
                                     <i class="fa fa-question-circle"></i>
                                     <input id="info_url_path" type="text" class="form-control" placeholder="Enter ...">
                                 </div>
                                 <div class="form-group">
-                                    <label>Http Method Type 선택</label>
+                                    <label for="info_method">Http Method Type 선택</label>
                                     <i class="fa fa-question-circle"></i>
                                     <select id="info_method" class="form-control">
                                         <option>GET</option>
                                         <option>POST</option>
                                         <option>PUT</option>
+                                        <option>PATCH</option>
                                         <option>DELETE</option>
                                     </select>
                                 </div>
@@ -95,7 +96,7 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <button onclick="javascript:OsoriRoute.go('view.newProject.authGroup', {id:SS.project_id});" class="btn btn-info pull-right">다음</button>
+                        <button onclick="OsoriRoute.go('view.newProject.authGroup', {id:SS.project_id});" class="btn btn-info pull-right">다음</button>
                     </div>
                 </div>
             </div>
@@ -113,32 +114,33 @@
                                     <div id="nav_radio_group" class="form-group">
                                         <label>네비게이션 타입</label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="navTypeGroup2" value="category" checked>카테고리
+                                            <input type="radio" name="navTypeGroup2" value="CATEGORY" checked>카테고리
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="navTypeGroup2" value="menu">메뉴
+                                            <input type="radio" name="navTypeGroup2" value="MENU">메뉴
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="navTypeGroup2" value="function">기능
+                                            <input type="radio" name="navTypeGroup2" value="FUNCTION">기능
                                         </label>
                                     </div>
                                     <!-- text input -->
                                     <div class="form-group">
-                                        <label>네비게이션 명</label>
+                                        <label for="nav_name">네비게이션 명</label>
                                         <input id="nav_name" type="text" class="form-control" placeholder="메뉴 수정">
                                     </div>
                                     <div class="form-group">
-                                        <label>URL Path Block</label>
+                                        <label for="nav_url_path">URL Path Block</label>
                                         <i class="fa fa-question-circle"></i>
                                         <input id="nav_url_path" type="text" class="form-control" placeholder="Enter ...">
                                     </div>
                                     <div class="form-group">
-                                        <label>Http Method Type 선택</label>
+                                        <label for="nav_method">Http Method Type 선택</label>
                                         <i class="fa fa-question-circle"></i>
                                         <select id="nav_method" class="form-control">
                                             <option>GET</option>
                                             <option>POST</option>
                                             <option>PUT</option>
+                                            <option>PATCH</option>
                                             <option>DELETE</option>
                                         </select>
                                     </div>

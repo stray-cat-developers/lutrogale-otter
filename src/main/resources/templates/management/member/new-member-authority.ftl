@@ -1,20 +1,20 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <@layout.baseHeader "New Project">
 
 </@layout.baseHeader>
 <body class="hold-transition skin-blue sidebar-mini">
 <@layout.baseWrapper>
 <section class="content-header">
-    <h1>유저 생성</h1>
+    <h1>사용자 생성</h1>
 </section>
 
 <section class="content">
     <div class="create-user-wrap">
         <!-- Nav tabs -->
         <ul class="nav nav-pills nav-justified">
-            <li class="done">1. 신규 유저 생성</li>
+            <li class="done">1. 신규 사용자 생성</li>
             <li class="active">2. 권한 그룹 설정</li>
             <li>3. 개인별 권한 설정</li>
             <li>4. 완료</li>
@@ -22,14 +22,14 @@
         <!-- Tab panes -->
         <div class="box box-primary box-body">
             <div class="box box-solid">
-                <div class="box-header with-border"><h4>유저 정보</h4></div>
+                <div class="box-header with-border"><h4>사용자 정보</h4></div>
                 <div class="box-body form-horizontal">
                     <div class="form-group">
-                        <strong class="col-sm-2">유저 이메일</strong>
+                        <strong class="col-sm-2">사용자 이메일</strong>
                         <div id="user-email" class="col-sm-10"></div>
                     </div>
                     <div class="form-group">
-                        <strong class="col-sm-2">유저 이름</strong>
+                        <strong class="col-sm-2">사용자 이름</strong>
                         <div id="user-name" class="col-sm-10"></div>
                     </div>
                     <div class="form-group">
@@ -56,7 +56,7 @@
 <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
 <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script>
-    var opt = {
+    let opt = {
         'tb_project': {
             'scrollY': '150px',
             'scrollCollapse': true,
@@ -74,34 +74,32 @@
         }
     };
 
-    var user_id = extractByWord('new-member');
-    var project_id = OsoriRoute.getQuery().projectId.split(',');
+    let user_id = extractByWord('new-member');
+    let project_id = OsoriRoute.getQuery().projectId.split(',');
 
     $(document).ready(function(){
 
         AJAX.getData(OsoriRoute.getUri('user.findOne', {userId: user_id}))
-        .done(function(user){
-            var user = user.result;
-
-            $('#user-email').text(user.email);
-            $('#user-name').text(user.name);
-            $('#user-dept').text(user.department);
-            $('#user-privacy').text(user.accessPrivacyInformation);
+        .done(function(data){
+            $('#user-email').text(data.email);
+            $('#user-name').text(data.name);
+            $('#user-dept').text(data.department);
+            $('#user-privacy').text(data.accessPrivacyInformation);
         });
 
-        var row;
-        var last = project_id.length-1;
+        let row;
+        let last = project_id.length-1;
 
         $.each(project_id, function(index, project_id) {
-            if(index%3 == 0)
+            if(index%3 === 0)
                 row = $('<div/>', {class: 'row'});
 
             $.when(
                 AJAX.getData(OsoriRoute.getUri('project.findOne', {id: project_id}), {}, {async:false}),
                 AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: project_id}), {}, {async:false})
-            ).done(function(project, authority) {
-                var project = project[0].result;
-                var authority = authority[0].result;
+            ).done(function(first, second) {
+                let project = first[0];
+                let authority = second[0].content;
 
                 $('<div/>', {class: 'col-md-4'}).append(
                     $('<div/>', {class: 'box box-solid'}).append(
@@ -117,17 +115,17 @@
                 $(row).find('#table_'+index).DataTable(OPTION.data_table(opt.tb_project, authority));
             });
 
-            if(index == last) {
+            if(index === last) {
                 $(row).appendTo('#content');
-            }else if(index != 0 && index%3 == 2) {
+            }else if(index !== 0 && index%3 === 2) {
                 $(row).appendTo('#content');
             }
         });
 
         setTimeout(function(){
-            var table = $('.table').DataTable();
+            let table = $('.table').DataTable();
             $('#content input:checkbox').change(function(){
-                var data = table.row($(this).parents('tr')).data();
+                let data = table.row($(this).parents('tr')).data();
 
                 if($(this).is(":checked")){
                     assignAuthorityGrant(data.projectId, user_id, data.authId, this);
@@ -140,29 +138,29 @@
 
     });
 
-    function assignAuthorityGrant(project_id, user_id, auth_id, chx_onoff){
+    function assignAuthorityGrant(project_id, user_id, auth_id, chx_on_off){
         AJAX.postData(
             OsoriRoute.getUri('user.assignAuthorityGrant', {projectId: project_id, userId: user_id, authIdGroup: auth_id}),
             {'async': false}
         )
         .fail(function(){
-            $(chx_onoff).prop('checked', false);
+            $(chx_on_off).prop('checked', false);
         });
     }
 
-    function withdrawAuthorityGrant(project_id, user_id, auth_id, chx_onoff){
+    function withdrawAuthorityGrant(project_id, user_id, auth_id, chx_on_off){
         AJAX.deleteData(
             OsoriRoute.getUri('user.withdrawAuthorityGrant', {projectId: project_id, userId: user_id, authIdGroup: auth_id}),
             {'async': false}
         )
         .fail(function(){
-            $(chx_onoff).prop('checked', true);
+            $(chx_on_off).prop('checked', true);
         });
     }
 
     function nextStep(){
         AJAX.getData(OsoriRoute.getUri('user.findUsersProjects', {userId: user_id})).done(function(data){
-            if(data.result.length == 0){
+            if(data.content.length === 0){
                 alert('최소 한개이상의 권한 그룹을 선택해야합니다.');
                 return false;
             }else{

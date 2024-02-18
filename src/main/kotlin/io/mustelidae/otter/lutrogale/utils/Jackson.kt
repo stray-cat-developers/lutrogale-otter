@@ -39,8 +39,8 @@ private class CustomDateSerializer : StdSerializer<Date>(Date::class.java) {
             gen.writeString(
                 LocalDateTime.ofInstant(
                     value.toInstant(),
-                    ZoneId.systemDefault()
-                ).format(DateTimeFormatter.ISO_DATE_TIME)
+                    ZoneId.systemDefault(),
+                ).format(DateTimeFormatter.ISO_DATE_TIME),
             )
         }
     }

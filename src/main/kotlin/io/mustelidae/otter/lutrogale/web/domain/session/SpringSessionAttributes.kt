@@ -1,17 +1,16 @@
 package io.mustelidae.otter.lutrogale.web.domain.session
 
+import jakarta.persistence.Column
+import jakarta.persistence.FetchType
+import jakarta.persistence.ForeignKey
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.Lob
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import java.io.Serializable
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.ForeignKey
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.Lob
-import javax.persistence.ManyToOne
-import javax.persistence.Table
 
 /**
  * Created by seooseok on 2016. 9. 28..
@@ -19,9 +18,8 @@ import javax.persistence.Table
  * @link org/springframework/session/jdbc/schema-h2.sql
  */
 
-@Entity
 @Table(
-    name = "SPRING_SESSION_ATTRIBUTES"
+    name = "SPRING_SESSION_ATTRIBUTES",
 )
 class SpringSessionAttributes : Serializable {
     @Id

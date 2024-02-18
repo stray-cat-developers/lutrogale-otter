@@ -24,7 +24,7 @@ class AuthorityBundleInteraction(
     private val menuNavigationInteraction: MenuNavigationInteraction,
     private val authorityDefinitionRepository: AuthorityDefinitionRepository,
     private val authorityDefinitionFinder: AuthorityDefinitionFinder,
-    private val menuNavigationFinder: MenuNavigationFinder
+    private val menuNavigationFinder: MenuNavigationFinder,
 ) {
 
     fun hasMenuNavigations(authorityDefinitionId: Long): List<MenuNavigation> {
@@ -85,7 +85,7 @@ class AuthorityBundleInteraction(
             MenuTreeResources.Reply.TreeBranch.of(
                 it.treeId,
                 it.parentTreeId,
-                menuNavigationResource
+                menuNavigationResource,
             )
         }
     }
@@ -118,7 +118,7 @@ class AuthorityBundleInteraction(
 
     private fun putInParentMenuNavigation(
         menuNavigations: MutableList<MenuNavigation>,
-        menuNavigation: MenuNavigation
+        menuNavigation: MenuNavigation,
     ) {
         menuNavigations.add(menuNavigation)
         val parentMenuNavigation = menuNavigation.parentMenuNavigation

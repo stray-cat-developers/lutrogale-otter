@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <@layout.baseHeader "메뉴 네비게이션 설정"/>
     <body class="hold-transition skin-blue sidebar-mini">
     <@layout.baseWrapper>
@@ -37,36 +37,37 @@
                             <div id="info_radio_group" class="form-group">
                                 <label>네비게이션 타입</label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="navTypeGroup1" value="category" checked>카테고리
+                                    <input type="radio" name="navTypeGroup1" value="CATEGORY" checked>카테고리
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="navTypeGroup1" value="menu">메뉴
+                                    <input type="radio" name="navTypeGroup1" value="MENU">메뉴
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="navTypeGroup1" value="function">기능
+                                    <input type="radio" name="navTypeGroup1" value="FUNCTION">기능
                                 </label>
                             </div>
                             <!-- text input -->
                             <div class="form-group">
-                                <label>전체 경로</label>
+                                <label for="full_url">전체 경로</label>
                                 <input id="full_url" type="text" class="form-control" disabled>
                             </div>
                             <div class="form-group">
-                                <label>네비게이션 명</label>
+                                <label for="info_name">네비게이션 명</label>
                                 <input id="info_name" type="text" class="form-control" placeholder="메뉴 수정">
                             </div>
                             <div class="form-group">
-                                <label>URL Path Block</label>
+                                <label for="info_url_path">URL Path Block</label>
                                 <i class="fa fa-question-circle"></i>
                                 <input id="info_url_path" type="text" class="form-control" placeholder="Enter ...">
                             </div>
                             <div class="form-group">
-                                <label>Http Method Type 선택</label>
+                                <label for="info_method">Http Method Type 선택</label>
                                 <i class="fa fa-question-circle"></i>
                                 <select id="info_method" class="form-control">
                                     <option>GET</option>
                                     <option>POST</option>
                                     <option>PUT</option>
+                                    <option>PATCH</option>
                                     <option>DELETE</option>
                                 </select>
                             </div>
@@ -113,32 +114,33 @@
                                 <div id="nav_radio_group" class="form-group">
                                     <label>네비게이션 타입</label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup2" value="category" checked>카테고리
+                                        <input type="radio" name="navTypeGroup2" value="CATEGORY" checked>카테고리
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup2" value="menu">메뉴
+                                        <input type="radio" name="navTypeGroup2" value="MENU">메뉴
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="navTypeGroup2" value="function">기능
+                                        <input type="radio" name="navTypeGroup2" value="FUNCTION">기능
                                     </label>
                                 </div>
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>네비게이션 명</label>
+                                    <label for="nav_name">네비게이션 명</label>
                                     <input id="nav_name" type="text" class="form-control" placeholder="메뉴 수정">
                                 </div>
                                 <div class="form-group">
-                                    <label>URL Path Block</label>
+                                    <label for="nav_url_path">URL Path Block</label>
                                     <i class="fa fa-question-circle"></i>
                                     <input id="nav_url_path" type="text" class="form-control" placeholder="Enter ...">
                                 </div>
                                 <div class="form-group">
-                                    <label>Http Method Type 선택</label>
+                                    <label for="nav_method">Http Method Type 선택</label>
                                     <i class="fa fa-question-circle"></i>
                                     <select id="nav_method" class="form-control">
                                         <option>GET</option>
                                         <option>POST</option>
                                         <option>PUT</option>
+                                        <option>PATCH</option>
                                         <option>DELETE</option>
                                     </select>
                                 </div>
@@ -159,7 +161,7 @@
     </section>
     </@layout.baseWrapper>
     <!-- Jstree https://github.com/orangehill/jstree-bootstrap-theme -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="/static/plugins/jstree/jstree.min.js"></script>
     <!-- Datatables -->
     <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
     <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -169,8 +171,8 @@
 
             AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id}))
             .done(function(data){
-                var navigation_list = data.result;
-                var table_api_opt = {
+                let navigation_list = data.content;
+                let table_api_opt = {
                     'searching': true,
                     'data': _.pluck(navigation_list, 'a_attr'),
                     'columns': [
@@ -196,7 +198,7 @@
                     ).done(function(data){
                         clearNavInfoArea();
 
-                        var navi_obj = data.result;
+                        let navi_obj = data;
                         $('#info_radio_group :input:radio[value='+navi_obj.type+']').prop('checked', true);
                         $('#full_url').val(navi_obj.a_attr.fullUrl);
                         $('#info_name').val(navi_obj.a_attr.name);
@@ -215,7 +217,7 @@
                     AJAX.putData(
                         OsoriRoute.getUri('menuTree.moveBranch', {id:SS.project_id, nodeId:data.node.a_attr.id}),
                         param
-                    ).done(function(data){
+                    ).done(function(){
                         refreshApiList();
 
                         $('#popover_result').fadeTo(800, 500).slideUp(500, function(){
@@ -223,7 +225,7 @@
                         });
                     });
 
-                }).on("loaded.jstree", function (event, data) {
+                }).on("loaded.jstree", function () {
                     $(this).jstree("open_all");
                 });
 
@@ -261,9 +263,9 @@
             AJAX.putData(
                 OsoriRoute.getUri('navigation.modifyInfo', {id:SS.project_id,nodeId:SS.selected_node_id}),
                 param
-            ).done(function(data){
-                var tree = $('#menuNaviTree').jstree(true);
-                var this_node = tree.get_node(SS.selected_tree_id);
+            ).done(function(){
+                let tree = $('#menuNaviTree').jstree(true);
+                let this_node = tree.get_node(SS.selected_tree_id);
 
                 this_node.a_attr.uriBlock = param.uriBlock;
                 tree.set_type(this_node, info_type);
@@ -280,17 +282,17 @@
         });
 
         $('#btn_modal_submit').click(function(){
-            var nav_type     = $('#nav_radio_group :radio:checked').val();
-            var nav_name     = $('#nav_name').val();
-            var nav_url_path = $('#nav_url_path').val();
-            var nav_method   = $('#nav_method').val();
+            let nav_type     = $('#nav_radio_group :radio:checked').val();
+            let nav_name     = $('#nav_name').val();
+            let nav_url_path = $('#nav_url_path').val();
+            let nav_method   = $('#nav_method').val();
 
-            if(nav_type == ""){
+            if(nav_type === ""){
                 alert("네비게이션 타입을 선택해주세요.");
                 return false;
             }
 
-            if(nav_name == "") {
+            if(nav_name === "") {
                 alert("네비게이션명을 입력해주세요.");
                 return false;
             }
@@ -309,11 +311,11 @@
                 OsoriRoute.getUri('menuTree.createBranch', {id:SS.project_id}),
                 param
             ).done(function(data){
-                var tree = $('#menuNaviTree').jstree(true);
-                var this_node = tree.get_node(SS.node_id);
+                let tree = $('#menuNaviTree').jstree(true);
+                let this_node = tree.get_node(SS.node_id);
 
                 this_node.a_attr.uriBlock = param.uriBlock;
-                this_node.a_attr.id = data.result;
+                this_node.a_attr.id = data.content;
 
                 tree.set_type(this_node, nav_type);
                 tree.rename_node(this_node, nav_name);
@@ -345,8 +347,8 @@
             AJAX.getData(
                 OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})
             ).done(function(data){
-                var data_table = $('#table-api').DataTable();
-                data_table.clear().rows.add(_.pluck(data.result, 'a_attr')).draw();
+                let data_table = $('#table-api').DataTable();
+                data_table.clear().rows.add(_.pluck(data.content, 'a_attr')).draw();
             });
         }
 

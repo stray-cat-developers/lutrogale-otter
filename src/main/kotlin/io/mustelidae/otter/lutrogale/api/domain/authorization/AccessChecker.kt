@@ -10,6 +10,6 @@ import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 interface AccessChecker {
     fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
-        accessGrant: AccessGrant
+        accessGrant: AccessGrant,
     ): List<AccessResources.Reply.AccessState>
 }

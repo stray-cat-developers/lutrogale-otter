@@ -1,6 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.config
 
-import io.mustelidae.otter.lutrogale.web.commons.constant.OsoriConstant
+import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityBundleResources
@@ -28,7 +28,7 @@ class EmbeddedDbInitializer(
     private val menuTreeController: MenuTreeController,
     private val authorityController: AuthorityController,
     private val userController: UserController,
-    private val userGrantController: UserGrantController
+    private val userGrantController: UserGrantController,
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         setupAdminIfNotExist()
@@ -47,11 +47,11 @@ class EmbeddedDbInitializer(
     private fun addUser(): Long {
         return userController.create(
             UserResources.Request(
-                userEmail,
+                USER_EMAIL,
                 "Lutrogale Otter",
                 false,
-                "Otter World"
-            )
+                "Otter World",
+            ),
         ).content!!
     }
 
@@ -60,8 +60,8 @@ class EmbeddedDbInitializer(
             projectId,
             AuthorityBundleResources.Request.AuthorityBundle(
                 "Only View Group",
-                listOf(1, 2, 3)
-            )
+                listOf(1, 2, 3),
+            ),
         )
     }
 
@@ -73,9 +73,9 @@ class EmbeddedDbInitializer(
                 "1",
                 "Get Reviews",
                 "/applications/{name}/reviews",
-                OsoriConstant.NavigationType.menu,
-                RequestMethod.GET
-            )
+                Constant.NavigationType.MENU,
+                RequestMethod.GET,
+            ),
         )
 
         menuTreeController.createBranch(
@@ -85,9 +85,9 @@ class EmbeddedDbInitializer(
                 "j1_1",
                 "Personal Review",
                 "/{reviewId}",
-                OsoriConstant.NavigationType.function,
-                RequestMethod.GET
-            )
+                Constant.NavigationType.FUNCTION,
+                RequestMethod.GET,
+            ),
         )
 
         menuTreeController.createBranch(
@@ -97,9 +97,9 @@ class EmbeddedDbInitializer(
                 "1",
                 "Add Review",
                 "/applications/{name}/reviews",
-                OsoriConstant.NavigationType.function,
-                RequestMethod.POST
-            )
+                Constant.NavigationType.FUNCTION,
+                RequestMethod.POST,
+            ),
         )
 
         menuTreeController.createBranch(
@@ -109,9 +109,9 @@ class EmbeddedDbInitializer(
                 "j1_1",
                 "Modify Review",
                 "/{reviewId}",
-                OsoriConstant.NavigationType.function,
-                RequestMethod.POST
-            )
+                Constant.NavigationType.FUNCTION,
+                RequestMethod.POST,
+            ),
         )
 
         menuTreeController.createBranch(
@@ -121,17 +121,18 @@ class EmbeddedDbInitializer(
                 "j1_1",
                 "Delete Review",
                 "/{reviewId}",
-                OsoriConstant.NavigationType.function,
-                RequestMethod.DELETE
-            )
+                Constant.NavigationType.FUNCTION,
+                RequestMethod.DELETE,
+            ),
         )
     }
 
     private fun addProject(): Long {
         return projectController.create(
             ProjectResources.Request(
-                "Otter Project", "This is Sample Project"
-            )
+                "Otter Project",
+                "This is Sample Project",
+            ),
         ).content!!
     }
 
@@ -143,7 +144,7 @@ class EmbeddedDbInitializer(
                 "admin@osori.com",
                 "슈퍼 관리자",
                 "오소리의 모든 권한을 가지고 있습니다.",
-                "/static/dist/img/osori.png"
+                "/static/dist/img/osori.png",
             ).apply {
                 setPassword("admin")
                 status = true
@@ -153,6 +154,6 @@ class EmbeddedDbInitializer(
     }
 
     companion object {
-        const val userEmail = "lutrogale@otter.com"
+        const val USER_EMAIL = "lutrogale@otter.com"
     }
 }
