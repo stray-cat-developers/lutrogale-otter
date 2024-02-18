@@ -328,7 +328,7 @@
                                 AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: project_id})),
                                 AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId: user.id, projectId: project_id}))
                             ).done(function(first, second){
-                                let all_group = first[0].result;
+                                let all_group = first[0].content;
                                 let own_group = second[0].result.authorityDefinitions;
 
                                 tb_group.clear().rows.add(all_group).draw();
@@ -390,7 +390,7 @@
             AJAX.getData(OsoriRoute.getUri("authority.findAll", {id: project_id})),
             AJAX.getData(OsoriRoute.getUri('user.findGrantsForUser', {userId: user_data.id, projectId: project_id}))
         ).done(function (first, second) {
-            let all_auth = first[0].result;
+            let all_auth = first[0].content;
             let user_auth = second[0].result.authorityDefinitions;
 
             $('#modal-modify-group .modal-title').text('사용자 권한 그룹 수정');
@@ -407,8 +407,8 @@
                 AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {
                     id: auth_obj.projectId,
                     authId: auth_obj.authId
-                })).done(function (obj) {
-                    $('#modal-modify-group #tb-group-api-list').DataTable(OPTION.data_table(opt.tb_api_list, obj.result));
+                })).done(function (data) {
+                    $('#modal-modify-group #tb-group-api-list').DataTable(OPTION.data_table(opt.tb_api_list, data.content));
                 });
             });
 
@@ -517,7 +517,7 @@
             AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:project_id, authId:auth_id}))
         ).done(function(first, second){
             let all_branch = first[0].content;
-            let bundleBranches = second[0].result;
+            let bundleBranches = second[0].content;
 
             setTimeout(function(){
                 $('#modal-selected').DataTable(OPTION.data_table(opt.tb_api_list, _.pluck(bundleBranches, 'a_attr')));

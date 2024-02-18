@@ -99,7 +99,7 @@
                 AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: project_id}), {}, {async:false})
             ).done(function(first, second) {
                 let project = first[0];
-                let authority = second[0].result;
+                let authority = second[0].content;
 
                 $('<div/>', {class: 'col-md-4'}).append(
                     $('<div/>', {class: 'box box-solid'}).append(

@@ -186,9 +186,10 @@
                     table_groups.$('tr.active').removeClass('active');
                     $(this).addClass('active');
 
-                    AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {id:data.projectId, authId:data.authId})).done(function(obj){
-                        table_group_api.clear().rows.add(obj.result).draw();
-                    });
+                    AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {id:data.projectId, authId:data.authId}))
+                        .done(function(data){
+                            table_group_api.clear().rows.add(data.content).draw();
+                        });
                 });
 
                 $.when(
@@ -263,7 +264,7 @@
                     AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:auth_obj.projectId, authId:auth_obj.authId}))
                 ).done(function(first, second){
                     let all_branch = first[0].content;
-                    let bundleBranches = second[0].result;
+                    let bundleBranches = second[0].content;
 
                     _.map(all_branch, function(v){
                         if(!_.isUndefined(_.findWhere(bundleBranches, {id:v.id})))
@@ -282,15 +283,15 @@
                     .jstree('destroy')
                     .jstree(OPTION.jstree(opt.menu_tree, all_branch))
                     .on('check_node.jstree uncheck_node.jstree', function (event, data) {
-                        var data_table = $('#modal-selected').DataTable();
-                        var node = data.node.a_attr;
+                        let data_table = $('#modal-selected').DataTable();
+                        let node = data.node.a_attr;
 
                         if(data.node.state.checked){
                             AJAX.putData(
                                 OsoriRoute.getUri('authority.modifyInfo', {id:Number(auth_obj.projectId), authId:Number(auth_obj.authId)}),
                                 {'naviId': node.id},
                                 {async: false}
-                            ).done(function(data){
+                            ).done(function(){
                                 node.DT_RowId = node.id;
                                 data_table.row.add(node);
                             });
@@ -306,8 +307,8 @@
                                 OsoriRoute.getUri('authority.expireNavigations', param),
                                 {},
                                 {async: false}
-                            ).done(function(data){
-                                var target_row = $('#modal-selected > tbody tr[id="'+node.id+'"]');
+                            ).done(function(){
+                                let target_row = $('#modal-selected > tbody tr[id="'+node.id+'"]');
                                 data_table.row($(target_row[0])).remove();
                             });
 
@@ -336,7 +337,7 @@
                     OsoriRoute.getUri('authority.findAll', {id:SS.project_id})
                 ).done(function(data){
                     let group_table = $('#table-groups').DataTable();
-                    group_table.clear().rows.add(data.result).draw();
+                    group_table.clear().rows.add(data.content).draw();
                 });
             }
 

@@ -196,8 +196,8 @@
                 return AJAX.getData(
                     OsoriRoute.getUri('authority.findAll', {id:SS.project_id})
                 ).done(function(data){
-                    var group_table = $('#table-groups').DataTable();
-                    group_table.clear().rows.add(data.result).draw();
+                    let group_table = $('#table-groups').DataTable();
+                    group_table.clear().rows.add(data.content).draw();
                 });
             }
 

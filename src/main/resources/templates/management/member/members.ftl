@@ -354,7 +354,7 @@
                                    AJAX.getData(OsoriRoute.getUri('authority.findBundlesBranches', {id:group_obj.projectId, authId:group_obj.id}))
                                ).done(function(first, second){
                                    let all_branch = first[0].content;
-                                   let bundleBranch = second[0].result;
+                                   let bundleBranch = second[0].content;
 
                                    $('#modal-group-detail .modal-title').text('권한그룹 상세');
                                    $('#modal-group-detail .modal-body').empty().append($('#modal-group-detail-content form').clone());

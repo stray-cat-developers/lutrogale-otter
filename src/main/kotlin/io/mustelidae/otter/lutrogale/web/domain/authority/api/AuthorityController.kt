@@ -1,7 +1,9 @@
 package io.mustelidae.otter.lutrogale.web.domain.authority.api
 
-import io.mustelidae.otter.lutrogale.web.common.ApiRes
-import io.mustelidae.otter.lutrogale.web.common.ApiRes.Companion.success
+import io.mustelidae.otter.lutrogale.common.Replies
+import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReplies
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityBundleInteraction
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources.Reply.TreeBranch
@@ -30,17 +32,18 @@ class AuthorityController(
     fun create(
         @PathVariable projectId: Long,
         @RequestBody request: AuthorityBundleResources.Request.AuthorityBundle,
-    ): ApiRes<*> {
+    ): Reply<Long> {
         val defineId: Long = authorityBundleInteraction.createBundle(projectId, request.groupName, request.naviId)
-        return ApiRes<Any?>(defineId)
+        return defineId.toReply()
     }
 
     @Operation(summary = "권한 그룹 조회")
     @GetMapping("/{projectId}/authority-bundles")
-    fun findAll(@PathVariable projectId: Long): ApiRes<*> {
+    fun findAll(@PathVariable projectId: Long): Replies<AuthorityBundleResources.Reply.AuthorityBundle> {
         val authorityDefinitions = authorityBundleInteraction.getBundles(projectId)
-        val authorityBundles = authorityDefinitions.map { AuthorityBundleResources.Reply.AuthorityBundle.from(it) }
-        return ApiRes<Any?>(authorityBundles)
+        return authorityDefinitions
+            .map { AuthorityBundleResources.Reply.AuthorityBundle.from(it) }
+            .toReplies()
     }
 
     @Operation(summary = "권한 그룹의 메뉴 네비게이션 전체 조회")
@@ -48,9 +51,9 @@ class AuthorityController(
     fun findBundlesNavigations(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
-    ): ApiRes<*> {
-        val menuNavigations: List<ReplyOfMenuNavigation> = authorityBundleInteraction.lookInBundle(authId)
-        return ApiRes<Any?>(menuNavigations)
+    ): Replies<ReplyOfMenuNavigation> {
+        return authorityBundleInteraction.lookInBundle(authId)
+            .toReplies()
     }
 
     @Operation(summary = "권한 그룹의 메뉴 네비게이션 트리 구조 조회")
@@ -58,9 +61,9 @@ class AuthorityController(
     fun findBundlesBranches(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
-    ): ApiRes<*> {
-        val treeBranches: List<TreeBranch> = authorityBundleInteraction.lookInBundleForTreeFormat(authId)
-        return ApiRes<Any?>(treeBranches)
+    ): Replies<TreeBranch> {
+        val treeBranches = authorityBundleInteraction.lookInBundleForTreeFormat(authId)
+        return treeBranches.toReplies()
     }
 
     @Operation(summary = "권한 그룹 수정")
@@ -69,9 +72,9 @@ class AuthorityController(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
         @RequestBody modify: AuthorityBundleResources.Modify.Tree,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         authorityBundleInteraction.mappingNavigationAndDefinition(projectId, authId, modify.naviId)
-        return success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "권한 그룹 만료")
@@ -79,18 +82,19 @@ class AuthorityController(
     fun expire(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         authorityBundleInteraction.expireBy(projectId, authId)
-        return success()
+        return Unit.toReply()
     }
 
+    @Operation(summary = "네비게이션 만료")
     @DeleteMapping("/{projectId}/authority-bundle/{authId}/navigations/{naviIdGroup}")
     fun expireNavigations(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
         @PathVariable("naviIdGroup") naviIdGroup: List<Long>,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         authorityBundleInteraction.removeMappingNavigationAndDefinition(projectId, authId, naviIdGroup)
-        return success()
+        return Unit.toReply()
     }
 }

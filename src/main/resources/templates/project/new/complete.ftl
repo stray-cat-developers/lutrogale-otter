@@ -101,10 +101,10 @@
                     AJAX.getData(OsoriRoute.getUri('project.findOne', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('menuTree.getAllBranch', {id:SS.project_id})),
                     AJAX.getData(OsoriRoute.getUri('authority.findAll', {id:SS.project_id}))
-                ).done(function(first, second, g){
+                ).done(function(first, second, third){
                     let project_obj = first[0];
                     let navigation_list = second[0].content;
-                    let group_list = g[0].result;
+                    let group_list = third[0].content;
 
                     let opt = {
                         'tree_navigation': {
@@ -144,16 +144,17 @@
                     $('#table-total-api').DataTable(OPTION.data_table(opt.table_total_api));
                     $('#table-group-api').DataTable(OPTION.data_table(opt.table_group_api));
                     $('#table-groups').DataTable(OPTION.data_table(opt.table_groups)).on('click', 'tr', function(){
-                        var table_groups = $('#table-groups').DataTable();
-                        var table_group_api = $('#table-group-api').DataTable();
-                        var data = table_groups.row($(this)).data();
+                        let table_groups = $('#table-groups').DataTable();
+                        let table_group_api = $('#table-group-api').DataTable();
+                        let data = table_groups.row($(this)).data();
 
                         table_groups.$('tr.active').removeClass('active');
                         $(this).addClass('active');
 
-                        AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {id:data.projectId, authId:data.authId})).done(function(obj){
-                            table_group_api.clear().rows.add(obj.result).draw();
-                        });
+                        AJAX.getData(OsoriRoute.getUri('authority.findBundlesNavigations', {id:data.projectId, authId:data.authId}))
+                            .done(function(data){
+                                table_group_api.clear().rows.add(data.content).draw();
+                            });
                     });
 
                     $('#project_name').text(project_obj.name);
