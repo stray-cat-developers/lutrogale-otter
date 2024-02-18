@@ -81,7 +81,7 @@
             $(document).ready(function() {
                 SS.setItem("project_id", extractByWord('project'));
 
-                var opt = {
+                let opt = {
                     'table_selected': {
                         'columns': [
                             {title: 'API ID', data: 'id'},
@@ -104,8 +104,8 @@
 
                 $('#table-selected').DataTable(OPTION.data_table(opt.table_selected));
                 $('#table-groups').DataTable(OPTION.data_table(opt.table_groups)).on('click', 'button', function(){
-                    var table = $('#table-groups').DataTable();
-                    var data = table.row($(this).parents('tr')).data();
+                    let table = $('#table-groups').DataTable();
+                    let data = table.row($(this).parents('tr')).data();
 
                     if(!confirm('['+data.name+'] 권한그룹을 삭제하시겠습니까?'))
                         return false;
@@ -139,14 +139,14 @@
                     };
 
                     $('#menuNaviTree').jstree(OPTION.jstree(tree_opt, navigation_list)).on('check_node.jstree uncheck_node.jstree', function (event, data) {
-                        var data_table = $('#table-selected').DataTable();
-                        var node = data.node.a_attr;
+                        let data_table = $('#table-selected').DataTable();
+                        let node = data.node.a_attr;
 
                         if(data.node.state.checked){
                             node.DT_RowId = node.id;
                             data_table.row.add(node);
                         }else{
-                            var target_row = $('#table-selected > tbody tr[id="'+node.id+'"]');
+                            let target_row = $('#table-selected > tbody tr[id="'+node.id+'"]');
                             data_table.row($(target_row[0])).remove();
                         }
 
@@ -160,8 +160,8 @@
             });
 
             $('#btn_create').click(function(){
-                var data_table = $('#table-selected').DataTable();
-                var group_name = $('#group-name').val();
+                let data_table = $('#table-selected').DataTable();
+                let group_name = $('#group-name').val();
 
                 if(group_name === ""){
                     alert('그룹명을 입력해주세요.');
@@ -173,7 +173,7 @@
                     return false;
                 }
 
-                var param = {
+                let param = {
                     groupName : group_name,
                     naviId : _.pluck(data_table.data(), 'id')
                 };

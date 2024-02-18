@@ -56,7 +56,7 @@
 <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
 <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script>
-    var opt = {
+    let opt = {
         'tb_group': {
             'scrollY': '150px',
             'scrollCollapse': true,
@@ -75,7 +75,7 @@
         }
     };
 
-    var user_id = extractByWord('new-member');
+    let user_id = extractByWord('new-member');
 
     $(document).ready(function() {
         AJAX.getData(OsoriRoute.getUri('user.findOne', {userId: user_id}))
@@ -87,7 +87,7 @@
             $('#user-privacy').text(data.accessPrivacyInformation);
         });
 
-        var box;
+        let box;
         AJAX.getData(OsoriRoute.getUri('user.findUsersProjects', {userId: user_id}))
         .done(function(data){
 

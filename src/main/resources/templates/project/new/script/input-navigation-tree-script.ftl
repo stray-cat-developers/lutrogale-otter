@@ -66,10 +66,10 @@
     });
 
     $('#btn_info_modify').click(function(){
-        var info_type     = $('#info_radio_group :radio:checked').val();
-        var info_name     = $('#info_name').val();
-        var info_url_path = $('#info_url_path').val();
-        var info_method   = $('#info_method').val();
+        let info_type     = $('#info_radio_group :radio:checked').val();
+        let info_name     = $('#info_name').val();
+        let info_url_path = $('#info_url_path').val();
+        let info_method   = $('#info_method').val();
 
         if(!SS.hasOwnProperty('selected_node_id')){
             alert('대상을 선택해주세요.');
@@ -106,10 +106,10 @@
     });
 
     $('#btn_modal_submit').click(function(){
-        var nav_type     = $('#nav_radio_group :radio:checked').val();
-        var nav_name     = $('#nav_name').val();
-        var nav_url_path = $('#nav_url_path').val();
-        var nav_method   = $('#nav_method').val();
+        let nav_type     = $('#nav_radio_group :radio:checked').val();
+        let nav_name     = $('#nav_name').val();
+        let nav_url_path = $('#nav_url_path').val();
+        let nav_method   = $('#nav_method').val();
 
         if(nav_type === ""){
             alert("네비게이션 타입을 선택해주세요.");
@@ -121,7 +121,7 @@
             return false;
         }
 
-        var param = {
+        let param = {
             projectId : SS.project_id,
             treeId : SS.node_id,
             parentTreeId : SS.node_parent,
@@ -152,13 +152,13 @@
     });
 
     function getFullUrl(node){
-        var id_list = _.flatten([node.id, node.parents]);
+        let id_list = _.flatten([node.id, node.parents]);
 
         return _.chain(id_list)
                 .without(id_list, '#')
                 .map(function(treeId){
-                    var tree = $('#menuNaviTree').jstree(true);
-                    var this_node = tree.get_node(treeId);
+                    let tree = $('#menuNaviTree').jstree(true);
+                    let this_node = tree.get_node(treeId);
                     return this_node.a_attr.uriBlock;
                 })
                 .reverse()

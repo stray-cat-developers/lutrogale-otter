@@ -55,9 +55,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">프로젝트 목록</label>
+                    <label class="col-sm-2 control-label" for="projects">프로젝트 목록</label>
                     <div class="col-sm-10">
-                        <select class="form-control select2" multiple="multiple" data-placeholder="프로젝트를 선택해주세요"></select>
+                        <select id="projects" class="form-control select2" multiple="multiple" data-placeholder="프로젝트를 선택해주세요"></select>
                     </div>
                 </div>
             </div>

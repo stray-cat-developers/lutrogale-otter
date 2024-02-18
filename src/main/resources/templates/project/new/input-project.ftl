@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <@layout.baseHeader "New Project"/>
     <body class="hold-transition skin-blue sidebar-mini">
         <@layout.baseWrapper>
@@ -55,7 +55,7 @@
                     return false;
                 }
 
-                var param = {
+                let param = {
                     url: OsoriRoute.getUri("project.create"),
                     data: {
                         name: $('#inputProjectName').val(),

@@ -1,6 +1,6 @@
 <#import "../../mecro/base-layout.ftl" as layout>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <@layout.baseHeader "메뉴 네비게이션 설정"/>
     <body class="hold-transition skin-blue sidebar-mini">
     <@layout.baseWrapper>
@@ -48,20 +48,20 @@
                             </div>
                             <!-- text input -->
                             <div class="form-group">
-                                <label>전체 경로</label>
+                                <label for="full_url">전체 경로</label>
                                 <input id="full_url" type="text" class="form-control" disabled>
                             </div>
                             <div class="form-group">
-                                <label>네비게이션 명</label>
+                                <label for="info_name">네비게이션 명</label>
                                 <input id="info_name" type="text" class="form-control" placeholder="메뉴 수정">
                             </div>
                             <div class="form-group">
-                                <label>URL Path Block</label>
+                                <label for="info_url_path">URL Path Block</label>
                                 <i class="fa fa-question-circle"></i>
                                 <input id="info_url_path" type="text" class="form-control" placeholder="Enter ...">
                             </div>
                             <div class="form-group">
-                                <label>Http Method Type 선택</label>
+                                <label for="info_method">Http Method Type 선택</label>
                                 <i class="fa fa-question-circle"></i>
                                 <select id="info_method" class="form-control">
                                     <option>GET</option>
@@ -125,16 +125,16 @@
                                 </div>
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label>네비게이션 명</label>
+                                    <label for="nav_name">네비게이션 명</label>
                                     <input id="nav_name" type="text" class="form-control" placeholder="메뉴 수정">
                                 </div>
                                 <div class="form-group">
-                                    <label>URL Path Block</label>
+                                    <label for="nav_url_path">URL Path Block</label>
                                     <i class="fa fa-question-circle"></i>
                                     <input id="nav_url_path" type="text" class="form-control" placeholder="Enter ...">
                                 </div>
                                 <div class="form-group">
-                                    <label>Http Method Type 선택</label>
+                                    <label for="nav_method">Http Method Type 선택</label>
                                     <i class="fa fa-question-circle"></i>
                                     <select id="nav_method" class="form-control">
                                         <option>GET</option>
@@ -161,7 +161,7 @@
     </section>
     </@layout.baseWrapper>
     <!-- Jstree https://github.com/orangehill/jstree-bootstrap-theme -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="/static/plugins/jstree/jstree.min.js"></script>
     <!-- Datatables -->
     <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
     <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -292,7 +292,7 @@
                 return false;
             }
 
-            if(nav_name == "") {
+            if(nav_name === "") {
                 alert("네비게이션명을 입력해주세요.");
                 return false;
             }

@@ -14,10 +14,10 @@
 </ul>
 
 <script>
-    var url = window.location.pathname;
-    var project_id = extractByWord('project');
+    let url = window.location.pathname;
+    let project_id = extractByWord('project');
 
-    var arr_li = $('.nav-wizard').children('li');
+    let arr_li = $('.nav-wizard').children('li');
 
     switch(url){
         case OsoriRoute.getUri('view.newProject.complete',{id:project_id}):
@@ -36,16 +36,19 @@
             $(arr_li[3]).children('a').click(function(){
                 OsoriRoute.go('view.newProject.complete',{id:project_id});
             });
+            break;
         case OsoriRoute.getUri('view.newProject.authGroup',{id:project_id}):
             $(arr_li[2]).children('a').prop('data-toggle', 'tab');
             $(arr_li[2]).children('a').click(function(){
                 OsoriRoute.go('view.newProject.authGroup',{id:project_id});
             });
+            break;
         case OsoriRoute.getUri('view.newProject.navi',{id:project_id}):
             $(arr_li[1]).children('a').prop('data-toggle', 'tab');
             $(arr_li[1]).children('a').click(function(){
                 OsoriRoute.go('view.newProject.navi',{id:project_id});
             });
+            break;
     }
 
 </script>

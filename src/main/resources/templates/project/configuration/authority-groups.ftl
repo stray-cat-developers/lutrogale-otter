@@ -218,7 +218,7 @@
 
                         data_table.draw();
 
-                    }).on('loaded.jstree', function (event, data) {
+                    }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
                     });
 
@@ -315,11 +315,11 @@
                         }
 
                         data_table.draw();
-                    }).on('loaded.jstree', function (event, data) {
+                    }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
                     });
 
-                    var modal_tree = $('#modal-menu-tree').jstree(true);
+                    let modal_tree = $('#modal-menu-tree').jstree(true);
                     $.each(_.pluck(bundleBranches, 'id'), function(i,v){
                         modal_tree.check_node(v);
                     });
