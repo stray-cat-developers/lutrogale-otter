@@ -38,9 +38,9 @@ class UserGrantController(
         @PathVariable userId: Long,
         @PathVariable projectId: Long,
         @PathVariable(value = "authIds") authDefinitionIds: List<Long>,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         userGrantInteraction.addByAuthorityGrant(userId, projectId, authDefinitionIds)
-        return ApiRes.success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "권한 그룹 제거")
@@ -49,9 +49,9 @@ class UserGrantController(
         @PathVariable userId: Long,
         @PathVariable projectId: Long,
         @PathVariable(value = "authIds") authDefinitionIds: List<Long>,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         userGrantInteraction.removeByAuthorityGrant(userId, projectId, authDefinitionIds)
-        return ApiRes.success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "메뉴 권한 추가")
@@ -60,9 +60,9 @@ class UserGrantController(
         @PathVariable userId: Long,
         @PathVariable projectId: Long,
         @PathVariable(value = "menuNaviIds") menuNavigationIds: List<Long>,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         userGrantInteraction.addByPersonalGrant(userId, projectId, menuNavigationIds)
-        return ApiRes.success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "메뉴 권한 제거")
@@ -71,9 +71,9 @@ class UserGrantController(
         @PathVariable userId: Long,
         @PathVariable projectId: Long,
         @PathVariable(value = "menuNaviIds") menuNavigationIds: List<Long>,
-    ): ApiRes<*> {
+    ): Reply<Unit> {
         userGrantInteraction.removeByPersonalGrant(userId, projectId, menuNavigationIds)
-        return ApiRes.success()
+        return Unit.toReply()
     }
 
     @Operation(summary = "사용자의 모든 권한 조회")
