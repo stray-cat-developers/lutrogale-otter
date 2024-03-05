@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Docker images
+      uses: docker/build-push-action@v5.1.0
+      with:
+        file: Dockerfile
+        # Always attempt to pull all referenced images
+        pull: true
+        # Push is a shorthand for --output=type=registry
+        push: false
