@@ -1,9 +1,10 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.client
 
+import io.mustelidae.grantotter.utils.ConnectionConfig
+import io.mustelidae.grantotter.utils.RestClient
 import io.mustelidae.otter.lutrogale.config.AppEnvironment
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.client.RestClient
 
 @Configuration
 class MigrationClientConfiguration(
@@ -11,13 +12,13 @@ class MigrationClientConfiguration(
 ) {
 
     @Bean
-    fun restStyleMigrationClient(): RestClient {
+    fun restStyleMigrationClient(): RestStyleMigrationClient {
         val env = appEnvironment.default
 
         return if(env.useDummy) {
-
+            DummyRestStyleMigrationClient()
         } else {
-
+            StableRestStyleMigrationClient(RestClient.new(ConnectionConfig.from(appEnvironment.default)))
         }
     }
 }

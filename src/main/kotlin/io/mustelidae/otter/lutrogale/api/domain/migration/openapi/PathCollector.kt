@@ -7,10 +7,11 @@ import org.springframework.http.HttpMethod
 class PathCollector(private val openAPI: OpenAPI) {
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    fun collectPathAndMethods(): List<Pair<String, List<HttpMethod>>> {
+    fun collectPathAndMethods(): List<HttpAPISpec> {
         val pathAndMethods = openAPI.paths.map { (path, pathItem) ->
             val methods = pathItem.readOperationsMap().keys.map { HttpMethod.valueOf(it.name.uppercase())  }
-            Pair(path, methods)
+            val summary = pathItem.summary
+            HttpAPISpec(path, summary, methods)
         }
 
         log.debug("Collected path and methods: {}", pathAndMethods)

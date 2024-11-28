@@ -9,7 +9,7 @@ import io.swagger.v3.parser.core.models.ParseOptions
 import org.springframework.data.util.Version
 
 class SwaggerSpec(
-    private val originalJson: String,
+    private val originalSpec: String,
     val type: Type
 ) {
     val openAPI: OpenAPI
@@ -21,9 +21,9 @@ class SwaggerSpec(
 
         // open api 2.X
         openAPI = if (version.isLessThan(Version(3, 0, 0))) {
-            SwaggerConverter().readContents(originalJson, null, parseOptions).openAPI
+            SwaggerConverter().readContents(originalSpec, null, parseOptions).openAPI
         } else {
-            OpenAPIV3Parser().readContents(originalJson, null, parseOptions).openAPI
+            OpenAPIV3Parser().readContents(originalSpec, null, parseOptions).openAPI
         }
     }
 
@@ -32,7 +32,7 @@ class SwaggerSpec(
         val versionNode: JsonNode? = when (type) {
             Type.JSON -> {
                 try {
-                    val treeNode = Jackson.getMapper().readTree(originalJson)
+                    val treeNode = Jackson.getMapper().readTree(originalSpec)
                     treeNode.get("swagger") ?: treeNode.get("openapi")
                 } catch (e: Exception) {
                     throw IllegalStateException("The format of the Open API Spec is not Json Type.", e)
@@ -40,7 +40,7 @@ class SwaggerSpec(
             }
             Type.YAML -> {
                 try {
-                    val treeNode = Jackson.getYmlMapper().readTree(originalJson)
+                    val treeNode = Jackson.getYmlMapper().readTree(originalSpec)
                     treeNode.get("swagger") ?: treeNode.get("openapi")
                 } catch (e: Exception) {
                     throw IllegalStateException("The format of the Open API Spec is not YAML Type.")
