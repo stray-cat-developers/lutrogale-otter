@@ -4,47 +4,47 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.swagger.v3.oas.models.OpenAPI
-import org.springframework.http.HttpMethod
 import org.springframework.web.bind.annotation.RequestMethod
+import java.util.concurrent.atomic.AtomicInteger
 
 class PathToMenuTree {
-
-    private var pathWithHttpMethods = emptyList<HttpAPISpec>()
-
-    fun setOpenAPI(openApi: OpenAPI){
+    constructor(openApi: OpenAPI) {
         this.pathWithHttpMethods = PathCollector(openApi).collectPathAndMethods()
     }
 
-/*    fun make(): List<MenuNavigation> {
-        val sortedPaths = pathWithHttpMethods.sortedBy { it.url }
-
-
-
+    constructor(httpApiSpecs: List<HttpAPISpec>) {
+        this.pathWithHttpMethods = httpApiSpecs
     }
 
-    fun parse(parentMenuNavigation: MenuNavigation, uriBlock: String, httpMethod: HttpMethod) {
+    private var pathWithHttpMethods: List<HttpAPISpec>
 
-        val exist = (parentMenuNavigation.menuNavigations.find { it.uriBlock == uriBlock && it.methodType == RequestMethod.valueOf(httpMethod.name()) } != null)
 
-        if (!exist) {
-            val menuNavigation = MenuNavigation(
-                name = "",
-                type = Constant.NavigationType.FUNCTION,
-                uriBlock = uriBlock,
-                methodType = RequestMethod.valueOf(httpMethod.name()),
-                treeId = "",
-                parentTreeId = ""
-            )
-            menuNavigation.setBy(parentMenuNavigation)
-            parentMenuNavigation.addBy(menuNavigation)
+    fun make(): MenuNavigation {
+        val sortedPaths = pathWithHttpMethods.sortedBy { it.url }
+
+        val rootMenuNavigation = MenuNavigation.root()
+        val categoryMap = sortedPaths.groupBy {it.blocksQueue.removeFirst() }
+
+        for (categoryEntry in categoryMap) {
+            val atomicInt = AtomicInteger(1)
+
+            val httpMethodSpec = categoryEntry.value.filter { it.blocksQueue.isEmpty() }
+
+            for(spec in httpMethodSpec){
+                for(method in spec.methods) {
+                    val categoryMenuNavigation = MenuNavigation(
+                        name = categoryEntry.key.replace("/",""),
+                        type = Constant.NavigationType.CATEGORY,
+                        uriBlock = categoryEntry.key,
+                        methodType = method,
+                        treeId = atomicInt.get().toString(),
+                        parentTreeId = rootMenuNavigation.treeId
+                    )
+                    rootMenuNavigation.addBy(categoryMenuNavigation)
+                }
+            }
         }
 
-
-        val branch = path.split("/")
-        if(branch.isNotEmpty()){
-
-        }
-
-        menuNavigation.menuNavigations.find { it }
-    }*/
+        return rootMenuNavigation
+    }
 }

@@ -106,5 +106,16 @@ class MenuNavigation(
         status = false
     }
 
-    companion object
+    companion object {
+        fun root(): MenuNavigation {
+            return MenuNavigation(
+                name = "root",
+                type = Constant.NavigationType.CATEGORY,
+                uriBlock = "/",
+                methodType = RequestMethod.GET,
+                treeId = "1",
+                parentTreeId = "#",
+            )
+        }
+    }
 }

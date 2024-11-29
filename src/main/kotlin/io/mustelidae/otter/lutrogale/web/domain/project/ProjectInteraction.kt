@@ -18,14 +18,7 @@ class ProjectInteraction(
 
     fun register(name: String, description: String?): Long {
         val project = Project.of(name, description)
-        val menuNavigation = MenuNavigation(
-            name,
-            NavigationType.CATEGORY,
-            "/",
-            RequestMethod.GET,
-            "1",
-            "#",
-        )
+        val menuNavigation = MenuNavigation.root()
         project.addBy(menuNavigation)
         return projectRepository.save(project).id!!
     }
