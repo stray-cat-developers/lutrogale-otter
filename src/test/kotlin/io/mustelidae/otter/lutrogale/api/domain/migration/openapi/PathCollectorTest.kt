@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class PathCollectorTest {
@@ -220,13 +219,12 @@ class PathCollectorTest {
               }
            }
         }
-        """.trimIndent()
+    """.trimIndent()
 
     @Test
     fun collectTest() {
         val swaggerSpec = SwaggerSpec(v3Json, SwaggerSpec.Type.JSON)
         val openApi = swaggerSpec.openAPI
-
 
         // Given
         val pathCollector = PathCollector(openApi)

@@ -1,11 +1,8 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 
 import io.kotest.matchers.shouldBe
-import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.SpecVersion
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 class SwaggerSpecTest {
 

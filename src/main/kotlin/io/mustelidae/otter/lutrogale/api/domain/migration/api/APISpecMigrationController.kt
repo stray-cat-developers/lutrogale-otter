@@ -1,12 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
-import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
-import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -16,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/migration/project/{projectId}")
 class APISpecMigrationController {
 
-
-
     /*@PutMapping("/openapi")
     fun experiment(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.OpenAPI): Replies<MenuTreeResources.Reply.TreeBranch> {
 
@@ -25,5 +18,4 @@ class APISpecMigrationController {
         return Replies
 
     }*/
-
 }

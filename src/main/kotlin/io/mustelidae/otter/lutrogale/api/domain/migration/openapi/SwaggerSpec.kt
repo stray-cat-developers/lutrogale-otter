@@ -10,7 +10,7 @@ import org.springframework.data.util.Version
 
 class SwaggerSpec(
     private val originalSpec: String,
-    val type: Type
+    val type: Type,
 ) {
     val openAPI: OpenAPI
 
@@ -26,7 +26,6 @@ class SwaggerSpec(
             OpenAPIV3Parser().readContents(originalSpec, null, parseOptions).openAPI
         }
     }
-
 
     private fun getVersion(): String? {
         val versionNode: JsonNode? = when (type) {

@@ -8,17 +8,17 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class MigrationClientConfiguration(
-    private val appEnvironment: AppEnvironment
+    private val appEnvironment: AppEnvironment,
 ) {
 
     @Bean
     fun restStyleMigrationClient(): RestStyleMigrationClient {
         val env = appEnvironment.default
 
-        return if(env.useDummy) {
+        return if (env.useDummy) {
             DummyRestStyleMigrationClient()
         } else {
-            StableRestStyleMigrationClient(RestClient.new(ConnectionConfig.from(appEnvironment.default)))
+            StableRestStyleMigrationClient(RestClient.new(ConnectionConfig.from(appEnvironment.default)), env.logging)
         }
     }
 }
