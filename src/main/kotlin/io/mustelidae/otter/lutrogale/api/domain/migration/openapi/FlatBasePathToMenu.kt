@@ -7,18 +7,20 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class FlatBasePathToMenu : PathToMenu {
 
-    constructor(openApi: OpenAPI) {
+    constructor(openApi: OpenAPI, rootMenuNavigation: MenuNavigation) {
         this.pathWithHttpMethods = PathCollector(openApi).collectPathAndMethods()
+        this.rootMenuNavigation = rootMenuNavigation
     }
 
-    constructor(httpApiSpecs: List<HttpAPISpec>) {
+    constructor(httpApiSpecs: List<HttpAPISpec>, rootMenuNavigation: MenuNavigation) {
         this.pathWithHttpMethods = httpApiSpecs
+        this.rootMenuNavigation = rootMenuNavigation
     }
 
     private var pathWithHttpMethods: List<HttpAPISpec>
     private val atomicInt = AtomicInteger(1)
 
-    override var rootMenuNavigation: MenuNavigation = MenuNavigation.root()
+    override var rootMenuNavigation: MenuNavigation
 
     override fun makeTree() {
         val sortedPaths = pathWithHttpMethods.sortedBy { it.url }
@@ -27,7 +29,7 @@ class FlatBasePathToMenu : PathToMenu {
             for (method in apiSpec.methods) {
                 rootMenuNavigation.addBy(
                     MenuNavigation(
-                        apiSpec.summary,
+                        apiSpec.summary ?: "[$method] ${apiSpec.url.replace("/", " ")}",
                         Constant.NavigationType.FUNCTION,
                         apiSpec.url,
                         method,

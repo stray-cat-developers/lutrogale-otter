@@ -1,6 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 
 import io.kotest.matchers.shouldBe
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -9,16 +10,16 @@ class TreeBasePathToMenuTest {
     @Test
     fun makeCode() {
         val specs = listOf(
-            HttpAPISpec("/sample/:id", "sample", listOf(RequestMethod.GET)),
-            HttpAPISpec("/sample/hello/:id", "sample hello", listOf(RequestMethod.POST, RequestMethod.GET)),
-            HttpAPISpec("/sample/hello/world/:id", "sample hello world", listOf(RequestMethod.POST, RequestMethod.GET)),
-            HttpAPISpec("/never/:id", "never", listOf(RequestMethod.GET, RequestMethod.POST)),
-            HttpAPISpec("/never/:id/die", "never die", listOf(RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT)),
-            HttpAPISpec("/A/:a/B/C/D/:d", "ABCD", listOf(RequestMethod.POST)),
-            HttpAPISpec("/A/:a/B/C/:c/D/:d", "ABCD", listOf(RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT)),
+            HttpAPISpec("/sample/:id", listOf(RequestMethod.GET), "sample"),
+            HttpAPISpec("/sample/hello/:id", listOf(RequestMethod.POST, RequestMethod.GET), "sample hello"),
+            HttpAPISpec("/sample/hello/world/:id", listOf(RequestMethod.POST, RequestMethod.GET), "sample hello world"),
+            HttpAPISpec("/never/:id", listOf(RequestMethod.GET, RequestMethod.POST), "never"),
+            HttpAPISpec("/never/:id/die", listOf(RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT), "never die"),
+            HttpAPISpec("/A/:a/B/C/D/:d", listOf(RequestMethod.POST), "ABCD"),
+            HttpAPISpec("/A/:a/B/C/:c/D/:d", listOf(RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT), "ABCD"),
         )
 
-        val treeBasePathToMenu = TreeBasePathToMenu(specs)
+        val treeBasePathToMenu = TreeBasePathToMenu(specs, MenuNavigation.root())
 
         treeBasePathToMenu.makeTree()
 

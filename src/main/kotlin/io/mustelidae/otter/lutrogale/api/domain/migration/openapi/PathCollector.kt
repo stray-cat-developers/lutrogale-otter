@@ -11,7 +11,7 @@ class PathCollector(private val openAPI: OpenAPI) {
         val pathAndMethods = openAPI.paths.map { (path, pathItem) ->
             val methods = pathItem.readOperationsMap().keys.map { RequestMethod.valueOf(it.name.uppercase()) }
             val summary = pathItem.summary
-            HttpAPISpec(path, summary, methods)
+            HttpAPISpec(path, methods, summary)
         }
 
         log.debug("Collected path and methods: {}", pathAndMethods)

@@ -7,8 +7,13 @@ class MigrationResources {
             val uri: String,
             val version: String,
             val format: OpenAPIFormat,
-            val header: List<Header>,
+            val migrationType: MigrationType,
+            val header: List<Header>? = null,
         ) {
+            enum class MigrationType {
+                TREE, FLAT
+            }
+
             enum class OpenAPIFormat {
                 JSON, YAML
             }

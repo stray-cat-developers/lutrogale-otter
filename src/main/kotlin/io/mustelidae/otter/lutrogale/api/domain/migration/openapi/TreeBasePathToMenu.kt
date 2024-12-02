@@ -7,19 +7,21 @@ import org.springframework.web.bind.annotation.RequestMethod
 import java.util.concurrent.atomic.AtomicInteger
 
 class TreeBasePathToMenu : PathToMenu {
-    constructor(openApi: OpenAPI) {
+    constructor(openApi: OpenAPI, rootMenuNavigation: MenuNavigation) {
         this.pathWithHttpMethods = PathCollector(openApi).collectPathAndMethods()
+        this.rootMenuNavigation = rootMenuNavigation
     }
 
-    constructor(httpApiSpecs: List<HttpAPISpec>) {
+    constructor(httpApiSpecs: List<HttpAPISpec>, rootMenuNavigation: MenuNavigation) {
         this.pathWithHttpMethods = httpApiSpecs
+        this.rootMenuNavigation = rootMenuNavigation
     }
 
     private var pathWithHttpMethods: List<HttpAPISpec>
 
     private val atomicInt = AtomicInteger(1)
 
-    override var rootMenuNavigation = MenuNavigation.root()
+    override var rootMenuNavigation: MenuNavigation
 
     override fun makeTree() {
         val sortedPaths = pathWithHttpMethods.sortedBy { it.url }
@@ -49,7 +51,7 @@ class TreeBasePathToMenu : PathToMenu {
         for (part in urlParts) {
             val child = current.menuNavigations.find { it.uriBlock == part && it.methodType == RequestMethod.GET }
                 ?: MenuNavigation(
-                    apiSpec.summary,
+                    apiSpec.summary ?: "[GET] ${apiSpec.url.replace("/", " ")}",
                     Constant.NavigationType.MENU,
                     part,
                     RequestMethod.GET,
@@ -66,7 +68,7 @@ class TreeBasePathToMenu : PathToMenu {
             current.menuNavigations.find { it.uriBlock == current.uriBlock && it.methodType == method }
                 ?: current.menuNavigations.add(
                     MenuNavigation(
-                        apiSpec.summary,
+                        apiSpec.summary ?: "[$method] ${apiSpec.url.replace("/", " ")}",
                         Constant.NavigationType.MENU,
                         current.uriBlock,
                         method,

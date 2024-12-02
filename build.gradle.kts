@@ -61,6 +61,7 @@ dependencies {
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("com.h2database:h2")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
 
 }
 

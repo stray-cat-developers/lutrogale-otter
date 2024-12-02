@@ -1,21 +1,46 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
+import io.mustelidae.otter.lutrogale.api.domain.migration.OpenAPIMigrationInteraction
+import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
+import io.mustelidae.otter.lutrogale.common.Reply
+import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "마이그레이션", description = "OpenAPI Spec 마이그레이션을 수행합니다.")
 @LoginCheck(false)
 @RestController
-@RequestMapping("/v1/migration/project/{projectId}")
-class APISpecMigrationController {
+@RequestMapping("/v1/migration/")
+class APISpecMigrationController(
+    private val openAPIMigrationInteraction: OpenAPIMigrationInteraction,
+) {
 
-    /*@PutMapping("/openapi")
-    fun experiment(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.OpenAPI): Replies<MenuTreeResources.Reply.TreeBranch> {
+    @PostMapping("/openapi/preview")
+    @ResponseStatus(HttpStatus.OK)
+    fun previewOpenAPI(@RequestBody request: MigrationResources.Request.OpenAPI): Reply<String> {
+        val type = request.migrationType
+        val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
+        val header = request.header?.map { it.key to it.value }?.toList()
 
+        val preview = openAPIMigrationInteraction.preview(request.uri, swaggerSpecType, request.migrationType, header)
 
-        return Replies
+        return preview.toReply()
+    }
 
-    }*/
+    @PostMapping("/openapi/generate/project/{projectId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun generateOpenAPI(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.OpenAPI): Reply<Long> {
+        val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
+        val header = request.header?.map { it.key to it.value }?.toList()
+
+        val rootMenuId = openAPIMigrationInteraction.generate(projectId, request.uri, swaggerSpecType, request.migrationType, header)
+        return rootMenuId.toReply()
+    }
 }
