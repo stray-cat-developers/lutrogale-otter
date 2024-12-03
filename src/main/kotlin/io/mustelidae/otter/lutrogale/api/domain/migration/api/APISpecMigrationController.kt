@@ -25,7 +25,6 @@ class APISpecMigrationController(
     @PostMapping("/openapi/preview")
     @ResponseStatus(HttpStatus.OK)
     fun previewOpenAPI(@RequestBody request: MigrationResources.Request.OpenAPI): Reply<String> {
-        val type = request.migrationType
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
 

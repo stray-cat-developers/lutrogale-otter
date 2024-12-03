@@ -9,6 +9,7 @@ import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.TreeBasePathToMenu
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,15 +28,12 @@ class OpenAPIMigrationInteraction(
         migrationType: MigrationResources.Request.OpenAPI.MigrationType,
         headers: List<Pair<String, Any>>?,
     ): String {
-        val openAPIJson = restStyleMigrationClient.getOpenAPISpec(url, swaggerSpecType, headers)
-        val swaggerSpec = SwaggerSpec(openAPIJson, swaggerSpecType)
-        val rootMenuNavigation = MenuNavigation.root()
-
-        val pathToMenu: PathToMenu = when (migrationType) {
-            TREE -> TreeBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
-            FLAT -> FlatBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
+        val rootMenuNavigation = MenuNavigation.root().apply {
+            setBy(Project("migration", null, ""))
         }
-        pathToMenu.makeTree()
+
+        val pathToMenu: PathToMenu = pathToMenuUsingOpenAPI(url, swaggerSpecType, headers, migrationType, rootMenuNavigation)
+        pathToMenu.makeTree(menuNavigationRepository)
 
         return pathToMenu.printMenuTree()
     }
@@ -53,6 +51,20 @@ class OpenAPIMigrationInteraction(
         }
         val rootMenuNavigation = project.menuNavigations.first()
 
+        val pathToMenu: PathToMenu =
+            pathToMenuUsingOpenAPI(url, swaggerSpecType, headers, migrationType, rootMenuNavigation)
+        pathToMenu.makeTree(menuNavigationRepository)
+
+        return menuNavigationRepository.save(pathToMenu.rootMenuNavigation).id!!
+    }
+
+    private fun pathToMenuUsingOpenAPI(
+        url: String,
+        swaggerSpecType: SwaggerSpec.Type,
+        headers: List<Pair<String, Any>>?,
+        migrationType: MigrationResources.Request.OpenAPI.MigrationType,
+        rootMenuNavigation: MenuNavigation,
+    ): PathToMenu {
         val openAPIJson = restStyleMigrationClient.getOpenAPISpec(url, swaggerSpecType, headers)
         val swaggerSpec = SwaggerSpec(openAPIJson, swaggerSpecType)
 
@@ -60,8 +72,6 @@ class OpenAPIMigrationInteraction(
             TREE -> TreeBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
             FLAT -> FlatBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
         }
-        pathToMenu.makeTree()
-
-        return menuNavigationRepository.save(pathToMenu.rootMenuNavigation).id!!
+        return pathToMenu
     }
 }

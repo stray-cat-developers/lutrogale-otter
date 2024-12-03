@@ -1,8 +1,10 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.mustelidae.otter.lutrogale.api.domain.migration.PathToMenu
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
+import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -21,8 +23,9 @@ class FlatBasePathToMenuTest {
         )
 
         val pathToMenu: PathToMenu = FlatBasePathToMenu(specs, MenuNavigation.root())
+        val menuNavigationRepository: MenuNavigationRepository = mockk()
 
-        pathToMenu.makeTree()
+        pathToMenu.makeTree(menuNavigationRepository)
 
         println(pathToMenu.printMenuTree())
 

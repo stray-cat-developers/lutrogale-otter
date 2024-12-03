@@ -37,6 +37,8 @@ class DbInitializer(
         setupDefinition(projectId)
         val userId = addUser()
         assignGrant(userId, projectId)
+
+        addProject()
     }
 
     private fun assignGrant(userId: Long, projectId: Long) {
