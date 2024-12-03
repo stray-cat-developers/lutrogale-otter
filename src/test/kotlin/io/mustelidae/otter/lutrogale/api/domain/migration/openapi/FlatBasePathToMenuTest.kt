@@ -1,6 +1,7 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 
 import io.kotest.matchers.shouldBe
+import io.mustelidae.otter.lutrogale.api.domain.migration.PathToMenu
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod

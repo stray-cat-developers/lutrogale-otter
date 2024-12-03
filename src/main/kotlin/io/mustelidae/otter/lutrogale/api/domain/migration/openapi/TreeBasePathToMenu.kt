@@ -1,5 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
 
+import io.mustelidae.otter.lutrogale.api.domain.migration.PathToMenu
 import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.swagger.v3.oas.models.OpenAPI

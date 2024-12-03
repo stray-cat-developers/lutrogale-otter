@@ -1,4 +1,4 @@
-package io.mustelidae.otter.lutrogale.api.domain.migration.openapi
+package io.mustelidae.otter.lutrogale.api.domain.migration
 
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 

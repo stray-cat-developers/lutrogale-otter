@@ -5,7 +5,6 @@ import io.mustelidae.otter.lutrogale.api.domain.migration.api.MigrationResources
 import io.mustelidae.otter.lutrogale.api.domain.migration.api.MigrationResources.Request.OpenAPI.MigrationType.TREE
 import io.mustelidae.otter.lutrogale.api.domain.migration.client.RestStyleMigrationClient
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.FlatBasePathToMenu
-import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.PathToMenu
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.TreeBasePathToMenu
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
