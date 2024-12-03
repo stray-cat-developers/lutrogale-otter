@@ -1,5 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
+import io.kotest.matchers.shouldBe
 import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectController
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
@@ -27,14 +28,55 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
     }
 
     @Test
-    fun previewOpenAPI() {
+    fun previewOpenAPIUsingTree() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
-        val preview = flow.previewOpenAPI("https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.TREE)
-
+        val preview = flow.previewOpenAPI(
+            "https://petstore.swagger.io/v2/swagger.json",
+            MigrationResources.Request.OpenAPI.MigrationType.TREE,
+        )
         println(preview)
     }
 
     @Test
-    fun generateOpenAPI() {
+    fun generateOpenAPIUsingTree() {
+        val flow = APISpecMigrationControllerFlow(mockMvc)
+        val preview = flow.generateOpenAPI(projectId, "https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.TREE)
+        println(preview)
+    }
+
+    @Test
+    fun previewOpenAPIUsingFlat() {
+        val flow = APISpecMigrationControllerFlow(mockMvc)
+        val preview = flow.previewOpenAPI("https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.FLAT)
+
+        preview shouldBe """
+            /pet PUT
+            /pet POST
+            /pet/findByStatus GET
+            /pet/findByTags GET
+            /pet/{petId} GET
+            /pet/{petId} POST
+            /pet/{petId} DELETE
+            /pet/{petId}/uploadImage POST
+            /store/inventory GET
+            /store/order POST
+            /store/order/{orderId} GET
+            /store/order/{orderId} DELETE
+            /user POST
+            /user/createWithArray POST
+            /user/createWithList POST
+            /user/login GET
+            /user/logout GET
+            /user/{username} GET
+            /user/{username} PUT
+            /user/{username} DELETE
+            
+        """.trimIndent()
+    }
+
+    @Test
+    fun generateOpenAPIUsingFlat() {
+        val flow = APISpecMigrationControllerFlow(mockMvc)
+        flow.generateOpenAPI(projectId, "https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.FLAT)
     }
 }

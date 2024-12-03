@@ -48,34 +48,47 @@ class TreeBasePathToMenu : PathToMenu {
         val urlParts = apiSpec.getUrlParts()
         var current = parentMenuNavigation
 
-        for (part in urlParts) {
-            val child = current.menuNavigations.find { it.uriBlock == part && it.methodType == RequestMethod.GET }
-                ?: MenuNavigation(
+        for ((index, part) in urlParts.withIndex()) {
+            var child = current.menuNavigations.find { it.uriBlock == part && it.methodType == RequestMethod.GET }
+
+            if (child == null) {
+                val type = when (index) {
+                    0 -> Constant.NavigationType.CATEGORY
+                    1 -> Constant.NavigationType.MENU
+                    else -> Constant.NavigationType.FUNCTION
+                }
+
+                val new = MenuNavigation(
                     apiSpec.summary ?: "[GET] ${apiSpec.url.replace("/", " ")}",
-                    Constant.NavigationType.MENU,
+                    type,
                     part,
                     RequestMethod.GET,
                     atomicInt.get().toString(),
                     current.treeId,
-                ).also {
-                    current.menuNavigations.add(it)
-                }
-            current = child
-        }
-
-        // 각 메서드별로 자식 노드를 추가
-        apiSpec.methods.forEach { method ->
-            current.menuNavigations.find { it.uriBlock == current.uriBlock && it.methodType == method }
-                ?: current.menuNavigations.add(
-                    MenuNavigation(
-                        apiSpec.summary ?: "[$method] ${apiSpec.url.replace("/", " ")}",
-                        Constant.NavigationType.MENU,
-                        current.uriBlock,
-                        method,
-                        atomicInt.get().toString(),
-                        current.treeId,
-                    ),
                 )
+                current.menuNavigations.add(new)
+                child = new
+            }
+
+            if (index == urlParts.lastIndex) {
+                for (method in apiSpec.methods) {
+                    val sameMenu = current.menuNavigations.find { it.uriBlock == part && it.methodType == method }
+
+                    if (sameMenu == null) {
+                        current.menuNavigations.add(
+                            MenuNavigation(
+                                apiSpec.summary ?: "[$method] ${apiSpec.url.replace("/", " ")}",
+                                Constant.NavigationType.FUNCTION,
+                                part,
+                                method,
+                                atomicInt.get().toString(),
+                                current.treeId,
+                            ),
+                        )
+                    }
+                }
+            }
+            current = child
         }
     }
 }

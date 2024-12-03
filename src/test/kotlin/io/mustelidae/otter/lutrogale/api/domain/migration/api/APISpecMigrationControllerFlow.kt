@@ -34,12 +34,12 @@ class APISpecMigrationControllerFlow(
             .content!!
     }
 
-    fun generateOpenAPI(projectId: Long, url: String): Long {
+    fun generateOpenAPI(projectId: Long, url: String, migrationType: MigrationResources.Request.OpenAPI.MigrationType): Long {
         val request = MigrationResources.Request.OpenAPI(
             uri = url,
             version = "2.0.0",
             format = MigrationResources.Request.OpenAPI.OpenAPIFormat.JSON,
-            migrationType = MigrationResources.Request.OpenAPI.MigrationType.TREE,
+            migrationType = migrationType,
         )
         val uri = linkTo<APISpecMigrationController> { generateOpenAPI(projectId, request) }.toUri()
 
