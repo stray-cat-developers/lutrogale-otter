@@ -68,7 +68,6 @@ class TreeBasePathToMenu : PathToMenu {
                 }
 
                 menuNavigationRepository.save(newMenu)
-
                 current.addBy(newMenu)
 
                 child = newMenu
@@ -93,7 +92,6 @@ class TreeBasePathToMenu : PathToMenu {
                         }
 
                         menuNavigationRepository.save(newMenu)
-
                         current.addBy(newMenu)
                     }
                 }

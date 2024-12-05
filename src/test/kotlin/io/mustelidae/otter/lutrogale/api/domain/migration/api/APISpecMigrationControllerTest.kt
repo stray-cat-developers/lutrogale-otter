@@ -3,23 +3,30 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.api
 import io.kotest.matchers.shouldBe
 import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
 import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectController
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional(readOnly = true)
 class APISpecMigrationControllerTest : FlowTestSupport() {
 
     @Autowired
     lateinit var projectController: ProjectController
 
-    var projectId: Long = 0L
+    @Autowired
+    lateinit var projectFinder: ProjectFinder
 
-    @BeforeAll
-    fun beforeAll() {
+    var projectId: Long = 0L
+    val whiteSpace = "\\s".toRegex()
+
+    @BeforeEach
+    fun beforeEach() {
         projectId = projectController.create(
             ProjectResources.Request(
                 name = "migration",
@@ -35,14 +42,45 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
             "https://petstore.swagger.io/v2/swagger.json",
             MigrationResources.Request.OpenAPI.MigrationType.TREE,
         )
-        println(preview)
+
+        preview.replace(whiteSpace, "") shouldBe """
+            - /pet (GET)
+                - /findByStatus (GET)
+                - /findByTags (GET)
+                - /{petId} (GET)
+                    - /uploadImage (GET)
+                    - /uploadImage (POST)
+                - /{petId} (POST)
+                - /{petId} (DELETE)
+            - /pet (PUT)
+            - /pet (POST)
+            - /store (GET)
+                - /inventory (GET)
+                - /order (GET)
+                    - /{orderId} (GET)
+                    - /{orderId} (DELETE)
+                - /order (POST)
+            - /user (GET)
+                - /createWithArray (GET)
+                - /createWithArray (POST)
+                - /createWithList (GET)
+                - /createWithList (POST)
+                - /login (GET)
+                - /logout (GET)
+                - /{username} (GET)
+                - /{username} (PUT)
+                - /{username} (DELETE)
+            - /user (POST)            
+        """.trimIndent()
+            .replace(whiteSpace, "")
     }
 
     @Test
     fun generateOpenAPIUsingTree() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
-        val preview = flow.generateOpenAPI(projectId, "https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.TREE)
-        println(preview)
+        flow.generateOpenAPI(projectId, "https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.TREE)
+        val project = projectFinder.findBy(projectId)
+        project.menuNavigations.size shouldBe 28
     }
 
     @Test
@@ -50,7 +88,7 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
         val preview = flow.previewOpenAPI("https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.FLAT)
 
-        preview shouldBe """
+        preview.replace(whiteSpace, "") shouldBe """
             /pet PUT
             /pet POST
             /pet/findByStatus GET
@@ -71,23 +109,24 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
             /user/{username} GET
             /user/{username} PUT
             /user/{username} DELETE
-            
         """.trimIndent()
+            .replace(whiteSpace, "")
     }
 
     @Test
     fun generateOpenAPIUsingFlat() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
         flow.generateOpenAPI(projectId, "https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.FLAT)
+        val project = projectFinder.findBy(projectId)
+        project.menuNavigations.size shouldBe 21
     }
 
     @Test
     fun previewGraphQL() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
         val preview = flow.previewGraphQL("https://api.spacex.land/graphql", HttpOperation.GET_AND_POST)
-        println(preview)
 
-        preview.replace("\n", "") shouldBe """
+        preview.replace(whiteSpace, "") shouldBe """
             Tweet GET
             Tweets GET
             TweetsMeta GET
@@ -97,13 +136,15 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
             createTweet POST
             deleteTweet POST
             markTweetRead POST
-        """.trimIndent().replace("\n", "")
+        """.trimIndent()
+            .replace(whiteSpace, "")
     }
 
     @Test
     fun generateGraphQL() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
-        val menuId = flow.generateGraphQL(projectId, "https://api.spacex.land/graphql", HttpOperation.GET_AND_POST)
-        println(menuId)
+        flow.generateGraphQL(projectId, "https://api.spacex.land/graphql", HttpOperation.GET_AND_POST)
+        val project = projectFinder.findBy(projectId)
+        project.menuNavigations.size shouldBe 10
     }
 }

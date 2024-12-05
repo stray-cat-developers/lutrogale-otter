@@ -46,7 +46,6 @@ class FlatBasePathToMenu : PathToMenu {
                 }
 
                 menuNavigationRepository.save(newMenu)
-                rootMenuNavigation.addBy(newMenu)
             }
         }
     }
