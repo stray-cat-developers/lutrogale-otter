@@ -9,6 +9,9 @@ import io.swagger.v3.oas.models.OpenAPI
 import org.springframework.web.bind.annotation.RequestMethod
 import java.util.concurrent.atomic.AtomicInteger
 
+/**
+ * TreeBasePathToMenu 클래스는 웹 API를 기반으로 메뉴 트리를 구성합니다.
+ */
 class TreeBasePathToMenu : PathToMenu {
     constructor(openApi: OpenAPI, rootMenuNavigation: MenuNavigation) {
         this.pathWithHttpMethods = PathCollector(openApi).collectPathAndMethods()
@@ -28,6 +31,10 @@ class TreeBasePathToMenu : PathToMenu {
     private val project: Project
     private val atomicInt = AtomicInteger(1)
 
+    /**
+     * 수집된 API 경로와 메서드 정보를 기반으로 메뉴 트리를 생성합니다.
+     * 입력된 메서드와 경로로 불러온 메뉴를 찾고, 없으면 새로운 메뉴를 생성하여 MenuNavigationRepository에 저장합니다.
+     */
     override fun makeTree(menuNavigationRepository: MenuNavigationRepository) {
         val sortedPaths = pathWithHttpMethods.sortedBy { it.url }
 

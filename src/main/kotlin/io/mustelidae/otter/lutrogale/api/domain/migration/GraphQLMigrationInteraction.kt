@@ -9,6 +9,7 @@ import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+
 @Service
 class GraphQLMigrationInteraction(
     val httpSpecClient: HttpSpecClient,
