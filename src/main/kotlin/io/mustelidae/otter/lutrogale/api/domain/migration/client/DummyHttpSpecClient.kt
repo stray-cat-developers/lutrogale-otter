@@ -2,14 +2,14 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.client
 
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 
-class DummyRestStyleMigrationClient : RestStyleMigrationClient {
+class DummyHttpSpecClient : HttpSpecClient {
     override fun getOpenAPISpec(url: String, type: SwaggerSpec.Type, headers: List<Pair<String, Any>>?): String {
         return when (url) {
             "https://petstore.swagger.io/v2/swagger.json" -> {
-                petJson
+                PET_JSON
             }
             "https://petstore.swagger.io/v2/swagger.yaml" -> {
-                petYaml
+                PET_YAML
             }
             else -> {
                 ""
@@ -17,20 +17,25 @@ class DummyRestStyleMigrationClient : RestStyleMigrationClient {
         }
     }
 
-    private val petJson = """
+    override fun getGraphQLSpec(url: String, headers: List<Pair<String, Any>>?): String {
+        return TWEET_GRAPHQL
+    }
+
+    companion object {
+        val PET_JSON = """
         {
         "swagger": "2.0",
         "info": {
-        "description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
+        "description": "This is a sample server Petstore server.  You can find out more about Swagger at [https://swagger.io](https://swagger.io) or on [irc.freenode.net, #swagger](https://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
         "version": "1.0.7",
         "title": "Swagger Petstore",
-        "termsOfService": "http://swagger.io/terms/",
+        "termsOfService": "https://swagger.io/terms/",
         "contact": {
         "email": "apiteam@swagger.io"
         },
         "license": {
         "name": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
         }
         },
         "host": "petstore.swagger.io",
@@ -41,7 +46,7 @@ class DummyRestStyleMigrationClient : RestStyleMigrationClient {
         "description": "Everything about your Pets",
         "externalDocs": {
         "description": "Find out more",
-        "url": "http://swagger.io"
+        "url": "https://swagger.io"
         }
         },
         {
@@ -53,7 +58,7 @@ class DummyRestStyleMigrationClient : RestStyleMigrationClient {
         "description": "Operations about user",
         "externalDocs": {
         "description": "Find out more about our store",
-        "url": "http://swagger.io"
+        "url": "https://swagger.io"
         }
         }
         ],
@@ -1069,27 +1074,26 @@ class DummyRestStyleMigrationClient : RestStyleMigrationClient {
         },
         "externalDocs": {
         "description": "Find out more about Swagger",
-        "url": "http://swagger.io"
+        "url": "https://swagger.io"
         }
         }
-    """.trimIndent()
-
-    private val petYaml = """
+        """.trimIndent()
+        val PET_YAML = """
 ---
 swagger: "2.0"
 info:
   description: "This is a sample server Petstore server.  You can find out more about\
-    \ Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).\
+    \ Swagger at [https://swagger.io](https://swagger.io) or on [irc.freenode.net, #swagger](https://swagger.io/irc/).\
     \  For this sample, you can use the api key `special-key` to test the authorization\
     \ filters."
   version: "1.0.7"
   title: "Swagger Petstore"
-  termsOfService: "http://swagger.io/terms/"
+  termsOfService: "https://swagger.io/terms/"
   contact:
     email: "apiteam@swagger.io"
   license:
     name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 host: "petstore.swagger.io"
 basePath: "/v2"
 tags:
@@ -1097,14 +1101,14 @@ tags:
   description: "Everything about your Pets"
   externalDocs:
     description: "Find out more"
-    url: "http://swagger.io"
+    url: "https://swagger.io"
 - name: "store"
   description: "Access to Petstore orders"
 - name: "user"
   description: "Operations about user"
   externalDocs:
     description: "Find out more about our store"
-    url: "http://swagger.io"
+    url: "https://swagger.io"
 schemes:
 - "https"
 - "http"
@@ -1792,7 +1796,68 @@ definitions:
       name: "User"
 externalDocs:
   description: "Find out more about Swagger"
-  url: "http://swagger.io"
+  url: "https://swagger.io"
         
-    """.trimIndent()
+        """.trimIndent()
+        val TWEET_GRAPHQL = """
+            type Tweet {
+                id: ID!
+                # The tweet text. No more than 140 characters!
+                body: String
+                # When the tweet was published
+                date: Date
+                # Who published the tweet
+                Author: User
+                # Views, retweets, likes, etc
+                Stats: Stat
+            }
+
+            type User {
+                id: ID!
+                username: String
+                first_name: String
+                last_name: String
+                full_name: String
+                name: String @deprecated
+                avatar_url: Url
+            }
+
+            type Stat {
+                views: Int
+                likes: Int
+                retweets: Int
+                responses: Int
+            }
+
+            type Notification {
+                id: ID
+                date: Date
+                type: String
+            }
+
+            type Meta {
+                count: Int
+            }
+
+            scalar Url
+            scalar Date
+
+            type Query {
+                Tweet(id: ID!): Tweet
+                Tweets(limit: Int, skip: Int, sort_field: String, sort_order: String): [Tweet]
+                TweetsMeta: Meta
+                User(id: ID!): User
+                Notifications(limit: Int): [Notification]
+                NotificationsMeta: Meta
+            }
+
+            type Mutation {
+                createTweet (
+                    body: String
+                ): Tweet
+                deleteTweet(id: ID!): Tweet
+                markTweetRead(id: ID!): Boolean
+            } 
+        """.trimIndent()
+    }
 }

@@ -7,13 +7,13 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.core5.http.ContentType
 import org.slf4j.LoggerFactory
 
-class StableRestStyleMigrationClient(
+class StableHttpSpecClient(
     private val restClient: CloseableHttpClient,
     writeLog: Boolean,
-) : RestStyleMigrationClient, RestClientSupport(
+) : HttpSpecClient, RestClientSupport(
     Jackson.getMapper(),
     writeLog,
-    LoggerFactory.getLogger(StableRestStyleMigrationClient::class.java),
+    LoggerFactory.getLogger(StableHttpSpecClient::class.java),
 ) {
     override fun getOpenAPISpec(url: String, type: SwaggerSpec.Type, headers: List<Pair<String, Any>>?): String {
         val requestHeader = mutableListOf<Pair<String, Any>>()
@@ -28,6 +28,18 @@ class StableRestStyleMigrationClient(
         }
 
         requestHeader.add(contentType)
+        return restClient.get(url, requestHeader)
+            .orElseThrow()
+    }
+
+    override fun getGraphQLSpec(url: String, headers: List<Pair<String, Any>>?): String {
+        val requestHeader = mutableListOf<Pair<String, Any>>()
+
+        headers?.let {
+            requestHeader.addAll(it)
+        }
+
+        requestHeader.add(Pair("Content-Type", ContentType.TEXT_PLAIN))
         return restClient.get(url, requestHeader)
             .orElseThrow()
     }

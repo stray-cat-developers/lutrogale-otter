@@ -56,12 +56,13 @@ dependencies {
     implementation("org.springframework.session:spring-session-jdbc")
     implementation("org.springframework.data:spring-data-envers")
     implementation("com.google.guava:guava:32.0.0-android")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation("commons-io:commons-io:2.14.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("com.h2database:h2")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.graphql-java:graphql-java:22.3")
 
 }
 

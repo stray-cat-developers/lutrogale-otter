@@ -12,13 +12,13 @@ class MigrationClientConfiguration(
 ) {
 
     @Bean
-    fun restStyleMigrationClient(): RestStyleMigrationClient {
+    fun httpSpecClient(): HttpSpecClient {
         val env = appEnvironment.default
 
         return if (env.useDummy) {
-            DummyRestStyleMigrationClient()
+            DummyHttpSpecClient()
         } else {
-            StableRestStyleMigrationClient(RestClient.new(ConnectionConfig.from(appEnvironment.default)), env.logging)
+            StableHttpSpecClient(RestClient.new(ConnectionConfig.from(appEnvironment.default)), env.logging)
         }
     }
 }
