@@ -1,5 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
+import io.mustelidae.otter.lutrogale.api.domain.migration.GraphQLMigrationInteraction
 import io.mustelidae.otter.lutrogale.api.domain.migration.OpenAPIMigrationInteraction
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 import io.mustelidae.otter.lutrogale.common.Reply
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/migration/")
 class APISpecMigrationController(
     private val openAPIMigrationInteraction: OpenAPIMigrationInteraction,
+    private val graphQLMigrationInteraction: GraphQLMigrationInteraction
 ) {
 
     @PostMapping("/openapi/preview")
@@ -28,7 +30,7 @@ class APISpecMigrationController(
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
 
-        val preview = openAPIMigrationInteraction.preview(request.uri, swaggerSpecType, request.migrationType, header)
+        val preview = openAPIMigrationInteraction.preview(request.url, swaggerSpecType, request.migrationType, header)
 
         return preview.toReply()
     }
@@ -39,7 +41,24 @@ class APISpecMigrationController(
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
 
-        val rootMenuId = openAPIMigrationInteraction.generate(projectId, request.uri, swaggerSpecType, request.migrationType, header)
+        val rootMenuId = openAPIMigrationInteraction.generate(projectId, request.url, swaggerSpecType, request.migrationType, header)
+        return rootMenuId.toReply()
+    }
+
+    @PostMapping("/graphql/preview")
+    fun previewGraphQL(@RequestBody request: MigrationResources.Request.GraphQL): Reply<String> {
+        val header = request.header?.map { it.key to it.value }?.toList()
+
+        val preview = graphQLMigrationInteraction.preview(request.url, request.httpOperation, header)
+
+        return preview.toReply()
+    }
+
+    @PostMapping("/graphql/generate/project/{projectId}")
+    fun generateGraphQL(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.GraphQL): Reply<Long> {
+        val header = request.header?.map { it.key to it.value }?.toList()
+
+        val rootMenuId = graphQLMigrationInteraction.generate(projectId, request.url, request.httpOperation, header)
         return rootMenuId.toReply()
     }
 }

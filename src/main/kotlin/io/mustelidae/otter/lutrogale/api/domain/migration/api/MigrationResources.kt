@@ -1,10 +1,12 @@
 package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
+import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
+
 class MigrationResources {
 
     class Request {
         data class OpenAPI(
-            val uri: String,
+            val url: String,
             val version: String,
             val format: OpenAPIFormat,
             val migrationType: MigrationType,
@@ -18,10 +20,17 @@ class MigrationResources {
                 JSON, YAML
             }
 
-            data class Header(
-                val key: String,
-                val value: String,
-            )
         }
+
+        data class GraphQL(
+            val url: String,
+            val httpOperation: HttpOperation,
+            val header: List<Header>? = null
+        )
+
+        data class Header(
+            val key: String,
+            val value: String,
+        )
     }
 }

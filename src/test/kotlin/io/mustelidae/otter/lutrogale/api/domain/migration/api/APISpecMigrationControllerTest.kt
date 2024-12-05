@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
 import io.kotest.matchers.shouldBe
 import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
+import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectController
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import org.junit.jupiter.api.BeforeAll
@@ -78,5 +79,31 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
     fun generateOpenAPIUsingFlat() {
         val flow = APISpecMigrationControllerFlow(mockMvc)
         flow.generateOpenAPI(projectId, "https://petstore.swagger.io/v2/swagger.json", MigrationResources.Request.OpenAPI.MigrationType.FLAT)
+    }
+
+    @Test
+    fun previewGraphQL() {
+        val flow = APISpecMigrationControllerFlow(mockMvc)
+        val preview = flow.previewGraphQL("https://api.spacex.land/graphql", HttpOperation.GET_AND_POST)
+        println(preview)
+
+        preview.replace("\n","") shouldBe """
+            Tweet GET
+            Tweets GET
+            TweetsMeta GET
+            User GET
+            Notifications GET
+            NotificationsMeta GET
+            createTweet POST
+            deleteTweet POST
+            markTweetRead POST
+        """.trimIndent().replace("\n","")
+    }
+
+    @Test
+    fun generateGraphQL() {
+        val flow = APISpecMigrationControllerFlow(mockMvc)
+        val menuId = flow.generateGraphQL(projectId, "https://api.spacex.land/graphql", HttpOperation.GET_AND_POST)
+        println(menuId)
     }
 }

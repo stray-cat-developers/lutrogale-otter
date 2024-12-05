@@ -9,28 +9,29 @@ import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.TreeBasePathToMenu
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
-import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class OpenAPIMigrationInteraction(
     val httpSpecClient: HttpSpecClient,
     val menuNavigationRepository: MenuNavigationRepository,
     val projectFinder: ProjectFinder,
+    private val projectInteraction: ProjectInteraction,
 ) {
 
+    @Transactional(readOnly = true)
     fun preview(
         url: String,
         swaggerSpecType: SwaggerSpec.Type,
         migrationType: MigrationResources.Request.OpenAPI.MigrationType,
         headers: List<Pair<String, Any>>?,
     ): String {
-        val rootMenuNavigation = MenuNavigation.root().apply {
-            setBy(Project("migration", null, ""))
-        }
+        val projectId = projectInteraction.register("migration", "preview")
+        val project = projectFinder.findBy(projectId)
+        val rootMenuNavigation = project.menuNavigations.first()
 
         val pathToMenu: PathToMenu = pathToMenuUsingOpenAPI(url, swaggerSpecType, headers, migrationType, rootMenuNavigation)
         pathToMenu.makeTree(menuNavigationRepository)
@@ -38,6 +39,7 @@ class OpenAPIMigrationInteraction(
         return pathToMenu.printMenuTree()
     }
 
+    @Transactional
     fun generate(
         projectId: Long,
         url: String,
