@@ -25,6 +25,13 @@ class AccessResources {
             val email: String,
             val ids: List<Long>,
         )
+
+        @Schema(name = "Lutrogale.Access.Request.GraphQLBase")
+        class GraphQLBase(
+            @Email
+            val email: String,
+            val graphQLs: List<AccessGraphQL>,
+        )
     }
 
     class Reply {
@@ -85,4 +92,10 @@ class AccessResources {
             }
         }
     }
+
+    @Schema(name = "Lutrogale.Access.AccessGraphQL")
+    class AccessGraphQL(
+        val operation: String,
+        val methodType: RequestMethod,
+    )
 }

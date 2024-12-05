@@ -1,5 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization
 
+import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources.AccessGraphQL
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources.AccessUri
 import io.mustelidae.otter.lutrogale.common.Constant
 import io.swagger.v3.oas.annotations.media.Schema
@@ -29,6 +30,15 @@ class AccessGrant(
                 apiKey,
                 Constant.AuthenticationCheckType.URI,
                 accessUriGroup = accessUriGroup,
+            )
+        }
+
+        fun ofOperationBase(email: String, apiKey: String, accessGraphQL: List<AccessGraphQL>): AccessGrant {
+            return AccessGrant(
+                email,
+                apiKey,
+                Constant.AuthenticationCheckType.URI,
+                accessUriGroup = accessGraphQL.map { AccessUri.of("/${it.operation}", it.methodType) },
             )
         }
     }

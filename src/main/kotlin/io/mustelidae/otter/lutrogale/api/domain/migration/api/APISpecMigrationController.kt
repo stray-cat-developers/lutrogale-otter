@@ -46,6 +46,7 @@ class APISpecMigrationController(
     }
 
     @PostMapping("/graphql/preview")
+    @ResponseStatus(HttpStatus.OK)
     fun previewGraphQL(@RequestBody request: MigrationResources.Request.GraphQL): Reply<String> {
         val header = request.header?.map { it.key to it.value }?.toList()
 
@@ -55,6 +56,7 @@ class APISpecMigrationController(
     }
 
     @PostMapping("/graphql/generate/project/{projectId}")
+    @ResponseStatus(HttpStatus.CREATED)
     fun generateGraphQL(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.GraphQL): Reply<Long> {
         val header = request.header?.map { it.key to it.value }?.toList()
 

@@ -75,6 +75,24 @@ class AuthorizationController(
         return accessStates.toReplies()
     }
 
+    @Operation(summary = "호출 GraphQL 기반 권한 체크")
+    @PostMapping("authorization-check/graphql")
+    fun graphQLCheck(
+        @RequestHeader(RoleHeader.XSystem.KEY) apiKey: String,
+        @RequestBody @Valid
+        request: AccessResources.Request.GraphQLBase,
+    ): Replies<AccessResources.Reply.AccessState> {
+        val email = request.email
+        if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
+            val accessStates = request.graphQLs.map { AccessResources.Reply.AccessState.ofDenied(it.operation, "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.") }
+            return accessStates.toReplies()
+        }
+
+        val accessGrant = AccessGrant.ofOperationBase(email, apiKey, request.graphQLs)
+        val accessStates = clientCertificationInteraction.check(accessGrant)
+        return accessStates.toReplies()
+    }
+
     @Operation(summary = "사용자의 권한이 있는 모든 메뉴 조회")
     @GetMapping("accessible-urls")
     fun findAllAccessibleGrant(
