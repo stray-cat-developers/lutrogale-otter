@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod
  */
 @Entity
 class MenuNavigation(
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 250)
     var name: String,
     @Enumerated(STRING)
     var type: Constant.NavigationType,
