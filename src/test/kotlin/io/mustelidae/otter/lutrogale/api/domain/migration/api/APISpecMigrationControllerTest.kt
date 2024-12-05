@@ -87,7 +87,7 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
         val preview = flow.previewGraphQL("https://api.spacex.land/graphql", HttpOperation.GET_AND_POST)
         println(preview)
 
-        preview.replace("\n","") shouldBe """
+        preview.replace("\n", "") shouldBe """
             Tweet GET
             Tweets GET
             TweetsMeta GET
@@ -97,7 +97,7 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
             createTweet POST
             deleteTweet POST
             markTweetRead POST
-        """.trimIndent().replace("\n","")
+        """.trimIndent().replace("\n", "")
     }
 
     @Test

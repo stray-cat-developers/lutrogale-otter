@@ -14,7 +14,7 @@ class GraphQLMigrationInteraction(
     val httpSpecClient: HttpSpecClient,
     val menuNavigationRepository: MenuNavigationRepository,
     val projectFinder: ProjectFinder,
-    val projectInteraction: ProjectInteraction
+    val projectInteraction: ProjectInteraction,
 ) {
 
     @Transactional(readOnly = true)

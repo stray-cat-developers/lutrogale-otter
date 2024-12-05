@@ -19,13 +19,12 @@ class MigrationResources {
             enum class OpenAPIFormat {
                 JSON, YAML
             }
-
         }
 
         data class GraphQL(
             val url: String,
             val httpOperation: HttpOperation,
-            val header: List<Header>? = null
+            val header: List<Header>? = null,
         )
 
         data class Header(

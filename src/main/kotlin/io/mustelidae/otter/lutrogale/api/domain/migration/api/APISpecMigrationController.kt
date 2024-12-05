@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/migration/")
 class APISpecMigrationController(
     private val openAPIMigrationInteraction: OpenAPIMigrationInteraction,
-    private val graphQLMigrationInteraction: GraphQLMigrationInteraction
+    private val graphQLMigrationInteraction: GraphQLMigrationInteraction,
 ) {
 
     @PostMapping("/openapi/preview")
