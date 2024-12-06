@@ -4,6 +4,20 @@
 [![Build Status](https://github.com/stray-cat-developers/lutrogale-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/lutrogale-otter)
 
 ## New Features!
+### 1.0.1
+- GraphQL URL을 통해 권한 전체를 마이그레이션 할 수 있습니다.
+- Open API (2.0, 3.x) URL을 통해 권한 전체를 마이그레이션 할 수 있습니다.
+  - Format은 JSON, YAML을 지원합니다.
+- GraphQL Operation을 통해 권한을 확인할 수 있습니다.
+
+### 1.0.0
+- 사용자, 프로젝트, 권한, 권한 그룹, 권한 그룹에 권한을 추가할 수 있습니다.
+- 사용자는 프로젝트에 참여할 수 있습니다.
+- 사용자는 프로젝트에 참여할 때 권한 그룹을 선택할 수 있습니다.
+- 특정 타켓만 가진 권한 그룹을 만들 수 있습니다.
+- 커스터마이징 된 개별 권한을 만들 수 있습니다.
+- url을 통해 권한을 확인할 수 있습니다.
+- 권한 id를 통해 권한을 확인할 수 있습니다.
 
 # Installation
 ### Quick start

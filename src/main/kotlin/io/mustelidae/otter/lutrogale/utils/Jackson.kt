@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -30,7 +31,10 @@ object Jackson {
         .build<ObjectMapper>()
         .registerKotlinModule()
 
+    private val ymlMapper = ObjectMapper(YAMLFactory())
+
     fun getMapper(): ObjectMapper = mapper
+    fun getYmlMapper(): ObjectMapper = ymlMapper
 }
 
 private class CustomDateSerializer : StdSerializer<Date>(Date::class.java) {

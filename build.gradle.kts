@@ -41,6 +41,8 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 
+    implementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.20")
+
     kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
     implementation("com.querydsl:querydsl-core:5.1.0")
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
@@ -54,10 +56,14 @@ dependencies {
     implementation("org.springframework.session:spring-session-jdbc")
     implementation("org.springframework.data:spring-data-envers")
     implementation("com.google.guava:guava:32.0.0-android")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation("commons-io:commons-io:2.14.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
     testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("com.h2database:h2")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.graphql-java:graphql-java:22.3")
+
 }
 
 tasks.withType<KotlinCompile>().all {
