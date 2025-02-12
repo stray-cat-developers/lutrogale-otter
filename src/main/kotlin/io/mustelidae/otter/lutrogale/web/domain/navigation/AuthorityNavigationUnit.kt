@@ -10,11 +10,14 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.envers.Audited
+import org.hibernate.envers.RelationTargetAuditMode
 
 /**
  * Created by seooseok on 2016. 9. 29..
  * 권한 그룹과 네비게이션 매핑
  */
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(name = "AuthorityDefinitionHasMenuNavigation")
 class AuthorityNavigationUnit : Audit() {
