@@ -29,7 +29,7 @@
                                                 <h3 class="box-title">네비게이션 트리에서 선택</h3>
                                             </div>
                                             <!-- /.box-header -->
-                                            <div class="box-body">
+                                            <div class="box-body" style="height: 70vh; overflow-y: auto;">
                                                 <div id="menuNaviTree"></div>
                                             </div>
                                         </div>
