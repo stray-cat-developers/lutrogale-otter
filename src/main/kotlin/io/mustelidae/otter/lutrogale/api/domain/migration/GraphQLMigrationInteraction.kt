@@ -48,7 +48,9 @@ class GraphQLMigrationInteraction(
         if (project.menuNavigations.size > 1) {
             throw PolicyException(
                 DefaultError(
-                    ErrorCode.PL03, "Project has more than one menuNavigations")
+                    ErrorCode.PL03,
+                    "Project has more than one menuNavigations",
+                ),
             )
         }
 
