@@ -1,0 +1,70 @@
+name: Weekly JIRA Ticket Sync
+
+# 매일 자정에 실행하거나 수동으로 실행할 수 있도록 설정
+on:
+  #workflow_run:
+   # workflows: [ "release" ]
+   # types:
+   #   - completed
+  schedule:
+    - cron: '0 0 * * *'  # 매일 자정에 실행
+  workflow_dispatch:      # 수동 실행 옵션 추가
+
+jobs:
+  sync-jira-tickets:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+    steps:
+      # 전체 히스토리를 포함하여 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 전체 히스토리 가져오기
+
+      # 최근 7일간 머지된 브랜치에서 JIRA 티켓 추출
+      - name: Extract JIRA tickets from merged branches
+        id: extract-tickets
+        run: |
+          # 7일 전 날짜 계산
+          SINCE_DATE=$(date -d "7 days ago" +%Y-%m-%d)
+          
+          # 최근 7일간 머지된 커밋들에서 브랜치 이름 추출 및 JIRA 티켓 번호 찾기
+          TICKETS=$(gh pr list \
+            --state merged \
+            --base master \
+            --json headRefName,mergedAt \
+            --jq ".[] | select(.mergedAt >= \"$SINCE_DATE\") | .headRefName" | \
+            grep -oE 'KAN-[0-9]+' | \
+            sort -u | \
+            jq -R -s 'split("\n") | map(select(length > 0))')
+          
+          # 발견된 티켓 수 확인
+          TICKET_COUNT=$(echo $TICKETS | jq '. | length')
+          
+          if [ "$TICKET_COUNT" -gt 0 ]; then
+            echo "Found $TICKET_COUNT JIRA tickets"
+            echo "tickets=$(echo $TICKETS | jq -c -R '.')" >> $GITHUB_OUTPUT
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            echo "No JIRA tickets found in merged branches"
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+
+      # JIRA webhook 호출
+      - name: Call JIRA webhook
+        if: steps.extract-tickets.outputs.found == 'true'
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"issues": ${{ fromJson(steps.extract-tickets.outputs.tickets) }}}' \
+          https://automation.atlassian.com/pro/hooks/ac86ed5b3824981ac57ecb07299eb12d1a61994f
+      # 결과 로깅
+      - name: Log sync results
+        run: |
+          echo "Sync completed at $(date)"
+          echo "Period: $(date -d '7 days ago' +%Y-%m-%d) to $(date +%Y-%m-%d)"
+          if [ "${{ steps.extract-tickets.outputs.found }}" = "true" ]; then
+            echo "Synced tickets: ${{ steps.extract-tickets.outputs.tickets }}"
+          else
+            echo "No tickets found to sync"
+          fi

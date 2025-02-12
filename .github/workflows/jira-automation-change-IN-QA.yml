@@ -1,0 +1,48 @@
+name: PR Merge 후 JIRA 티켓 변경(IN QA)
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master  # 메인 브랜치로의 PR에 대해서만 실행
+
+jobs:
+  jira-webhook:
+    # PR이 실제로 merge된 경우에만 실행
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      # 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # JIRA 티켓 번호 추출
+      - name: Extract JIRA ticket number
+        id: extract-ticket
+        run: |
+          # PR 제목에서 JIRA 티켓 번호 추출 시도
+          TICKET_FROM_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -oE 'KAN-[0-9]+' || echo '')
+
+          # PR 브랜치 이름에서 JIRA 티켓 번호 추출 시도
+          TICKET_FROM_BRANCH=$(echo "${{ github.event.pull_request.head.ref }}" | grep -oE 'KAN-[0-9]+' || echo '')
+
+          # 티켓 번호가 제목이나 브랜치 중 하나에서 발견되면 그것을 사용
+          TICKET_NUMBER="${TICKET_FROM_TITLE:-$TICKET_FROM_BRANCH}"
+
+          if [ -n "$TICKET_NUMBER" ]; then
+            echo "Found JIRA ticket: $TICKET_NUMBER"
+            echo "ticket=$TICKET_NUMBER" >> $GITHUB_OUTPUT
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            echo "No JIRA ticket found in PR title or branch name"
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+
+      # JIRA webhook 호출
+      - name: Call JIRA webhook
+        if: steps.extract-ticket.outputs.found == 'true'
+        run: |
+          curl -X POST https://automation.atlassian.com/pro/hooks/f95f6f43fe6286588dd022a0e8445e1ac6a33fad \
+            -H "Content-Type: application/json" \
+            -d '{"issues":["${{ steps.extract-ticket.outputs.ticket }}"]}'
