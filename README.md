@@ -4,6 +4,12 @@
 [![Build Status](https://github.com/stray-cat-developers/lutrogale-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/lutrogale-otter)
 
 ## New Features!
+### 1.0.2
+- Envers 적용으로 권한 관리의 변경사항을 저장합니다.
+- 메뉴트리가 많아지는 경우 스크롤이 생기지 않던 문제를 해결했습니다.
+- 마이그레이션 API 오류 시 오류 내용이 제대로 나오지 않는 문제를 해결했습니다.
+- auditor id 뒤에 .이 들어간 부분을 제거했습니다.
+
 ### 1.0.1
 - GraphQL URL을 통해 권한 전체를 마이그레이션 할 수 있습니다.
 - Open API (2.0, 3.x) URL을 통해 권한 전체를 마이그레이션 할 수 있습니다.
