@@ -16,5 +16,5 @@ COPY . .
 RUN ./gradlew clean build
 
 FROM eclipse-temurin:21-jdk-alpine as runner
-COPY --from=builder /app/build/libs/lutrogale-1.0.0.jar lutrogale-1.0.0.jar
-ENTRYPOINT [ "java", "-jar", "lutrogale-1.0.0.jar" ]
+COPY --from=builder /app/build/libs/lutrogale-1.0.2.jar lutrogale-1.0.2.jar
+ENTRYPOINT [ "java", "-jar", "lutrogale-1.0.2.jar" ]
