@@ -30,7 +30,7 @@ class AuditorAwareImpl : AuditorAware<String> {
 
             // Admin인 경우
             if (session.hasSession()) {
-                return Optional.of("A:${session.getAdminId()}.")
+                return Optional.of("A:${session.getAdminId()}")
             }
 
             // API인 경우

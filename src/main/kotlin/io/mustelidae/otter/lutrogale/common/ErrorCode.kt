@@ -22,6 +22,7 @@ enum class ErrorCode(val summary: String) {
     PD01("develop mistake error"),
     PL01("duplicate request"),
     PL02("expired"),
+    PL03("Project has more than one menuNavigations"),
 
     S000("common system error"),
     SA00("async execute error"),

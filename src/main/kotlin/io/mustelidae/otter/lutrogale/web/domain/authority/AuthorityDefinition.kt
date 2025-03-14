@@ -16,11 +16,14 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import org.hibernate.annotations.SQLRestriction
+import org.hibernate.envers.Audited
+import org.hibernate.envers.RelationTargetAuditMode
 
 /**
  * Created by HanJaehyun on 2016. 9. 21..
  * 권한 정의 그룹
  */
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 class AuthorityDefinition(
     @Column(nullable = false, length = 50)

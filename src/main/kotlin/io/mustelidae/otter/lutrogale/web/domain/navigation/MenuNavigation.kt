@@ -16,11 +16,14 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import org.hibernate.envers.Audited
+import org.hibernate.envers.RelationTargetAuditMode
 import org.springframework.web.bind.annotation.RequestMethod
 
 /**
  * Created by HanJaehyun on 2016. 9. 21..
  */
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 class MenuNavigation(
     @Column(nullable = false, length = 250)

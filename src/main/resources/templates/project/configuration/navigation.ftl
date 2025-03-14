@@ -20,7 +20,7 @@
                         <!-- /.box-header -->
                         <!-- form start -->
                         <form class="form-horizontal">
-                            <div class="box-body">
+                            <div class="box-body" style="height: 50vh; overflow-y: auto;">
                                 <div id="menuNaviTree"></div>
                             </div>
                             <!-- /.box-body -->

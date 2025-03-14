@@ -43,6 +43,15 @@ spring:
         format_sql: true
         dialect:
           storage_engine: innodb
+        envers:
+          revision_field_name: revision_id
+          revision_type_field_name: revision_type
+          store_data_at_delete: true
+          global_with_modified_flag: true
+          audit_strategy: org.hibernate.envers.strategy.internal.DefaultAuditStrategy
+          audit_strategy_validity_end_rev_field_name: next_revision_id
+          audit_strategy_validity_store_revend_timestamp: true
+          audit_strategy_validity_revend_timestamp_field_name: revision_end_at
     open-in-view: true
   datasource:
     hikari:

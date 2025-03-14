@@ -15,12 +15,15 @@ import jakarta.persistence.Index
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.SQLRestriction
+import org.hibernate.envers.Audited
+import org.hibernate.envers.RelationTargetAuditMode
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 /**
  * Created by HanJaehyun on 2016. 9. 21..
  */
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(indexes = [Index(name = "IDX_APIKEY", columnList = "apiKey", unique = true)])
 class Project(

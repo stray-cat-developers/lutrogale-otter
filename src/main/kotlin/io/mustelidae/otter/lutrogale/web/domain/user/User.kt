@@ -18,10 +18,13 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import org.hibernate.annotations.SQLRestriction
+import org.hibernate.envers.Audited
+import org.hibernate.envers.RelationTargetAuditMode
 
 /**
  * 어드민의 권한을 체크해야 하는 운영자의 정보
  */
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 class User(
     @Column(nullable = false, length = 30)

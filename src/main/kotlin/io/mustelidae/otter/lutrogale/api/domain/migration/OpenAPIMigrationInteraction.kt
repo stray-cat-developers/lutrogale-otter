@@ -7,6 +7,9 @@ import io.mustelidae.otter.lutrogale.api.domain.migration.client.HttpSpecClient
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.FlatBasePathToMenu
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.TreeBasePathToMenu
+import io.mustelidae.otter.lutrogale.common.DefaultError
+import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.config.PolicyException
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
@@ -49,7 +52,12 @@ class OpenAPIMigrationInteraction(
     ): Long {
         val project = projectFinder.findBy(projectId)
         if (project.menuNavigations.size > 1) {
-            throw IllegalArgumentException("Project has more than one menuNavigations")
+            throw PolicyException(
+                DefaultError(
+                    ErrorCode.PL03,
+                    "Project has more than one menuNavigations",
+                ),
+            )
         }
         val rootMenuNavigation = project.menuNavigations.first()
 

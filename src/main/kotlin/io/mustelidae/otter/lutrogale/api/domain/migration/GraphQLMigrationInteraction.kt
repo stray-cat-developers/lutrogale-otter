@@ -3,6 +3,9 @@ package io.mustelidae.otter.lutrogale.api.domain.migration
 import io.mustelidae.otter.lutrogale.api.domain.migration.client.HttpSpecClient
 import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.FlatBasePathToMenu
 import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
+import io.mustelidae.otter.lutrogale.common.DefaultError
+import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.config.PolicyException
 import io.mustelidae.otter.lutrogale.web.domain.navigation.repository.MenuNavigationRepository
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
@@ -43,7 +46,12 @@ class GraphQLMigrationInteraction(
     ): Long {
         val project = projectFinder.findBy(projectId)
         if (project.menuNavigations.size > 1) {
-            throw IllegalArgumentException("Project has more than one menuNavigations")
+            throw PolicyException(
+                DefaultError(
+                    ErrorCode.PL03,
+                    "Project has more than one menuNavigations",
+                ),
+            )
         }
 
         val scheme = httpSpecClient.getGraphQLSpec(url, headers)
