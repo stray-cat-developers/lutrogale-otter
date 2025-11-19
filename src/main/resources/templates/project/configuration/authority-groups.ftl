@@ -26,9 +26,15 @@
                                     <div class="col-lg-4 col-xs-12">
                                         <div class="box box-solid">
                                             <div class="box-header">
-                                                <h3 class="box-title">네비게이션 트리에서 선택</h3>
+                                                <h3 class="box-title">
+                                                    네비게이션 트리에서 선택
+                                                    <i class="fa fa-question-circle text-muted" 
+                                                       data-toggle="tooltip" 
+                                                       data-placement="top" 
+                                                       title="키보드: 화살표로 이동, 'v'키로 체크박스 토글"></i>
+                                                </h3>
                                             </div>
-                                            <!-- /.box-header -->
+                                            <!-- /.box-header FIXME: style을 CSS로 지정하자. -->
                                             <div class="box-body" style="height: 70vh; overflow-y: auto;">
                                                 <div id="menuNaviTree"></div>
                                             </div>
@@ -90,10 +96,16 @@
                 <div class="col-lg-5 col-xs-12">
                     <div class="box box-solid">
                         <div class="box-header">
-                            <h4 class="box-title">네비게이션 트리에서 선택</h4>
+                            <h4 class="box-title">
+                                네비게이션 트리에서 선택
+                                <i class="fa fa-question-circle text-muted" 
+                                   data-toggle="tooltip" 
+                                   data-placement="top" 
+                                   title="키보드: 화살표로 이동, 'v'키로 체크박스 토글"></i>
+                            </h4>
                         </div>
                         <!-- /.box-header -->
-                        <div class="box-body">
+                        <div class="box-body" style="height: 70vh; overflow-y: auto;">
                             <div id="modal-menu-tree"></div>
                         </div>
                     </div>
@@ -121,7 +133,7 @@
         <script>
             SS.setItem("project_id", extractByWord('project'));
 
-            var opt = {
+            const opt = {
                 'table_selected': {
                     'columns': [
                         {title: 'API ID', data: 'id'},
@@ -156,6 +168,9 @@
             };
 
             $(document).ready(function() {
+                // 툴팁 초기화
+                $('[data-toggle="tooltip"]').tooltip();
+                
                 $('#table-selected').DataTable(OPTION.data_table(opt.table_selected));
                 $('#table-group-api').DataTable(OPTION.data_table(opt.table_selected));
                 $('#table-groups').DataTable(OPTION.data_table(opt.table_groups)).on('click', 'button', function(){
@@ -204,7 +219,8 @@
                     $('#project_desc').html(project_obj.description);
                     $('#project_apiKey').text(project_obj.apiKey);
 
-                    $('#menuNaviTree').jstree(OPTION.jstree(opt.menu_tree, navigation_list)).on('check_node.jstree uncheck_node.jstree', function (event, data) {
+                    const $menuNaviTree = $('#menuNaviTree');
+                    $menuNaviTree.jstree(OPTION.jstree(opt.menu_tree, navigation_list)).on('check_node.jstree uncheck_node.jstree', function (event, data) {
                         let data_table = $('#table-selected').DataTable();
                         let node = data.node.a_attr;
 
@@ -220,7 +236,42 @@
 
                     }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
+                    }).on('select_node.jstree', function(e, data) {
+                        // 노드 선택 시 포커스를 jstree 컨테이너에 설정하여 키보드 이벤트를 받을 수 있도록 함
+                        $(this).focus();
                     });
+
+                    // menuNaviTree에 키보드 이벤트 리스너 추가
+                    $menuNaviTree.on('keydown', function(e) {
+                        // 'v' 키 (keyCode: 86) 또는 'V' 키를 눌렀을 때
+                        if (e.keyCode === 86 || e.key === 'v' || e.key === 'V') {
+                            e.preventDefault();
+                            
+                            let tree = $(this).jstree(true);
+                            let target_node_id = null;
+                            
+                            // 현재 hovered/focused 노드를 찾기
+                            let hovered_node = $(this).find('.jstree-hovered').first();
+                            if (hovered_node.length > 0) {
+                                target_node_id = hovered_node.closest('.jstree-node').attr('id');
+                            } else {
+                                // hovered 노드가 없으면 선택된 노드 사용
+                                let selected_nodes = tree.get_selected();
+                                if (selected_nodes.length > 0) {
+                                    target_node_id = selected_nodes[0];
+                                }
+                            }
+                            
+                            if (target_node_id) {
+                                // 현재 타겟 노드의 체크박스 상태를 토글
+                                if (tree.is_checked(target_node_id)) {
+                                    tree.uncheck_node(target_node_id);
+                                } else {
+                                    tree.check_node(target_node_id);
+                                }
+                            }
+                        }
+                    }).attr('tabindex', '0'); // tabindex를 설정하여 키보드 포커스를 받을 수 있도록 함
 
                 });
             });
@@ -248,7 +299,8 @@
                     OsoriRoute.getUri('authority.create', {id:SS.project_id}),
                     param
                 ).done(function(){
-                    $('#menuNaviTree').jstree(true).uncheck_all();
+                    const $menuTree = $('#menuNaviTree');
+                    $menuTree.jstree(true).uncheck_all();
                     $('#table-selected').DataTable().clear().draw();
                     $('#table-groups').DataTable().clear().draw();
                     $('#group-name').val('');
@@ -297,7 +349,7 @@
                             });
 
                         }else{
-                            var param = {
+                            const param = {
                                 'id': auth_obj.projectId,
                                 'authId': auth_obj.authId,
                                 'menuNaviIdGroup': [node.id]
@@ -317,7 +369,42 @@
                         data_table.draw();
                     }).on('loaded.jstree', function () {
                         $(this).jstree("open_all");
+                    }).on('select_node.jstree', function(e, data) {
+                        // 노드 선택 시 포커스를 jstree 컨테이너에 설정하여 키보드 이벤트를 받을 수 있도록 함
+                        $(this).focus();
                     });
+
+                    // modal-menu-tree에도 키보드 이벤트 리스너 추가
+                    $('#modal-menu-tree').on('keydown', function(e) {
+                        // 'v' 키 (keyCode: 86) 또는 'V' 키를 눌렀을 때
+                        if (e.keyCode === 86 || e.key === 'v' || e.key === 'V') {
+                            e.preventDefault();
+                            
+                            let tree = $(this).jstree(true);
+                            let target_node_id = null;
+                            
+                            // 현재 hovered/focused 노드를 찾기
+                            let hovered_node = $(this).find('.jstree-hovered').first();
+                            if (hovered_node.length > 0) {
+                                target_node_id = hovered_node.closest('.jstree-node').attr('id');
+                            } else {
+                                // hovered 노드가 없으면 선택된 노드 사용
+                                let selected_nodes = tree.get_selected();
+                                if (selected_nodes.length > 0) {
+                                    target_node_id = selected_nodes[0];
+                                }
+                            }
+                            
+                            if (target_node_id) {
+                                // 현재 타겟 노드의 체크박스 상태를 토글
+                                if (tree.is_checked(target_node_id)) {
+                                    tree.uncheck_node(target_node_id);
+                                } else {
+                                    tree.check_node(target_node_id);
+                                }
+                            }
+                        }
+                    }).attr('tabindex', '0'); // tabindex를 설정하여 키보드 포커스를 받을 수 있도록 함
 
                     let modal_tree = $('#modal-menu-tree').jstree(true);
                     $.each(_.pluck(bundleBranches, 'id'), function(i,v){
@@ -326,6 +413,11 @@
 
                     $('.modal-title').text(auth_obj.name);
                     $('#modal-content form').appendTo('.modal-body');
+
+                    // 모달 내 툴팁 초기화
+                    setTimeout(function() {
+                        $('[data-toggle="tooltip"]').tooltip();
+                    }, 100);
 
                     $('#modify-modal').modal();
 
