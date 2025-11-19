@@ -43,5 +43,13 @@ Homepage is http://localhost:4210/
   - 로그인을 하면 테스트를 위해 "Otter Project" 프로젝트와 "lutrogale@otter.com" 사용자 계정이 등록되어 있습니다.
 - 로그인을 하게 되면 대시보드로 이동이 됩니다. 
 
-
+# Local DB Intellij 설정
+- Database 탭에서 + 버튼을 클릭합니다.
+- Data Source > Mysql DB를 선택합니다.
+- Url에 jdbc:mysql://localhost:3306/local?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true 를 입력합니다.
+- User에 root, Password에 root를 입력합니다.
+- Test Connection 버튼을 클릭합니다.
+- OK 버튼을 클릭합니다.
+- 이제 Database 탭에서 local DB를 확인할 수 있습니다.
+- 비밀번호 저장은 '계속'으로 해둡니다.
 

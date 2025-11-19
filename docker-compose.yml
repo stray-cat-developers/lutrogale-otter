@@ -1,13 +1,26 @@
 version: '3.8'
+
 services:
-  maria:
-    image: mariadb:10.7.1
-    platform: linux/arm64/v8
-    command: "mysqld --character-set-server=utf8mb4"
+  mysql:
+    image: mysql:8.0.43
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: local
       MYSQL_DATABASE: local
       MYSQL_USER: local
       MYSQL_PASSWORD: local
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3319:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=caching_sha2_password
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-ulocal", "-plocal" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+    driver: local

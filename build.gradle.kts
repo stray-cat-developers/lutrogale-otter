@@ -50,7 +50,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.6.2")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.3.2")
+    implementation("com.mysql:mysql-connector-j:9.4.0")
 
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.session:spring-session-jdbc")
