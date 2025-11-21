@@ -17,9 +17,10 @@ services:
     command: --default-authentication-plugin=caching_sha2_password
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-ulocal", "-plocal" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   mysql_data:

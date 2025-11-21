@@ -19,7 +19,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.RequestMethod
 
-@Profile("local")
+@Profile("default")
 @Configuration
 @Transactional
 class DbInitializer(
