@@ -1,0 +1,22 @@
+ticket_pattern: "(WMS|FULFILMENT)-[0-9]+"
+
+webhooks:
+  done:
+    url: "https://api-private.atlassian.com/automation/webhooks/jira/a/"
+    token: ""
+  
+  ready_to_qa:
+    url: "https://api-private.atlassian.com/automation/webhooks/jira/a/"
+    token: ""
+    
+  ready_to_release:
+    url: "https://api-private.atlassian.com/automation/webhooks/jira/a/"
+    token: ""
+    
+  release_version:
+    url: "https://api-private.atlassian.com/automation/webhooks/jira/a/"
+    token: ""
+    
+  hotfix_work:
+    url: "https://api-private.atlassian.com/automation/webhooks/jira/a/"
+    token: ""

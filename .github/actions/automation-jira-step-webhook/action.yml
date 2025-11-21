@@ -1,0 +1,37 @@
+name: 'Call Jira Webhook'
+description: 'Calls a Jira automation webhook'
+inputs:
+  webhook_url:
+    description: 'Jira Webhook URL'
+    required: true
+  webhook_token:
+    description: 'Jira Webhook Token'
+    required: true
+  payload:
+    description: 'JSON Payload'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Call Webhook
+      shell: bash
+      env:
+        PAYLOAD: ${{ inputs.payload }}
+        URL: ${{ inputs.webhook_url }}
+        TOKEN: ${{ inputs.webhook_token }}
+      run: |
+        if [ -z "$URL" ] || [ "$URL" == "None" ]; then
+          echo "⚠️ Webhook URL is not configured. Skipping webhook call."
+          exit 0
+        fi
+
+        if [ -z "$TOKEN" ] || [ "$TOKEN" == "None" ]; then
+          echo "⚠️ Webhook Token is not configured. Skipping webhook call."
+          exit 0
+        fi
+
+        curl -X POST "$URL" \
+          -H "Content-Type: application/json" \
+          -H "X-Automation-Webhook-Token: $TOKEN" \
+          -d "$PAYLOAD"

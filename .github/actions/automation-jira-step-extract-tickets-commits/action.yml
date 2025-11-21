@@ -1,0 +1,67 @@
+name: 'Extract Jira Tickets from Commits'
+description: 'Extracts Jira tickets from commit messages of the latest merged PR'
+inputs:
+  ticket_pattern:
+    description: 'Regex pattern for Jira tickets'
+    required: true
+  base_branch:
+    description: 'Base branch to check against'
+    required: true
+    default: 'main'
+  head_branch:
+    description: 'Head branch to check'
+    required: true
+    default: 'alpha'
+  gh_token:
+    description: 'GitHub Token'
+    required: true
+
+outputs:
+  tickets:
+    description: 'JSON array of extracted tickets'
+    value: ${{ steps.extract.outputs.tickets }}
+  found:
+    description: 'Whether tickets were found (true/false)'
+    value: ${{ steps.extract.outputs.found }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Extract Tickets
+      id: extract
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+      run: |
+        PATTERN="${{ inputs.ticket_pattern }}"
+        BASE="${{ inputs.base_branch }}"
+        HEAD="${{ inputs.head_branch }}"
+        
+        # Find latest merged PR
+        LATEST_PR=$(gh pr list --state merged --base "$BASE" --head "$HEAD" --limit 1 --json number --jq '.[0].number')
+        
+        if [ -z "$LATEST_PR" ]; then
+          echo "No merged PRs found from $HEAD to $BASE"
+          echo "found=false" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+        
+        echo "Found latest merged PR #$LATEST_PR from $HEAD to $BASE"
+        
+        # Extract tickets from commit messages
+        TICKETS=$(gh pr view $LATEST_PR --json commits --jq '.commits[].messageHeadline' | \
+          grep -oE "$PATTERN" | \
+          sort -u | \
+          jq -R -s 'split("\n") | map(select(length > 0))')
+        
+        # Check count
+        TICKET_COUNT=$(echo $TICKETS | jq '. | length')
+        
+        if [ "$TICKET_COUNT" -gt 0 ]; then
+          echo "Found $TICKET_COUNT JIRA tickets in PR #$LATEST_PR commit messages"
+          echo "tickets=$(echo $TICKETS | jq -c '.')" >> $GITHUB_OUTPUT
+          echo "found=true" >> $GITHUB_OUTPUT
+        else
+          echo "No JIRA tickets found in PR #$LATEST_PR commit messages"
+          echo "found=false" >> $GITHUB_OUTPUT
+        fi

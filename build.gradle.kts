@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     id("org.jmailen.kotlinter") version "3.14.0"
     id("com.avast.gradle.docker-compose") version "0.17.6"
+    id("com.google.cloud.tools.jib") version "3.4.5"
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
     kotlin("plugin.jpa") version "1.9.22"

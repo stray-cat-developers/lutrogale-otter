@@ -1,0 +1,115 @@
+name: Release Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read Jira Config
+        id: config
+        uses: ./.github/actions/automation-jira-step-read-config
+
+      - name: Calculate Version and Generate Notes
+        id: release-info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TICKET_PATTERN: ${{ steps.config.outputs.ticket_pattern }}
+        run: |
+          # 1. Get Latest Tag
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Latest Tag: $LATEST_TAG"
+          
+          # 2. Get Merged PRs since Latest Tag
+          if [ "$LATEST_TAG" == "v0.0.0" ]; then
+            PRS=$(gh pr list --state merged --base main --json title,number,author --limit 1000)
+          else
+            # Get date of latest tag
+            TAG_DATE=$(git log -1 --format=%aI $LATEST_TAG)
+            # Get PRs merged after tag date
+            PRS=$(gh pr list --state merged --base main --search "merged:>$TAG_DATE" --json title,number,author --limit 1000)
+          fi
+          
+          PR_COUNT=$(echo "$PRS" | jq length)
+          echo "Merged PRs count: $PR_COUNT"
+          
+          # 3. Calculate New Version
+          # Remove 'v' prefix
+          VERSION_NUM=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR MICRO <<< "$VERSION_NUM"
+          
+          if [ "$PR_COUNT" -ge 15 ]; then
+            MINOR=$((MINOR + 1))
+            MICRO=0
+            echo "Incrementing Minor version (PR count >= 15)"
+          else
+            MICRO=$((MICRO + 1))
+            echo "Incrementing Micro version (PR count < 15)"
+          fi
+          
+          NEW_VERSION="v$MAJOR.$MINOR.$MICRO"
+          echo "New Version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          
+          # 4. Generate Release Notes
+          echo "Generating Release Notes..."
+
+          WHATS_CHANGED=""
+          SMALL_FIXES=""
+
+          # Process each PR
+          # Use process substitution to avoid subshell issue
+          while read pr_base64; do
+            _jq() {
+              echo ${pr_base64} | base64 --decode | jq -r ${1}
+            }
+
+            TITLE=$(_jq '.title')
+            NUMBER=$(_jq '.number')
+            AUTHOR=$(_jq '.author.login')
+
+            LINE="- $TITLE (#$NUMBER) @$AUTHOR"
+
+            if [[ "$TITLE" =~ $TICKET_PATTERN ]]; then
+              WHATS_CHANGED="${WHATS_CHANGED}${LINE}\n"
+            else
+              SMALL_FIXES="${SMALL_FIXES}${LINE}\n"
+            fi
+          done < <(echo "$PRS" | jq -r '.[] | @base64')
+          
+          NOTES=""
+          if [ -n "$WHATS_CHANGED" ]; then
+            NOTES="${NOTES}## What's Changed\n${WHATS_CHANGED}\n"
+          fi
+          
+          if [ -n "$SMALL_FIXES" ]; then
+            NOTES="${NOTES}## Small fixes / Bug fixes\n${SMALL_FIXES}\n"
+          fi
+          
+          # Escape newlines for GITHUB_OUTPUT
+          NOTES="${NOTES//'%'/'%25'}"
+          NOTES="${NOTES//$'\n'/'%0A'}"
+          NOTES="${NOTES//$'\r'/'%0D'}"
+          
+          echo "notes=$NOTES" >> $GITHUB_OUTPUT
+
+      - name: Create Draft Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.release-info.outputs.version }}"
+          NOTES="${{ steps.release-info.outputs.notes }}"
+          
+          echo "Creating draft release $VERSION"
+          
+          gh release create "$VERSION" \
+            --draft \
+            --title "$VERSION" \
+            --notes "$NOTES" \
+            --target main
