@@ -1,0 +1,33 @@
+name: Sync Main to Alpha
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge main to alpha
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              await github.rest.repos.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                base: 'alpha',
+                head: 'main',
+              });
+              console.log('Successfully merged main into alpha');
+            } catch (error) {
+              if (error.status === 409) {
+                console.log('Conflict detected. Manual merge required.');
+                core.setFailed('Merge conflict detected');
+              } else {
+                console.log('Error merging branches:', error);
+                core.setFailed(error.message);
+              }
+            }
