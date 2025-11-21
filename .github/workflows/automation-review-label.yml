@@ -18,6 +18,10 @@ env:
 jobs:
   label:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     steps:
       - name: Check branch name and add label
         uses: actions/github-script@v6

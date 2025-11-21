@@ -35,4 +35,4 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO_NAME: ${{ github.repository }}
         run: |
-          python .github/scripts/claude_review.py
+          python .github/workflows/scripts/claude_review.py
