@@ -1,0 +1,54 @@
+name: PR 시 라벨 달기
+
+on:
+  pull_request:
+    types: [opened]
+
+# 라벨과 브랜치 규칙을 이곳에서 관리합니다.
+# 키(key)가 라벨 이름이고, 값(value)이 브랜치 접두사 배열입니다.
+env:
+  LABEL_CONFIG: >
+    {
+      "documentation": ["doc/", "docs/"],
+      "enhancement": ["feat/", "feature/", "features/"],
+      "bug": ["bug/", "bugs/", "fix/", "hotfix/"],
+      "refactoring": ["refactor/", "refactoring/"]
+    }
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Check branch name and add label
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const branchName = process.env.GITHUB_HEAD_REF;
+            const labelConfig = JSON.parse(process.env.LABEL_CONFIG);
+            let labelToAdd = '';
+
+            // 설정된 규칙을 순회하며 브랜치 이름과 일치하는 라벨을 찾습니다.
+            for (const label in labelConfig) {
+              const prefixes = labelConfig[label];
+              if (prefixes.some(prefix => branchName.startsWith(prefix))) {
+                labelToAdd = label;
+                break;
+              }
+            }
+
+            if (labelToAdd) {
+              console.log(`Branch [${branchName}] matches rule for label [${labelToAdd}]. Adding label.`);
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: [labelToAdd]
+              });
+            } else {
+              console.log(`Branch [${branchName}] did not match any labeling rules.`);
+            }

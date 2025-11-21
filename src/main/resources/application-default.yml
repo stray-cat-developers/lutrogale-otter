@@ -30,17 +30,21 @@ spring:
     check-template-location: true
     cache: false
   jpa:
-    database-platform: org.hibernate.dialect.MariaDBDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: create
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     properties:
       hibernate:
         use_sql_comments: true
         default_batch_fetch_size: 50
         enable_lazy_load_no_trans: true
         format_sql: true
+
+
+
         dialect:
           storage_engine: innodb
         envers:
@@ -59,9 +63,9 @@ spring:
       minimum-idle: 3
       maximum-pool-size: 30
       pool-name: SpirngBootHikariCP
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://127.0.0.1:3319/local?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://127.0.0.1:3319/local?serverTimezone=Asia/Seoul
     username: local
     password: local
 

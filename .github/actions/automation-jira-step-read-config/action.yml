@@ -1,0 +1,63 @@
+name: 'Read Jira Config'
+description: 'Reads Jira configuration from .github/config/jira.yml'
+outputs:
+  ticket_pattern:
+    description: 'Regex pattern for Jira tickets'
+    value: ${{ steps.read.outputs.ticket_pattern }}
+  done_webhook_url:
+    description: 'Webhook URL for DONE'
+    value: ${{ steps.read.outputs.done_webhook_url }}
+  done_webhook_token:
+    description: 'Webhook Token for DONE'
+    value: ${{ steps.read.outputs.done_webhook_token }}
+  ready_to_qa_webhook_url:
+    description: 'Webhook URL for READY TO QA'
+    value: ${{ steps.read.outputs.ready_to_qa_webhook_url }}
+  ready_to_qa_webhook_token:
+    description: 'Webhook Token for READY TO QA'
+    value: ${{ steps.read.outputs.ready_to_qa_webhook_token }}
+  ready_to_release_webhook_url:
+    description: 'Webhook URL for READY TO RELEASE'
+    value: ${{ steps.read.outputs.ready_to_release_webhook_url }}
+  ready_to_release_webhook_token:
+    description: 'Webhook Token for READY TO RELEASE'
+    value: ${{ steps.read.outputs.ready_to_release_webhook_token }}
+  release_version_webhook_url:
+    description: 'Webhook URL for RELEASE VERSION'
+    value: ${{ steps.read.outputs.release_version_webhook_url }}
+  release_version_webhook_token:
+    description: 'Webhook Token for RELEASE VERSION'
+    value: ${{ steps.read.outputs.release_version_webhook_token }}
+  hotfix_work_webhook_url:
+    description: 'Webhook URL for HOTFIX WORK'
+    value: ${{ steps.read.outputs.hotfix_work_webhook_url }}
+  hotfix_work_webhook_token:
+    description: 'Webhook Token for HOTFIX WORK'
+    value: ${{ steps.read.outputs.hotfix_work_webhook_token }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install PyYAML
+      shell: bash
+      run: pip install pyyaml
+
+    - name: Read Config
+      id: read
+      shell: python
+      run: |
+        import yaml
+        import os
+
+        try:
+            with open('.github/config/jira.yml', 'r') as f:
+                config = yaml.safe_load(f)
+            
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+                print(f"ticket_pattern={config['ticket_pattern']}", file=fh)
+                for key, value in config['webhooks'].items():
+                    print(f"{key}_webhook_url={value['url']}", file=fh)
+                    print(f"{key}_webhook_token={value['token']}", file=fh)
+        except Exception as e:
+            print(f"Error reading config: {e}")
+            exit(1)

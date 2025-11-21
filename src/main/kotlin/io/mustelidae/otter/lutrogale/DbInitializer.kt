@@ -32,22 +32,22 @@ class DbInitializer(
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         setupAdminIfNotExist()
-        val projectId = addProject()
+        val timestamp = System.currentTimeMillis()
+        val projectId = addProject(timestamp)
         setupMenuTree(projectId)
-        setupDefinition(projectId)
-        val userId = addUser()
-        assignGrant(userId, projectId)
+        val authorityDefinitionId = setupDefinition(projectId)
+        val userId = addUser(timestamp)
+        assignGrant(userId, projectId, authorityDefinitionId)
     }
 
-    private fun assignGrant(userId: Long, projectId: Long) {
-        userGrantController.assignAuthorityGrant(userId, projectId, listOf(1))
-        userGrantController.assignPersonalGrant(userId, projectId, listOf(5))
+    private fun assignGrant(userId: Long, projectId: Long, authorityDefinitionId: Long) {
+        userGrantController.assignAuthorityGrant(userId, projectId, listOf(authorityDefinitionId))
     }
 
-    private fun addUser(): Long {
+    private fun addUser(timestamp: Long): Long {
         return userController.create(
             UserResources.Request(
-                "lutrogale@otter.com",
+                "test-$timestamp@otter.com",
                 "Lutrogale Otter",
                 false,
                 "Otter World",
@@ -55,14 +55,14 @@ class DbInitializer(
         ).content!!
     }
 
-    private fun setupDefinition(projectId: Long) {
-        authorityController.create(
+    private fun setupDefinition(projectId: Long): Long {
+        return authorityController.create(
             projectId,
             AuthorityBundleResources.Request.AuthorityBundle(
                 "Only View Group",
                 listOf(1, 2, 3),
             ),
-        )
+        ).content!!
     }
 
     private fun setupMenuTree(projectId: Long) {
@@ -127,11 +127,11 @@ class DbInitializer(
         )
     }
 
-    private fun addProject(): Long {
+    private fun addProject(timestamp: Long): Long {
         return projectController.create(
             ProjectResources.Request(
-                "Otter Project",
-                "This is Sample Project",
+                "Otter Project $timestamp",
+                "This is Sample Project created at $timestamp",
             ),
         ).content!!
     }

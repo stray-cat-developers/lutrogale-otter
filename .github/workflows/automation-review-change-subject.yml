@@ -1,0 +1,70 @@
+name: PR 시 PR명 변경
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  update-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Jira Config
+        id: config
+        uses: ./.github/actions/automation-jira-step-read-config
+
+      - name: Update PR Title with Ticket ID
+        uses: actions/github-script@v6
+        env:
+          TICKET_PATTERN: ${{ steps.config.outputs.ticket_pattern }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 티켓 ID 패턴 정의 (환경변수에서 읽어옴)
+            const pattern = process.env.TICKET_PATTERN;
+            const TICKET_REGEX = new RegExp(`(${pattern})`, 'i');
+
+            const pr = context.payload.pull_request;
+            const branchName = pr.head.ref;
+            let currentTitle = pr.title;
+            
+            // 티켓 ID 패턴 추출
+            const ticketMatch = branchName.match(TICKET_REGEX);
+            
+            if (ticketMatch) {
+              const ticketId = ticketMatch[0].toUpperCase(); // 대문자로 통일
+            
+              // PR 제목에 이미 티켓 ID가 포함되어 있는지 확인 (대소문자 무시)
+              const titleHasTicket = new RegExp(ticketId, 'i').test(currentTitle);
+            
+              // 티켓 ID가 제목에 없을 경우에만 추가
+              if (!titleHasTicket) {
+                const newTitle = `${currentTitle} : ${ticketId}`;
+            
+                github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  title: newTitle
+                });
+            
+                console.log(`Updated PR title to: ${newTitle}`);
+              } else {
+                console.log(`PR title already contains the ticket ID: ${ticketId}`);
+              }
+            } else {
+              github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: '⚠️ 브랜치명에 티켓 ID가 포함되어 있지 않습니다. 브랜치 명명 규칙을 확인해주세요.'
+              });
+              console.log(`No ticket ID matching pattern found in branch name: ${branchName}`);
+            }
+            

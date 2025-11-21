@@ -1,0 +1,244 @@
+name: Main PR Merge 시 Hotfix 티켓 생성
+
+on:
+  workflow_dispatch:      # 수동 실행 옵션 추가
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  pr-info-to-jira:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read Jira Config
+        id: config
+        uses: ./.github/actions/automation-jira-step-read-config
+
+      - name: Check exclusion conditions
+        id: check-exclusions
+        run: |
+          # 1. alpha branch에서 main으로의 merge 체크
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+          echo "Source branch: $HEAD_BRANCH"
+          
+          if [ "$HEAD_BRANCH" = "alpha" ]; then
+            echo "❌ Skipping: alpha branch merge detected"
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # Ticket Pattern from Config
+          PATTERN="${{ steps.config.outputs.ticket_pattern }}"
+          
+          # 2. PR 제목에 Ticket ID 포함 체크
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "PR Title: $PR_TITLE"
+          
+          if [[ "$PR_TITLE" =~ $PATTERN ]]; then
+            echo "❌ Skipping: PR title contains ticket ID ($PATTERN)"
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # 3. branch 명에 Ticket ID 포함 체크
+          if [[ "$HEAD_BRANCH" =~ $PATTERN ]]; then
+            echo "❌ Skipping: Branch name contains ticket ID ($PATTERN)"
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "✅ All checks passed. Proceeding with workflow."
+          echo "skip=false" >> $GITHUB_OUTPUT
+
+
+      - name: Get PR details
+        if: steps.check-exclusions.outputs.skip == 'false'
+        id: pr-details
+        run: |
+          # PR 정보 수집
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          
+          # JSON escape를 위한 처리
+          PR_TITLE_ESCAPED=$(echo "$PR_TITLE" | sed 's/"/\\"/g' | sed "s/'/\\'/g")
+          
+          echo "pr_title=$PR_TITLE_ESCAPED" >> $GITHUB_OUTPUT
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+
+      - name: Extract change description from PR Body
+        if: steps.check-exclusions.outputs.skip == 'false'
+        id: extract-changes
+        run: |
+          # PR Body에서 "### 🛠 변경 사항" 하위의 첫 번째 라인 추출
+          PR_BODY="${{ github.event.pull_request.body }}"
+          
+          # 변경사항 섹션 찾기 및 첫 번째 비어있지 않은 라인 추출
+          extract_first_change() {
+            local body="$1"
+            local in_changes_section=false
+          
+            # 줄바꿈으로 분리하여 처리
+            while IFS= read -r line || [ -n "$line" ]; do
+              # 변경사항 섹션 시작 확인
+              if [[ "$line" == *"### 🛠 변경 사항"* ]]; then
+                in_changes_section=true
+                continue
+              fi
+          
+              # 다음 섹션이 시작되면 중단
+              if [[ "$in_changes_section" == true ]] && [[ "$line" == "### "* ]]; then
+                break
+              fi
+          
+              # 변경사항 섹션 내부인 경우
+              if [[ "$in_changes_section" == true ]] && [[ "$line" != *"### "* ]]; then
+                # 앞뒤 공백 제거
+                trimmed_line=$(printf "%s" "$line" | sed 's/^[ \t]*//;s/[ \t]*$//')
+          
+                # 완전히 빈 라인인 경우 건너뛰기
+                if [[ -z "$trimmed_line" ]]; then
+                  continue
+                fi
+          
+                # 리스트 마커 제거 (-, *, + 등)
+                content=$(printf "%s" "$trimmed_line" | sed 's/^[-*+] *//')
+          
+                # 리스트 마커 제거 후 앞뒤 공백 다시 제거
+                content=$(printf "%s" "$content" | sed 's/^[ \t]*//;s/[ \t]*$//')
+          
+                # 리스트 마커 제거 후에도 내용이 있는 경우에만 반환
+                if [[ -n "$content" ]]; then
+                  printf "%s" "$content"
+                  return
+                fi
+              fi
+            done <<< "$body"
+          
+            # 변경사항을 찾지 못한 경우 기본값
+            printf "PR 내용이 비어있거나 변경사항 섹션을 찾지 못했습니다."
+          }
+          
+          # 변경사항 추출
+          CHANGE_DESCRIPTION=$(extract_first_change "$PR_BODY")
+          
+          # JSON escape 처리 - 모든 제어 문자와 특수 문자 처리
+          json_escape() {
+            local text="$1"
+            # 백슬래시를 먼저 이스케이프
+            text=$(printf "%s" "$text" | sed 's/\\/\\\\/g')
+            # 따옴표 이스케이프
+            text=$(printf "%s" "$text" | sed 's/"/\\"/g')
+            # 탭 문자 이스케이프
+            text=$(printf "%s" "$text" | sed 's/\t/\\t/g')
+            # 캐리지 리턴 이스케이프 (CTRL-CHAR, code 13)
+            text=$(printf "%s" "$text" | tr '\r' ' ')
+            # 줄바꿈 이스케이프
+            text=$(printf "%s" "$text" | tr '\n' ' ')
+            # 기타 제어 문자 제거
+            text=$(printf "%s" "$text" | tr -d '\000-\037\177')
+            # 연속 공백 정리
+            text=$(printf "%s" "$text" | tr -s ' ')
+            # 앞뒤 공백 제거
+            text=$(printf "%s" "$text" | sed 's/^[ \t]*//;s/[ \t]*$//')
+            printf "%s" "$text"
+          }
+          
+          CHANGE_DESCRIPTION_ESCAPED=$(json_escape "$CHANGE_DESCRIPTION")
+          
+          echo "change_description=$CHANGE_DESCRIPTION_ESCAPED" >> $GITHUB_OUTPUT
+          echo "추출된 변경사항: $CHANGE_DESCRIPTION_ESCAPED"
+
+      - name: Get PR author info
+        if: steps.check-exclusions.outputs.skip == 'false'
+        id: pr-author
+        run: |
+          # PR 작성자 정보 수집
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_AUTHOR_NAME="${{ github.event.pull_request.user.name }}"
+          
+          # 작성자 이름이 없는 경우 로그인 ID 사용
+          if [ -z "$PR_AUTHOR_NAME" ] || [ "$PR_AUTHOR_NAME" = "null" ]; then
+            AUTHOR_DISPLAY="$PR_AUTHOR"
+          else
+            AUTHOR_DISPLAY="$PR_AUTHOR_NAME ($PR_AUTHOR)"
+          fi
+          
+          # JSON escape 처리
+          json_escape() {
+            local text="$1"
+            # 백슬래시를 먼저 이스케이프
+            text=$(printf "%s" "$text" | sed 's/\\/\\\\/g')
+            # 따옴표 이스케이프
+            text=$(printf "%s" "$text" | sed 's/"/\\"/g')
+            # 탭 문자 이스케이프
+            text=$(printf "%s" "$text" | sed 's/\t/\\t/g')
+            # 캐리지 리턴 이스케이프 (CTRL-CHAR, code 13)
+            text=$(printf "%s" "$text" | tr '\r' ' ')
+            # 줄바꿈 이스케이프
+            text=$(printf "%s" "$text" | tr '\n' ' ')
+            # 기타 제어 문자 제거
+            text=$(printf "%s" "$text" | tr -d '\000-\037\177')
+            # 연속 공백 정리
+            text=$(printf "%s" "$text" | tr -s ' ')
+            # 앞뒤 공백 제거
+            text=$(printf "%s" "$text" | sed 's/^[ \t]*//;s/[ \t]*$//')
+            printf "%s" "$text"
+          }
+          
+          AUTHOR_ESCAPED=$(json_escape "$AUTHOR_DISPLAY")
+          
+          echo "author=$AUTHOR_ESCAPED" >> $GITHUB_OUTPUT
+
+      - name: Prepare Jira Payload
+        if: steps.check-exclusions.outputs.skip == 'false'
+        id: prepare-payload
+        run: |
+          # Jira webhook으로 전송할 JSON 데이터 구성
+          JSON_PAYLOAD=$(cat <<EOF
+          {
+            "aiSummary": "${{ steps.pr-details.outputs.pr_title }}",
+            "aiDescription": "${{ steps.extract-changes.outputs.change_description }}",
+            "pullRequest": "${{ steps.pr-details.outputs.pr_url }}",
+            "pullRequestAuthor": "${{ steps.pr-author.outputs.author }}"
+          }
+          EOF
+          )
+          
+          # Multiline output for payload
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "payload<<$EOF" >> $GITHUB_OUTPUT
+          echo "$JSON_PAYLOAD" >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+          
+          echo "전송될 데이터: $JSON_PAYLOAD"
+
+      - name: Call Jira Webhook
+        if: steps.check-exclusions.outputs.skip == 'false'
+        uses: ./.github/actions/automation-jira-step-webhook
+        with:
+          webhook_url: ${{ steps.config.outputs.hotfix_work_webhook_url }}
+          webhook_token: ${{ steps.config.outputs.hotfix_work_webhook_token }}
+          payload: ${{ steps.prepare-payload.outputs.payload }}
+
+      - name: Log summary
+        if: steps.check-exclusions.outputs.skip == 'false'
+        run: |
+          echo "=== PR 정보 전송 완료 ==="
+          echo "PR 제목: ${{ steps.pr-details.outputs.pr_title }}"
+          echo "변경사항: ${{ steps.extract-changes.outputs.change_description }}"
+          echo "PR URL: ${{ steps.pr-details.outputs.pr_url }}"
+          echo "작성자: ${{ steps.pr-author.outputs.author }}"
+
+      - name: Log exclusion reason
+        if: steps.check-exclusions.outputs.skip == 'true'
+        run: |
+          echo "=== 워크플로우 제외됨 ==="
+          echo "Source branch: ${{ github.event.pull_request.head.ref }}"
+          echo "PR title: ${{ github.event.pull_request.title }}"
+          echo "이 PR은 예외 조건에 해당하여 Jira webhook을 호출하지 않습니다."

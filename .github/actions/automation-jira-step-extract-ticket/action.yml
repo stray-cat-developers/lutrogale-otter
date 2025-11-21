@@ -1,0 +1,49 @@
+name: 'Extract Jira Ticket'
+description: 'Extracts a single Jira ticket from PR title or branch'
+inputs:
+  ticket_pattern:
+    description: 'Regex pattern for Jira tickets'
+    required: true
+  pr_title:
+    description: 'PR Title'
+    required: true
+  pr_branch:
+    description: 'PR Branch Name'
+    required: true
+
+outputs:
+  ticket:
+    description: 'Extracted ticket number'
+    value: ${{ steps.extract.outputs.ticket }}
+  found:
+    description: 'Whether a ticket was found (true/false)'
+    value: ${{ steps.extract.outputs.found }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Extract Ticket
+      id: extract
+      shell: bash
+      run: |
+        PATTERN="${{ inputs.ticket_pattern }}"
+        TITLE="${{ inputs.pr_title }}"
+        BRANCH="${{ inputs.pr_branch }}"
+        
+        # Extract from title
+        TICKET_FROM_TITLE=$(echo "$TITLE" | grep -oE "$PATTERN" || echo '')
+        
+        # Extract from branch
+        TICKET_FROM_BRANCH=$(echo "$BRANCH" | grep -oE "$PATTERN" || echo '')
+        
+        # Prioritize title
+        TICKET_NUMBER="${TICKET_FROM_TITLE:-$TICKET_FROM_BRANCH}"
+        
+        if [ -n "$TICKET_NUMBER" ]; then
+          echo "Found JIRA ticket: $TICKET_NUMBER"
+          echo "ticket=$TICKET_NUMBER" >> $GITHUB_OUTPUT
+          echo "found=true" >> $GITHUB_OUTPUT
+        else
+          echo "No JIRA ticket found in PR title or branch name"
+          echo "found=false" >> $GITHUB_OUTPUT
+        fi

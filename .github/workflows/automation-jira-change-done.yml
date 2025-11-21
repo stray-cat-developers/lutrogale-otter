@@ -1,0 +1,86 @@
+name: 릴리즈 후 JIRA 티켓 변경(DONE)
+# Release Production이 정상 수행되거나 수동으로 실행하는 경우 동작
+on:
+  workflow_run:
+    workflows: ["Release Production"]
+    types:
+      - completed
+  workflow_dispatch:      # 수동 실행 옵션 추가
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - name: Check triggering workflow branch
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+            echo "Workflow triggered manually"
+          else
+            # 트리거한 workflow run의
+            WORKFLOW_RUN_ID=${{ github.event.workflow_run.id }}
+
+            # 워크플로우 실행 정보 가져오기
+            BRANCH=$(gh api /repos/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID --jq .head_branch)
+            echo "Workflow ran on branch: $BRANCH"
+
+            # 특정 브랜치 확인
+            if [ "$BRANCH" == "main" ]; then
+              echo "should_run=true" >> $GITHUB_OUTPUT
+              echo "Workflow will proceed"
+            else
+              echo "should_run=false" >> $GITHUB_OUTPUT
+              echo "Workflow will be skipped - not run from main branch"
+            fi
+          fi
+
+  sync-jira-tickets:
+    needs: check-branch
+    if: needs.check-branch.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Read Jira Config
+        id: config
+        uses: ./.github/actions/automation-jira-step-read-config
+
+      - name: Extract JIRA tickets from PR commit messages
+        id: extract-tickets
+        uses: ./.github/actions/automation-jira-step-extract-tickets-commits
+        with:
+          ticket_pattern: ${{ steps.config.outputs.ticket_pattern }}
+          base_branch: 'main'
+          head_branch: 'alpha'
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # JIRA webhook 호출
+      - name: Call JIRA webhook
+        if: steps.extract-tickets.outputs.found == 'true'
+        uses: ./.github/actions/automation-jira-step-webhook
+        with:
+          webhook_url: ${{ steps.config.outputs.done_webhook_url }}
+          webhook_token: ${{ steps.config.outputs.done_webhook_token }}
+          payload: '{"issues":${{ steps.extract-tickets.outputs.tickets }}}'
+
+      # 결과 로깅
+      - name: Log sync results
+        run: |
+          echo "Sync completed at $(date)"
+          echo "Should Run: ${{needs.check-branch.outputs.should_run}}"
+          echo "Period: $(date -d '7 days ago' +%Y-%m-%d) to $(date +%Y-%m-%d)"
+          if [ "${{ steps.extract-tickets.outputs.found }}" = "true" ]; then
+            echo "Synced tickets: ${{ steps.extract-tickets.outputs.tickets }}"
+          else
+            echo "No tickets found to sync"
+          fi

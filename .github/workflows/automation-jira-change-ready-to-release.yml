@@ -1,0 +1,50 @@
+name: PR Merge 후 JIRA 티켓 변경(READY FOR RELEASE)
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - alpha
+  workflow_dispatch:      # 수동 실행 옵션 추가
+
+jobs:
+  jira-webhook:
+    # PR이 실제로 merge된 경우에만 실행
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      # 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read Jira Config
+        id: config
+        uses: ./.github/actions/automation-jira-step-read-config
+
+      # JIRA 티켓 번호 추출
+      - name: Extract JIRA ticket number
+        id: extract-ticket
+        uses: ./.github/actions/automation-jira-step-extract-ticket
+        with:
+          ticket_pattern: ${{ steps.config.outputs.ticket_pattern }}
+          pr_title: ${{ github.event.pull_request.title }}
+          pr_branch: ${{ github.event.pull_request.head.ref }}
+
+      # JIRA webhook 호출
+      - name: Call JIRA webhook
+        if: steps.extract-ticket.outputs.found == 'true'
+        uses: ./.github/actions/automation-jira-step-webhook
+        with:
+          webhook_url: ${{ steps.config.outputs.ready_to_release_webhook_url }}
+          webhook_token: ${{ steps.config.outputs.ready_to_release_webhook_token }}
+          payload: '{"issues":["${{ steps.extract-ticket.outputs.ticket }}"]}'
+
+      # 결과 로깅
+      - name: Log sync results
+        run: |
+          if [ "${{ steps.extract-ticket.outputs.found }}" = "true" ]; then
+            echo "Synced ticket: ${{ steps.extract-ticket.outputs.ticket }}"
+          else
+            echo "No tickets found to sync"
+          fi
