@@ -1,0 +1,70 @@
+server:
+  port: 4211
+  error:
+    include-stacktrace: always
+    whitelabel:
+      enabled: true
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    lazy-initialization: false
+
+  datasource:
+    url: jdbc:h2:mem:embedded;DB_CLOSE_ON_EXIT=FALSE;AUTOCOMMIT=OFF;MODE=MySQL;NON_KEYWORDS=USER
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      pool-name: SpringBootHikariCP
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        default_batch_fetch_size: 50
+        enable_lazy_load_no_trans: true
+        format_sql: false
+        use_sql_comments: false
+        envers:
+          revision_field_name: revision_id
+          revision_type_field_name: revision_type
+          store_data_at_delete: true
+          global_with_modified_flag: true
+          audit_strategy: org.hibernate.envers.strategy.internal.DefaultAuditStrategy
+          audit_strategy_validity_end_rev_field_name: next_revision_id
+          audit_strategy_validity_store_revend_timestamp: true
+          audit_strategy_validity_revend_timestamp_field_name: revision_end_at
+    open-in-view: true
+
+  session:
+    timeout: 30m
+    jdbc:
+      platform: h2
+      initialize-schema: always
+
+  freemarker:
+    check-template-location: true
+    cache: false
+
+  web:
+    resources:
+      add-mappings: false
+
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    org.springframework.boot: warn
+    org.hibernate: warn
+    io.mustelidae.otter.lutrogale: info
