@@ -9,7 +9,8 @@ test.describe('authority-groups 페이지', () => {
 
   test('페이지가 정상 렌더링된다', async ({ adminPage }) => {
     await expect(adminPage.locator('#table-groups')).toBeVisible();
-    await expect(adminPage.locator('#menuNaviTree')).toBeVisible();
+    // #menuNaviTree는 collapsible 섹션 내부 — DOM에 존재하는지만 확인
+    await expect(adminPage.locator('#menuNaviTree')).toBeAttached();
   });
 
   test('수정 버튼이 btn-warning 클래스를 가진다', async ({ adminPage }) => {
@@ -68,9 +69,10 @@ test.describe('authority-groups 페이지', () => {
     await expect(templateForm).toHaveCount(1);
   });
 
-  test('트리 컨테이너에 separator-line hr이 표시된다', async ({ adminPage }) => {
+  test('트리 컨테이너에 separator-line 클래스가 적용된다', async ({ adminPage }) => {
+    // hr은 collapsible 섹션 내부 — 클래스 적용 여부(인라인 style 제거)만 검증
     const hr = adminPage.locator('hr.separator-line').first();
-    await expect(hr).toBeVisible();
+    await expect(hr).toBeAttached();
     await expect(hr).not.toHaveAttribute('style');
   });
 });

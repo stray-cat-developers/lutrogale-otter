@@ -46,9 +46,11 @@ test.describe('management/members 페이지', () => {
 
   test('상태 변경 모달을 두 번 열어도 정상 표시된다 (clone 패턴 검증)', async ({ adminPage }) => {
     const checkbox = adminPage.locator('#tb-users tbody input[name="cbx_user"]').first();
+    const dropdownToggle = adminPage.locator('.btn-group.pull-right .dropdown-toggle');
     await checkbox.check();
 
-    // 첫 번째 열기
+    // 첫 번째 열기 — dropdown을 먼저 열어야 링크가 보임
+    await dropdownToggle.click();
     await adminPage.click('text=허용');
     await adminPage.waitForSelector('#modal-user-status.in');
     await adminPage.waitForSelector('#modal-user-status table tbody tr');
@@ -58,6 +60,7 @@ test.describe('management/members 페이지', () => {
     await adminPage.waitForSelector('#modal-user-status', { state: 'hidden' });
 
     // 두 번째 열기
+    await dropdownToggle.click();
     await adminPage.click('text=허용');
     await adminPage.waitForSelector('#modal-user-status.in');
     await adminPage.waitForSelector('#modal-user-status table tbody tr');
