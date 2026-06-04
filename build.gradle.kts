@@ -74,6 +74,10 @@ tasks.withType<KotlinCompile>().all {
     }
 }
 
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    classpath += configurations.testRuntimeClasspath.get()
+}
+
 tasks.getByName<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()
