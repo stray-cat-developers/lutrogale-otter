@@ -11,11 +11,11 @@
             <div class="row">
                 <div class="col-lg-12 col-xs-12">
                     <div class="box box-solid">
-                        <div class="box-header with-border" data-toggle="collapse" href="#collapseExample">
+                        <div class="box-header with-border" data-toggle="collapse" href="#collapse-create-group">
                             <h3 class="box-title">권한 그룹 생성</h3>
                         </div>
                         <!-- /.box-header -->
-                        <div class="collapse" id="collapseExample">
+                        <div class="collapse" id="collapse-create-group">
                             <div class="box-body">
                                 <form role="form">
                                     <div class="form-group">
@@ -135,6 +135,8 @@
 
             const opt = {
                 'table_selected': {
+                    'scrollY': '',
+                    'scrollCollapse': false,
                     'columns': [
                         {title: 'API ID', data: 'id'},
                         {title: '타입', data: 'type'},
