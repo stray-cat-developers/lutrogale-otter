@@ -8,9 +8,11 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: [['html', { open: 'never' }], ['line']],
+  globalSetup: './global-setup',
 
   use: {
     baseURL: BASE_URL,
+    storageState: '.auth/admin.json',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
