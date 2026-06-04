@@ -6,15 +6,24 @@ cd "$SCRIPT_DIR"
 
 GREEN='\033[0;32m'; RED='\033[0;31m'; YELLOW='\033[1;33m'; NC='\033[0m'
 
+MYSQL_STARTED=false
+
 cleanup() {
-    echo -e "\n${YELLOW}Stopping Docker containers...${NC}"
-    docker-compose down
+    if [ "$MYSQL_STARTED" = true ]; then
+        echo -e "\n${YELLOW}Stopping Docker containers...${NC}"
+        docker-compose down
+    fi
 }
 trap cleanup EXIT
 
-# 1. MySQL 기동
-echo -e "${GREEN}[1/3] Starting MySQL via Docker Compose...${NC}"
-docker-compose up -d
+# 1. MySQL 기동 (이미 3319 포트가 사용 중이면 skip)
+if nc -z localhost 3319 2>/dev/null; then
+    echo -e "${YELLOW}[1/3] MySQL already running on port 3319, skipping.${NC}"
+else
+    echo -e "${GREEN}[1/3] Starting MySQL via Docker Compose...${NC}"
+    docker-compose up -d
+    MYSQL_STARTED=true
+fi
 
 # 2. MySQL ready 대기
 echo -e "${GREEN}[2/3] Waiting for MySQL...${NC}"
