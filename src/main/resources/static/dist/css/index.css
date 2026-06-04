@@ -68,3 +68,44 @@
 .create-user-wrap .btn-area {
     margin-top:40px;
 }
+
+.tree-container {
+    height: 70vh;
+    overflow-y: auto;
+}
+.tree-container-sm {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.separator-line {
+    border: none;
+    border-bottom: 1px solid dimgrey;
+}
+
+.btn-purple {
+    background-color: #605ca8;
+    border-color: #605ca8;
+    color: #fff;
+}
+.btn-purple:hover,
+.btn-purple:focus {
+    background-color: #4c4a8a;
+    border-color: #4c4a8a;
+    color: #fff;
+}
+.btn-purple:active {
+    background-color: #403e73;
+    border-color: #403e73;
+    color: #fff;
+}
+.btn-purple[disabled]:hover,
+.btn-purple[disabled]:focus,
+.btn-purple[disabled]:active {
+    background-color: #605ca8;
+    border-color: #605ca8;
+}
+
+.js-hidden {
+    display: none;
+}

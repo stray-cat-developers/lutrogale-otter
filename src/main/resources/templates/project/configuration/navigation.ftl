@@ -20,7 +20,7 @@
                         <!-- /.box-header -->
                         <!-- form start -->
                         <form class="form-horizontal">
-                            <div class="box-body" style="height: 50vh; overflow-y: auto;">
+                            <div class="box-body tree-container-sm">
                                 <div id="menuNaviTree"></div>
                             </div>
                             <!-- /.box-body -->
@@ -76,7 +76,7 @@
                                 <button id="btn_info_modify" type="submit" class="btn btn-info">수정</button>
                             </div>
                             <!-- /.box-footer -->
-                            <div id="popover_result" style="display: none;" class="alert alert-info alert-dismissible">
+                            <div id="popover_result" class="js-hidden alert alert-info alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                 <h4><i class="icon fa fa-check"></i>수정완료!</h4>
                             </div>
