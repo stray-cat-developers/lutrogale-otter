@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:4211';
+const BASE_URL = 'http://localhost:4210';
 
 export default defineConfig({
   testDir: './tests',
@@ -25,7 +25,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'cd .. && ./gradlew bootRun --args="--spring.profiles.active=embedded"',
+    command: 'cd .. && ./gradlew bootRun',
     url: `${BASE_URL}/login.html`,
     timeout: 180_000,
     reuseExistingServer: !process.env.CI,
