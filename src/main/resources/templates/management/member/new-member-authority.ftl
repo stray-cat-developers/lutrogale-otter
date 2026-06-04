@@ -21,27 +21,7 @@
         </ul>
         <!-- Tab panes -->
         <div class="box box-primary box-body">
-            <div class="box box-solid">
-                <div class="box-header with-border"><h4>사용자 정보</h4></div>
-                <div class="box-body form-horizontal">
-                    <div class="form-group">
-                        <strong class="col-sm-2">사용자 이메일</strong>
-                        <div id="user-email" class="col-sm-10"></div>
-                    </div>
-                    <div class="form-group">
-                        <strong class="col-sm-2">사용자 이름</strong>
-                        <div id="user-name" class="col-sm-10"></div>
-                    </div>
-                    <div class="form-group">
-                        <strong class="col-sm-2">소속 부서</strong>
-                        <div id="user-dept" class="col-sm-10"></div>
-                    </div>
-                    <div class="form-group">
-                        <strong class="col-sm-2">개인 정보 노출 여부</strong>
-                        <div id="user-privacy" class="col-sm-10"></div>
-                    </div>
-                </div>
-            </div>
+            <@layout.userInfoBox />
 
             <div id="content"></div>
 
@@ -87,16 +67,16 @@
             $('#user-privacy').text(data.accessPrivacyInformation);
         });
 
+        const COLUMNS_PER_ROW = 3;
         let row;
-        let last = project_id.length-1;
 
-        $.each(project_id, function(index, project_id) {
-            if(index%3 === 0)
+        $.each(project_id, function(index, pid) {
+            if (index % COLUMNS_PER_ROW === 0)
                 row = $('<div/>', {class: 'row'});
 
             $.when(
-                AJAX.getData(OsoriRoute.getUri('project.findOne', {id: project_id}), {}, {async:false}),
-                AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: project_id}), {}, {async:false})
+                AJAX.getData(OsoriRoute.getUri('project.findOne', {id: pid}), {}, {async:false}),
+                AJAX.getData(OsoriRoute.getUri('authority.findAll', {id: pid}), {}, {async:false})
             ).done(function(first, second) {
                 let project = first[0];
                 let authority = second[0].content;
@@ -115,11 +95,8 @@
                 $(row).find('#table_'+index).DataTable(OPTION.data_table(opt.tb_project, authority));
             });
 
-            if(index === last) {
+            if ((index + 1) % COLUMNS_PER_ROW === 0 || index === project_id.length - 1)
                 $(row).appendTo('#content');
-            }else if(index !== 0 && index%3 === 2) {
-                $(row).appendTo('#content');
-            }
         });
 
         setTimeout(function(){

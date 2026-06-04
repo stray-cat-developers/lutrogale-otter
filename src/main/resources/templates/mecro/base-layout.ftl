@@ -125,6 +125,30 @@
 	</div>
 </#macro>
 
+<#macro userInfoBox>
+<div class="box box-solid">
+    <div class="box-header with-border"><h4>사용자 정보</h4></div>
+    <div class="box-body form-horizontal">
+        <div class="form-group">
+            <strong class="col-sm-2">사용자 이메일</strong>
+            <div id="user-email" class="col-sm-10"></div>
+        </div>
+        <div class="form-group">
+            <strong class="col-sm-2">사용자 이름</strong>
+            <div id="user-name" class="col-sm-10"></div>
+        </div>
+        <div class="form-group">
+            <strong class="col-sm-2">소속 부서</strong>
+            <div id="user-dept" class="col-sm-10"></div>
+        </div>
+        <div class="form-group">
+            <strong class="col-sm-2">개인 정보 노출 여부</strong>
+            <div id="user-privacy" class="col-sm-10"></div>
+        </div>
+    </div>
+</div>
+</#macro>
+
 <#macro authorityBundleDetailModal>
 	<div id="authority-bundle-detail-modal" class="modal fade" role="dialog" aria-labelledby="authority-bundle-detail" aria-hidden="true">
 		<div class="modal-dialog modal-lg">

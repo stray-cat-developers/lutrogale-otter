@@ -19,38 +19,25 @@
 
     let arr_li = $('.nav-wizard').children('li');
 
-    switch(url){
-        case OsoriRoute.getUri('view.newProject.complete',{id:project_id}):
-            $(arr_li[3]).addClass('active'); break;
-        case OsoriRoute.getUri('view.newProject.authGroup',{id:project_id}):
-            $(arr_li[2]).addClass('active'); break;
-        case OsoriRoute.getUri('view.newProject.navi',{id:project_id}):
-            $(arr_li[1]).addClass('active'); break;
-        default:
-            $(arr_li[0]).addClass('active');
-    }
+    const steps = [
+        { route: 'view.newProject.navi',      idx: 1 },
+        { route: 'view.newProject.authGroup', idx: 2 },
+        { route: 'view.newProject.complete',  idx: 3 }
+    ];
 
-    switch(url){
-        case OsoriRoute.getUri('view.newProject.complete',{id:project_id}):
-            $(arr_li[3]).children('a').prop('data-toggle', 'tab');
-            $(arr_li[3]).children('a').click(function(){
-                OsoriRoute.go('view.newProject.complete',{id:project_id});
-            });
-            break;
-        case OsoriRoute.getUri('view.newProject.authGroup',{id:project_id}):
-            $(arr_li[2]).children('a').prop('data-toggle', 'tab');
-            $(arr_li[2]).children('a').click(function(){
-                OsoriRoute.go('view.newProject.authGroup',{id:project_id});
-            });
-            break;
-        case OsoriRoute.getUri('view.newProject.navi',{id:project_id}):
-            $(arr_li[1]).children('a').prop('data-toggle', 'tab');
-            $(arr_li[1]).children('a').click(function(){
-                OsoriRoute.go('view.newProject.navi',{id:project_id});
-            });
-            break;
+    const activeStep = steps.find(function(s) {
+        return url === OsoriRoute.getUri(s.route, {id: project_id});
+    });
+    const activeIdx = activeStep ? activeStep.idx : 0;
+
+    $(arr_li[activeIdx]).addClass('active');
+
+    if (activeStep) {
+        $(arr_li[activeIdx]).children('a').prop('data-toggle', 'tab').click(function() {
+            OsoriRoute.go(activeStep.route, {id: project_id});
+        });
     }
 
 </script>
-<hr style="border: none; border-bottom: 1px solid dimgrey;">
+<hr class="separator-line">
 
