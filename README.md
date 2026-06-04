@@ -43,6 +43,50 @@ Homepage is http://localhost:4210/
   - 로그인을 하면 테스트를 위해 "Otter Project" 프로젝트와 "lutrogale@otter.com" 사용자 계정이 등록되어 있습니다.
 - 로그인을 하게 되면 대시보드로 이동이 됩니다. 
 
+# Testing
+
+## Unit / Integration Tests
+
+H2 인메모리 DB를 사용합니다. Docker 없이 실행 가능합니다.
+
+```sh
+./gradlew test
+```
+
+## E2E Tests (Playwright)
+
+실제 브라우저에서 UI 동작을 검증합니다. Node.js 18+ 가 필요합니다.
+
+**최초 1회 설정**
+
+```sh
+cd e2e
+npm install
+npx playwright install chromium
+```
+
+**테스트 실행**
+
+```sh
+cd e2e
+npm test
+```
+
+첫 실행 시 Spring Boot 서버(port 4211, H2 embedded)를 자동으로 시작합니다. 이미 4211 포트에 서버가 떠 있으면 재사용합니다.
+
+**옵션**
+
+```sh
+npm run test:ui      # 시각적 UI 모드 (브라우저로 실행 흐름 확인)
+npm run test:debug   # 디버그 모드 (한 단계씩 실행)
+npm run report       # 마지막 테스트 HTML 리포트 열기
+npm run codegen      # 브라우저 조작을 코드로 자동 생성
+```
+
+> CI 환경에서는 `CI=true npm test` 로 실행하면 서버를 항상 새로 시작하고 실패 시 1회 재시도합니다.
+
+---
+
 # Local DB Intellij 설정
 - Database 탭에서 + 버튼을 클릭합니다.
 - Data Source > Mysql DB를 선택합니다.
