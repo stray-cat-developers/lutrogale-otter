@@ -53,7 +53,7 @@
     </div>
 </section>
 
-<div id="modal-modify-user-content" style="display: none;">
+<div id="modal-modify-user-content" class="hidden">
     <form role="form">
         <div class="col-md-6">
             <div class="box box-solid">
@@ -78,7 +78,7 @@
     </form>
 </div>
 
-<div id="modal-modify-group-content" style="display: none;">
+<div id="modal-modify-group-content" class="hidden">
     <form role="form">
         <div class="col-lg-4 col-xs-12">
             <div class="box box-solid">
@@ -105,7 +105,7 @@
     </form>
 </div>
 
-<div id="modal-modify-personal-content" style="display: none;">
+<div id="modal-modify-personal-content" class="hidden">
     <form role="form">
         <div class="col-lg-12 col-xs-12">
             <div class="box box-solid">
@@ -117,7 +117,7 @@
     </form>
 </div>
 
-<div id="modal-group-detail-content" style="display: none;">
+<div id="modal-group-detail-content" class="hidden">
     <form role="form">
         <div class="col-lg-5 col-xs-12">
             <div class="box box-solid">
@@ -519,19 +519,19 @@
             let all_branch = first[0].content;
             let bundleBranches = second[0].content;
 
+            $('#modal-group-detail .modal-title').text(name);
+            $('#modal-group-detail .modal-body').empty().append($('#modal-group-detail-content form').clone());
+
             setTimeout(function(){
-                $('#modal-selected').DataTable(OPTION.data_table(opt.tb_api_list, _.pluck(bundleBranches, 'a_attr')));
+                $('#modal-group-detail #modal-selected').DataTable(OPTION.data_table(opt.tb_api_list, _.pluck(bundleBranches, 'a_attr')));
             }, 300);
 
-            $('#modal-menu-tree')
+            $('#modal-group-detail #modal-menu-tree')
             .jstree('destroy')
             .jstree(OPTION.jstree(opt.menu_tree, all_branch))
             .on('loaded.jstree', function () {
                 $(this).jstree("open_all");
             });
-
-            $('#modal-group-detail .modal-title').text(name);
-            $('#modal-group-detail .modal-body').append($('#modal-group-detail-content form'));
 
             $('#modal-group-detail').modal();
 

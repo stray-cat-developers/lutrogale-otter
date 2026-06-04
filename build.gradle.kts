@@ -74,6 +74,7 @@ tasks.withType<KotlinCompile>().all {
     }
 }
 
+
 tasks.getByName<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()

@@ -29,7 +29,7 @@
                             </div>
 
                             <div class="btn-group pull-right">
-                                <button type="button" class="btn bg-orange">사용자 상태 변경</button>
+                                <button type="button" class="btn btn-warning">사용자 상태 변경</button>
                                 <button type="button" class="btn bg-orange dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
@@ -83,13 +83,13 @@
             </div>
 		</section>
 
-        <div id="modal-user-status-content" style="display: none;">
+        <div id="modal-user-status-content" class="hidden">
             <form role="form">
                 <table class="table table-bordered table-striped"></table>
             </form>
         </div>
 
-        <div id="modal-modify-multi-user-content" style="display: none;">
+        <div id="modal-modify-multi-user-content" class="hidden">
             <form role="form-horizontal">
                 <div class="row">
                     <div class="col-md-9">
@@ -122,7 +122,7 @@
             </form>
         </div>
 
-        <div id="modal-modify-single-user-content" style="display: none;">
+        <div id="modal-modify-single-user-content" class="hidden">
             <form role="form-horizontal">
                 <div class="row">
                     <div class="col-md-9">
@@ -166,7 +166,7 @@
             </form>
         </div>
 
-        <div id="modal-group-detail-content" style="display: none;">
+        <div id="modal-group-detail-content" class="hidden">
             <form role="form-horizontal">
                 <div class="row">
                     <div class="col-md-12">
@@ -383,6 +383,13 @@
                 });
             });
 
+            function getCheckedUsers() {
+                let tb_users = $('#tb-users').DataTable();
+                return _.map($('#tb-users input[type="checkbox"]:checked'), function(v) {
+                    return tb_users.row($(v).parents('tr')).data();
+                });
+            }
+
             function modifyUserInfo(){
                 let select_count = $('#tb-users input[type="checkbox"]:checked').length;
 
@@ -391,10 +398,7 @@
                     return false;
                 }
 
-                let tb_users = $('#tb-users').DataTable();
-                let checked_users = _.map($('#tb-users input[type="checkbox"]:checked'), function(v){
-                    return tb_users.row($(v).parents('tr')).data();
-                });
+                let checked_users = getCheckedUsers();
 
                 let user_type = (select_count > 1)?'multi':'single';
 
@@ -454,14 +458,11 @@
                     return false;
                 }
 
-                let tb_users = $('#tb-users').DataTable();
-                let checked_users = _.map($('#tb-users input[type="checkbox"]:checked'), function(v){
-                    return tb_users.row($(v).parents('tr')).data();
-                });
+                let checked_users = getCheckedUsers();
 
                 $('#modal-user-status-submit').prop('value', type);
                 $('#modal-user-status').find('.modal-title').text('상태변경 ['+title[type]+']');
-                $('#modal-user-status .modal-body').append($('#modal-user-status-content form'));
+                $('#modal-user-status .modal-body').empty().append($('#modal-user-status-content form').clone());
                 setTimeout(function() {
                     $('#modal-user-status table').DataTable(OPTION.data_table(opt.tb_modal_user_status, checked_users));
                 }, 300);
@@ -476,11 +477,9 @@
                 if (!confirm('선택된 사용자들을 ' + title[status_type] + '처리 하시겠습니까?'))
                     return false;
 
-                let tb_users = $('#tb-users').DataTable();
-                let checked_users = _.map($('#tb-users input[type="checkbox"]:checked'), function(v){
-                    return tb_users.row($(v).parents('tr')).data();
-                });
+                let checked_users = getCheckedUsers();
                 let target_id = _.pluck(checked_users, 'id');
+                let tb_users = $('#tb-users').DataTable();
 
                 let after_func = function(){
                     $('#modal-user-status').modal('hide');

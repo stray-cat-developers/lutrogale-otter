@@ -21,27 +21,7 @@
         </ul>
         <!-- Tab panes -->
         <div class="box box-primary box-body">
-            <div class="box box-solid">
-                <div class="box-header with-border"><h4>사용자 정보</h4></div>
-                <div class="box-body form-horizontal">
-                    <div class="form-group">
-                        <strong class="col-sm-2">사용자 이메일</strong>
-                        <div id="user-email" class="col-sm-10"></div>
-                    </div>
-                    <div class="form-group">
-                        <strong class="col-sm-2">사용자 이름</strong>
-                        <div id="user-name" class="col-sm-10"></div>
-                    </div>
-                    <div class="form-group">
-                        <strong class="col-sm-2">소속 부서</strong>
-                        <div id="user-dept" class="col-sm-10"></div>
-                    </div>
-                    <div class="form-group">
-                        <strong class="col-sm-2">개인 정보 노출 여부</strong>
-                        <div id="user-privacy" class="col-sm-10"></div>
-                    </div>
-                </div>
-            </div>
+            <@layout.userInfoBox />
 
             <div id="content"></div>
 
