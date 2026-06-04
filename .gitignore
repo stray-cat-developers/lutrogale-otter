@@ -35,3 +35,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+
+### E2E ###
+e2e/node_modules/
+e2e/package-lock.json
+e2e/test-results/
+e2e/playwright-report/
