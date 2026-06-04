@@ -76,6 +76,7 @@ tasks.withType<KotlinCompile>().all {
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
     classpath += configurations.testRuntimeClasspath.get()
+    classpath += sourceSets.test.get().output
 }
 
 tasks.getByName<Test>("test") {
