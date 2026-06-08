@@ -169,3 +169,4 @@ sd 'old' 'new' file.kt     # sed 대신
 1. 구현 완료 후 `code-reviewer` 서브에이전트를 호출하여 변경된 파일을 리뷰
 2. 리뷰 결과에서 Critical/High 이슈가 있으면 즉시 수정 후 재리뷰
 3. 이슈가 없거나 Low 이슈만 남으면 최종 완료 보고
+4. gradle task 중 formatKotlin을 수행하여 Lint 처리

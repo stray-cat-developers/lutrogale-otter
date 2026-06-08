@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin
 
 import io.mustelidae.otter.lutrogale.common.Audit
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -17,6 +16,7 @@ import jakarta.persistence.OneToMany
 import org.hibernate.annotations.SQLRestriction
 import org.hibernate.envers.Audited
 import org.hibernate.envers.RelationTargetAuditMode
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity

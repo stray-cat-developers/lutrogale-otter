@@ -7,7 +7,6 @@ import io.mustelidae.otter.lutrogale.api.config.EmbeddedDbInitializer
 import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
 import io.mustelidae.otter.lutrogale.api.domain.authorization.IdBaseAuthorizedKey
 import io.mustelidae.otter.lutrogale.api.domain.authorization.UriBaseAuthorizedKey
-import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
 import io.mustelidae.otter.lutrogale.web.domain.project.repository.ProjectRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
