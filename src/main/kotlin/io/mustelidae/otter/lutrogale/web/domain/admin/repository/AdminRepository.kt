@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface AdminRepository : JpaRepository<Admin, Long> {
-    fun findByEmailAndPw(email: String, pw: String): Admin?
+    fun findByEmail(email: String): Admin?
 }

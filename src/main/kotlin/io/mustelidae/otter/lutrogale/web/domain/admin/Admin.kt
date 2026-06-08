@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin
 
 import io.mustelidae.otter.lutrogale.common.Audit
-import io.mustelidae.otter.lutrogale.utils.Crypto
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -17,6 +16,7 @@ import jakarta.persistence.OneToMany
 import org.hibernate.annotations.SQLRestriction
 import org.hibernate.envers.Audited
 import org.hibernate.envers.RelationTargetAuditMode
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
@@ -68,7 +68,12 @@ class Admin(
     }
 
     fun setPassword(pw: String) {
-        this.pw = Crypto.sha256(pw)
+        this.pw = passwordEncoder.encode(pw)
+    }
+
+    fun matchesPassword(raw: String): Boolean {
+        val encrypted = this.pw ?: return false
+        return passwordEncoder.matches(raw, encrypted)
     }
 
     fun expire() {
@@ -76,6 +81,8 @@ class Admin(
     }
 
     companion object {
+        private val passwordEncoder = BCryptPasswordEncoder(10)
+
         fun of(email: String, pw: String, name: String, description: String?, img: String?, role: AdminRole = AdminRole.REGULAR): Admin {
             return Admin(email, name, description, img).apply {
                 setPassword(pw)
