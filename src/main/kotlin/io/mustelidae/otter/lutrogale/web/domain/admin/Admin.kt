@@ -71,8 +71,10 @@ class Admin(
         this.pw = passwordEncoder.encode(pw)
     }
 
-    fun matchesPassword(raw: String): Boolean =
-        passwordEncoder.matches(raw, this.pw)
+    fun matchesPassword(raw: String): Boolean {
+        val encrypted = this.pw ?: return false
+        return passwordEncoder.matches(raw, encrypted)
+    }
 
     fun expire() {
         status = false
