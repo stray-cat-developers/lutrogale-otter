@@ -4,6 +4,11 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">Management<li>
+                <a id="admins" href="#" onclick="OsoriRoute.go('view.management.admins');">
+                    <i class="fa fa-user-secret"></i> <span>어드민 관리</span>
+                </a>
+            </li>
+            <li>
                 <a id="members" href="#" onclick="OsoriRoute.go('view.management.members');">
                     <i class="fa fa-users"></i> <span>사용자 정보 관리</span>
                 </a>
@@ -14,6 +19,8 @@
     <!-- /.sidebar -->
 </aside>
 <script>
+    if(window.location.pathname === OsoriRoute.getUri('view.management.admins',{}))
+        $('#admins').parents('li').addClass('active');
     if(window.location.pathname === OsoriRoute.getUri('view.management.members',{}))
         $('#members').parents('li').addClass('active');
 

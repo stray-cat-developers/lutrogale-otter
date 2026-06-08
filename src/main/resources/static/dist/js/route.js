@@ -16,6 +16,7 @@ var OsoriRoute = (function () {
     map.set("view.management.newMember.personalGrant",  "/view/management/new-member/{userId}/personal-grant");
     map.set("view.management.newMember.complete",       "/view/management/new-member/{userId}/complete");
 
+    map.set("view.management.admins",        "/view/management/admins");
     map.set("view.management.members",      "/view/management/members");
 
     map.set("view.project.configuration.navigation",    "/view/project/{id}/configuration/navigation");
@@ -23,8 +24,13 @@ var OsoriRoute = (function () {
     map.set("view.project.configuration.members",       "/view/project/{id}/configuration/members");
 
     //Api
-    map.set("admin.findOne",    "/v1/maintenance/management/admin");
-    map.set("admin.modifyInfo", "/v1/maintenance/management/admin");
+    map.set("admin.findOne",          "/v1/maintenance/management/admin");
+    map.set("admin.modifyInfo",       "/v1/maintenance/management/admin");
+    map.set("admin.expire",           "/v1/maintenance/management/admin/{adminId}/expire");
+    map.set("admin.changePassword",   "/v1/maintenance/management/admin/{adminId}/pw");
+
+    map.set("admins.findAll",  "/v1/maintenance/management/admins");
+    map.set("admins.create",   "/v1/maintenance/management/admins");
 
     map.set("user.create",                  "/v1/maintenance/management/user");
     map.set("user.modifyInfo",              "/v1/maintenance/management/user/{userId}");

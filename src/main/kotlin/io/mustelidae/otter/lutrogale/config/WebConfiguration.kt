@@ -83,6 +83,7 @@ class WebConfiguration(
         registry.addViewController("/")
             .setViewName("forward:/dashboard")
 
+        registry.addViewController("/view/management/admins").setViewName("management/admin/admins")
         registry.addViewController("/view/management/members").setViewName("management/member/members")
         registry.addViewController("/view/management/new-member").setViewName("management/member/new-member")
         registry.addViewController("/view/management/new-member/{userId}/authority-grant")

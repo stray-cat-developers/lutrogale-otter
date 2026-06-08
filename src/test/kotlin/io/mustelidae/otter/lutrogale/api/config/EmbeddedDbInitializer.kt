@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.api.config
 
 import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
+import io.mustelidae.otter.lutrogale.web.domain.admin.AdminRole
 import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityBundleResources
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityController
@@ -140,15 +141,14 @@ class EmbeddedDbInitializer(
         val supervisor = adminRepository.findByIdOrNull(1)
 
         if (supervisor == null) {
-            val admin = Admin(
+            val admin = Admin.of(
                 "admin@osori.com",
+                "admin",
                 "슈퍼 관리자",
                 "오소리의 모든 권한을 가지고 있습니다.",
                 "/static/dist/img/osori.png",
-            ).apply {
-                setPassword("admin")
-                status = true
-            }
+                AdminRole.SUPER,
+            )
             adminRepository.save(admin)
         }
     }
