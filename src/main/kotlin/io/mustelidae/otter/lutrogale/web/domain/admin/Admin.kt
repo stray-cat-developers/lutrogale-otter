@@ -1,9 +1,12 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin
 
+import io.mustelidae.otter.lutrogale.common.Audit
 import io.mustelidae.otter.lutrogale.utils.Crypto
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -11,11 +14,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
-import java.util.ArrayList
+import org.hibernate.annotations.SQLRestriction
+import org.hibernate.envers.Audited
+import org.hibernate.envers.RelationTargetAuditMode
 
-/**
- * Created by HanJaehyun on 2016. 9. 20..
- */
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 class Admin(
     @Column(unique = true, nullable = false)
@@ -23,7 +26,7 @@ class Admin(
     val name: String,
     var description: String? = null,
     var img: String? = null,
-) {
+) : Audit() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -33,18 +36,27 @@ class Admin(
     var pw: String? = null
         private set
 
-    var status = false
+    var status = true
+        private set
+
+    @Column(nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
+    var role: AdminRole = AdminRole.REGULAR
+        private set
 
     @ManyToOne
     @JoinColumn(name = "parentId")
-    private var parentAdmin: Admin? = null
+    var parentAdmin: Admin? = null
+        private set
 
+    @SQLRestriction("status = true")
     @OneToMany(
         mappedBy = "parentAdmin",
         fetch = FetchType.LAZY,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH],
     )
-    private val admins: MutableList<Admin> = ArrayList()
+    val admins: MutableList<Admin> = ArrayList()
+
     fun setBy(parentAdmin: Admin) {
         this.parentAdmin = parentAdmin
         if (!parentAdmin.admins.contains(this)) parentAdmin.addBy(this)
@@ -59,15 +71,15 @@ class Admin(
         this.pw = Crypto.sha256(pw)
     }
 
+    fun expire() {
+        status = false
+    }
+
     companion object {
-        fun of(email: String, pw: String, name: String, description: String?, img: String?): Admin {
-            return Admin(
-                email,
-                name,
-                description,
-                img,
-            ).apply {
+        fun of(email: String, pw: String, name: String, description: String?, img: String?, role: AdminRole = AdminRole.REGULAR): Admin {
+            return Admin(email, name, description, img).apply {
                 setPassword(pw)
+                this.role = role
             }
         }
     }

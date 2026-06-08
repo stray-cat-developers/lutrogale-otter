@@ -38,7 +38,7 @@ class AdminController(
         @RequestBody modify: AdminResources.Modify,
     ): Reply<Unit> {
         val sessionInfo = AdminSession(httpSession).infoOrThrow()
-        adminInteraction.modifyBy(sessionInfo.adminId, modify.imageUrl, modify.description, modify.pw!!)
+        adminInteraction.modifyBy(sessionInfo.adminId, modify.imageUrl, modify.description, modify.pw)
         return Unit.toReply()
     }
 }
