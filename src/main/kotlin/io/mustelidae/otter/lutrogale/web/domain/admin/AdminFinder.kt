@@ -25,5 +25,7 @@ class AdminFinder(
         return admin
     }
 
+    fun findByEmailOrNull(email: String): Admin? = adminRepository.findByEmail(email)
+
     fun findAllActive(): List<Admin> = adminDSLRepository.findAllActive()
 }

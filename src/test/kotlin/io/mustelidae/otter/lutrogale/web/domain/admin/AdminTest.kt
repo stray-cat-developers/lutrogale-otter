@@ -32,9 +32,22 @@ internal class AdminTest {
     }
 
     @Test
-    fun `setPassword 는 비밀번호를 SHA256 해시로 저장한다`() {
+    fun `setPassword 는 비밀번호를 BCrypt 해시로 저장한다`() {
         val admin = Admin.of("test@test.com", "password", "테스트", null, null)
         admin.pw shouldNotBe null
         admin.pw shouldNotBe "password"
+        admin.pw!!.startsWith("\$2a\$") shouldBe true
+    }
+
+    @Test
+    fun `matchesPassword 는 올바른 비밀번호에 true를 반환한다`() {
+        val admin = Admin.of("test@test.com", "password", "테스트", null, null)
+        admin.matchesPassword("password") shouldBe true
+    }
+
+    @Test
+    fun `matchesPassword 는 잘못된 비밀번호에 false를 반환한다`() {
+        val admin = Admin.of("test@test.com", "password", "테스트", null, null)
+        admin.matchesPassword("wrong") shouldBe false
     }
 }

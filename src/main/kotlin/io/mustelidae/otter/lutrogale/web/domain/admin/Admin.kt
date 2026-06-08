@@ -1,7 +1,7 @@
 package io.mustelidae.otter.lutrogale.web.domain.admin
 
 import io.mustelidae.otter.lutrogale.common.Audit
-import io.mustelidae.otter.lutrogale.utils.Crypto
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -68,14 +68,19 @@ class Admin(
     }
 
     fun setPassword(pw: String) {
-        this.pw = Crypto.sha256(pw)
+        this.pw = passwordEncoder.encode(pw)
     }
+
+    fun matchesPassword(raw: String): Boolean =
+        passwordEncoder.matches(raw, this.pw)
 
     fun expire() {
         status = false
     }
 
     companion object {
+        private val passwordEncoder = BCryptPasswordEncoder(10)
+
         fun of(email: String, pw: String, name: String, description: String?, img: String?, role: AdminRole = AdminRole.REGULAR): Admin {
             return Admin(email, name, description, img).apply {
                 setPassword(pw)

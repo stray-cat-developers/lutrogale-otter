@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
 import io.kotest.matchers.shouldBe
 import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
+import io.mustelidae.otter.lutrogale.utils.toJson
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminInteraction
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminRole
 import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
@@ -9,6 +10,8 @@ import jakarta.servlet.http.Cookie
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.post
 
 internal class AdminManagementControllerTest : FlowTestSupport() {
 
@@ -134,6 +137,20 @@ internal class AdminManagementControllerTest : FlowTestSupport() {
 
         flow.changePassword(regularSession, otherAdminId, "hacked")
             .andExpect { status { isUnauthorized() } }
+    }
+
+    @Test
+    fun `만료된 어드민은 로그인할 수 없다`() {
+        val targetId = adminInteraction.registerBy(
+            "expired-login@test.com", "pw", "만료로그인", null, null, AdminRole.REGULAR, null,
+        )
+        flow.expireAdmin(superSession, targetId)
+            .andExpect { status { isCreated() } }
+
+        mockMvc.post("/v1/check-login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = mapOf("email" to "expired-login@test.com", "password" to "pw").toJson()
+        }.andExpect { status { isBadRequest() } }
     }
 
     @Test
