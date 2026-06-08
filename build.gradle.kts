@@ -65,6 +65,10 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.graphql-java:graphql-java:22.3")
 
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 tasks.withType<KotlinCompile>().all {
@@ -78,6 +82,16 @@ tasks.withType<KotlinCompile>().all {
 tasks.getByName<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()
+
+    // Testcontainers: DOCKER_HOST가 없으면 Rancher Desktop 소켓을 자동으로 탐지
+    if (System.getenv("DOCKER_HOST") == null) {
+        val rdSock = file("${System.getProperty("user.home")}/.rd/docker.sock")
+        if (rdSock.exists()) {
+            environment("DOCKER_HOST", "unix://${rdSock.absolutePath}")
+            // Rancher Desktop은 Ryuk(socket mount)를 지원하지 않으므로 비활성화
+            environment("TESTCONTAINERS_RYUK_DISABLED", "true")
+        }
+    }
 
     addTestListener(object : TestListener {
         override fun beforeSuite(suite: TestDescriptor) {}

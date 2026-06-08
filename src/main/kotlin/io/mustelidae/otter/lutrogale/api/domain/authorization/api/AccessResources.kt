@@ -1,5 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 import org.springframework.web.bind.annotation.RequestMethod
@@ -35,6 +36,7 @@ class AccessResources {
     }
 
     class Reply {
+        @JsonIgnoreProperties(ignoreUnknown = true)
         @Schema(name = "Lutrogale.Access.Reply.AccessState")
         class AccessState(
             val target: String,

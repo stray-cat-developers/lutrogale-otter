@@ -61,6 +61,27 @@ class AuthorizationControllerFlow(
             .toList()
     }
 
+    fun graphqlCheck(email: String, operation: String, method: RequestMethod): List<AccessResources.Reply.AccessState> {
+        val request = AccessResources.Request.GraphQLBase(
+            email,
+            listOf(AccessResources.AccessGraphQL(operation, method)),
+        )
+        val uri = linkTo<AuthorizationController> { graphQLCheck(apiKey, request) }.toUri()
+
+        return mockMvc.post(uri) {
+            contentType = MediaType.APPLICATION_JSON
+            header(RoleHeader.XSystem.KEY, apiKey)
+            content = request.toJson()
+        }.andExpect {
+            status { is2xxSuccessful() }
+        }.andReturn()
+            .response
+            .contentAsString
+            .fromJson<Replies<AccessResources.Reply.AccessState>>()
+            .getContent()
+            .toList()
+    }
+
     fun findAllAccessibleGrant(email: String): List<AccessResources.AccessUri> {
         val uri = linkTo<AuthorizationController> { findAllAccessibleGrant(apiKey, email) }.toUri()
 
