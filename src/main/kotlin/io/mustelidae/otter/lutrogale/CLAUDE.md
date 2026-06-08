@@ -5,7 +5,7 @@
 - Entity 조회 시 Repository를 항상 Finder로 감싸서 호출한다. Controller/Interaction에서 Repository를 직접 사용하지 않는다.
 - Repository 반환값이 `Optional`인 경우 Finder에서 반드시 NotFound 검사를 수행한다. 데이터가 없으면 즉시 예외를 던진다.
 - `*DSLRepository`(QueryDSL)도 Finder가 감싸서 호출부의 사용성을 단순하게 유지한다.
-- Cache가 필요한 조회는 Finder에서 Redis에 접근하여 캐시 데이터를 가져온다.
+- **DB 조회 결과**를 캐싱할 때는 Finder에서 Redis에 접근한다. 비즈니스 로직 실행 결과(예: 권한 체크 결과 캐싱)는 Interaction에서 캐싱해도 된다.
 - 모든 Finder 클래스에 `@Transactional(readOnly = true)`를 선언한다.
 
 ```kotlin

@@ -4,6 +4,15 @@
 [![Build Status](https://github.com/stray-cat-developers/lutrogale-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/lutrogale-otter)
 
 ## New Features!
+### 1.0.3
+
+- 권한 체크 결과를 Redis에 5분간 캐싱하여 동일 요청에 대한 DB 조회를 줄입니다.
+  - 메뉴ID 기반(`/authorization-check/id`), URL 기반(`/authorization-check/uri`), GraphQL 기반(`/authorization-check/graphql`) 모두 적용
+  - Redis 장애 시 DB에서 직접 조회하는 폴백 처리 포함
+- Playwright 기반 E2E 테스트 인프라를 추가했습니다.
+  - 권한 그룹(authority-groups), 프로젝트 멤버(project-members), 회원 관리(management-members) 시나리오 포함
+  - `e2e-test.sh` 스크립트로 Docker MySQL 환경과 함께 E2E 테스트를 한 번에 실행할 수 있습니다.
+
 ### 1.0.2
 - Envers 적용으로 권한 관리의 변경사항을 저장합니다.
 - 메뉴트리가 많아지는 경우 스크롤이 생기지 않던 문제를 해결했습니다.
