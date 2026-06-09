@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.api.domain.authorization
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResources
+import io.mustelidae.otter.lutrogale.api.permission.RoleHeader
 import io.mustelidae.otter.lutrogale.common.Replies
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -30,7 +31,7 @@ class AuthorizationAuditAspect(
         val startTime = System.currentTimeMillis()
         val servletRequest = (RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes)?.request
 
-        val rawApiKey = servletRequest?.getHeader("x-system-id") ?: (pjp.args.getOrNull(0) as? String) ?: ""
+        val rawApiKey = servletRequest?.getHeader(RoleHeader.XSystem.KEY) ?: (pjp.args.getOrNull(0) as? String) ?: ""
         val apiKey = maskApiKey(rawApiKey)
         val clientIp = servletRequest?.remoteAddr ?: ""
         val userAgent = servletRequest?.getHeader("User-Agent") ?: ""
@@ -83,7 +84,7 @@ class AuthorizationAuditAspect(
         return result
     }
 
-    private fun extractEmail(args: Array<Any>): String {
+    private fun extractEmail(args: Array<out Any?>): String {
         return when (val req = args.getOrNull(1)) {
             is AccessResources.Request.IdBase -> req.email
             is AccessResources.Request.UriBase -> req.email
@@ -100,6 +101,7 @@ class AuthorizationAuditAspect(
     }
 
     private fun maskApiKey(apiKey: String): String {
+        if (apiKey.isBlank()) return ""
         if (apiKey.length <= 8) return "****"
         return apiKey.take(8) + "****"
     }

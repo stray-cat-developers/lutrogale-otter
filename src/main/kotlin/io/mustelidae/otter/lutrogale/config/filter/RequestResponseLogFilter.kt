@@ -61,21 +61,24 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
                 filterChain.doFilter(multiReadRequest, wrappedResponse)
             } finally {
                 try {
-                    run {
-                        appendTransactionId(messageMap, transactionId)
-                        appendHttpMethod(messageMap, request)
-                        appendUrl(messageMap, "res", request)
-                        appendStatus(messageMap, wrappedResponse)
-                        appendLatency(messageMap, startTime)
+                    try {
+                        run {
+                            appendTransactionId(messageMap, transactionId)
+                            appendHttpMethod(messageMap, request)
+                            appendUrl(messageMap, "res", request)
+                            appendStatus(messageMap, wrappedResponse)
+                            appendLatency(messageMap, startTime)
 
-                        if (log.isDebugEnabled) {
-                            appendResponseBody(messageMap, wrappedResponse)
+                            if (log.isDebugEnabled) {
+                                appendResponseBody(messageMap, wrappedResponse)
+                            }
+
+                            log.info(messageMap.toJson())
+                            messageMap.clear()
                         }
-
-                        log.info(messageMap.toJson())
-                        messageMap.clear()
+                    } catch (e: Exception) {
+                        log.error("Failed to write response log", e)
                     }
-
                     wrappedResponse.copyBodyToResponse()
                 } finally {
                     MDC.remove("txId")
