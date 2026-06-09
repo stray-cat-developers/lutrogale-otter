@@ -8,9 +8,34 @@ import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import io.mustelidae.otter.lutrogale.web.domain.user.User
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
 
 class UserResources {
+
+    class BatchRegister {
+
+        @Schema(name = "Lutrogale.User.BatchRegister.Request")
+        data class Request(
+            @field:Size(min = 1, max = 10)
+            val emails: List<@Email @NotBlank
+            String,>,
+            val projectId: Long?,
+            val authorityDefinitionId: Long?,
+            val initialStatus: User.Status,
+        )
+
+        @Schema(name = "Lutrogale.User.BatchRegister.Result")
+        data class Result(
+            val email: String,
+            val outcome: Outcome,
+            val userId: Long?,
+        ) {
+            enum class Outcome { SUCCESS, SKIPPED }
+        }
+    }
 
     @Schema(name = "Lutrogale.User.Request")
     class Request(

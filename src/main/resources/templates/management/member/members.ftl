@@ -26,6 +26,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary" onclick="modifyUserInfo();">사용자정보 수정</button>
                                 <button type="button" class="btn btn-primary" onclick="OsoriRoute.go('view.management.newMember');">사용자 생성</button>
+                                <button type="button" class="btn btn-success" onclick="openBulkRegisterModal();">대량 등록</button>
                             </div>
 
                             <div class="btn-group pull-right">
@@ -202,6 +203,63 @@
         </div>
 
         <@layout.plainModal "" "modal-fullsize" "modal-group-detail" ""/>
+        <div id="modal-bulk-register" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span></button>
+                        <h4 class="modal-title">사용자 대량 등록</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="bulk-form-step">
+                            <div class="form-group">
+                                <label>이메일 목록 <small class="text-muted">(쉼표 또는 공백으로 구분, 최대 10개)</small></label>
+                                <textarea id="bulk-emails" class="form-control" rows="4"
+                                    placeholder="예) user1@example.com, user2@example.com user3@example.com"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>프로젝트 <small class="text-muted">(선택)</small></label>
+                                <select id="bulk-project" class="form-control">
+                                    <option value="">-- 선택 안 함 --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>권한 그룹 <small class="text-muted">(선택, 프로젝트 선택 시 활성화)</small></label>
+                                <select id="bulk-authority" class="form-control" disabled>
+                                    <option value="">-- 선택 안 함 --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>초기 상태</label>
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="bulk-status" value="ALLOW" checked> 허용 (ALLOW)
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="bulk-status" value="WAIT"> 대기 (WAIT)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bulk-progress-step" style="display:none">
+                            <div class="progress">
+                                <div id="bulk-progress-bar" class="progress-bar progress-bar-striped active"
+                                     role="progressbar" style="width:0%">0 / 0</div>
+                            </div>
+                            <table class="table table-condensed" style="margin-top:10px">
+                                <thead><tr><th>이메일</th><th>결과</th></tr></thead>
+                                <tbody id="bulk-result-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="bulk-register-close" type="button" class="btn btn-default pull-left" data-dismiss="modal">취소</button>
+                        <button id="bulk-register-submit" type="button" class="btn btn-success">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <@layout.plainModal "" "modal-dialog" "modal-user-status" "true"/>
         <@layout.plainModal "" "modal-fullsize" "modal-modify-user" "true"/>
 
@@ -504,6 +562,119 @@
                     });
                 }
 
+            });
+
+            function openBulkRegisterModal() {
+                $('#bulk-form-step').show();
+                $('#bulk-progress-step').hide();
+                $('#bulk-emails').val('');
+                $('#bulk-project').val('');
+                $('#bulk-authority').val('').prop('disabled', true).html('<option value="">-- 선택 안 함 --</option>');
+                $('input[name="bulk-status"][value="ALLOW"]').prop('checked', true);
+                $('#bulk-register-submit').show().prop('disabled', false);
+                $('#bulk-register-close').text('취소');
+                $('#bulk-result-list').empty();
+
+                AJAX.getData('/v1/maintenance/projects').done(function(data) {
+                    let $select = $('#bulk-project').html('<option value="">-- 선택 안 함 --</option>');
+                    $.each(data.content, function(i, p) {
+                        $select.append('<option value="' + p.id + '">' + p.name + '</option>');
+                    });
+                });
+
+                $('#modal-bulk-register').modal('show');
+            }
+
+            $('#bulk-project').change(function() {
+                let pid = $(this).val();
+                let $authSelect = $('#bulk-authority');
+                $authSelect.prop('disabled', true).html('<option value="">-- 선택 안 함 --</option>');
+                $('input[name="bulk-status"]').prop('disabled', false);
+
+                if (!pid) return;
+
+                AJAX.getData('/v1/maintenance/project/' + pid + '/authority-bundles').done(function(data) {
+                    $.each(data.content, function(i, a) {
+                        $authSelect.append('<option value="' + a.authId + '">' + a.name + '</option>');
+                    });
+                    $authSelect.prop('disabled', false);
+                });
+            });
+
+            $('input[name="bulk-status"]').change(function() {
+                if ($(this).val() === 'WAIT') {
+                    $('#bulk-authority').val('').prop('disabled', true);
+                } else {
+                    let pid = $('#bulk-project').val();
+                    if (pid) {
+                        $('#bulk-project').trigger('change');
+                    }
+                }
+            });
+
+            $('#bulk-register-submit').click(function() {
+                let rawText = $('#bulk-emails').val().trim();
+                if (!rawText) { alert('이메일을 입력해주세요.'); return; }
+
+                let emails = rawText.split(/[\s,]+/).filter(function(e) { return e.length > 0; });
+                if (emails.length === 0) { alert('유효한 이메일이 없습니다.'); return; }
+                if (emails.length > 10) { alert('이메일은 최대 10개까지 입력 가능합니다.'); return; }
+
+                let projectId = $('#bulk-project').val() || null;
+                let authorityDefinitionId = $('#bulk-authority').val() || null;
+                let initialStatus = $('input[name="bulk-status"]:checked').val();
+
+                let payload = { emails: emails, projectId: projectId, authorityDefinitionId: authorityDefinitionId, initialStatus: initialStatus };
+                if (projectId) payload.projectId = parseInt(projectId);
+                if (authorityDefinitionId) payload.authorityDefinitionId = parseInt(authorityDefinitionId);
+
+                $('#bulk-form-step').hide();
+                $('#bulk-progress-step').show();
+                $('#bulk-register-submit').hide();
+                $('#bulk-register-close').text('닫기');
+
+                let total = emails.length;
+                $('#bulk-progress-bar').css('width', '0%').text('0 / ' + total);
+
+                $.ajax({
+                    url: '/v1/maintenance/management/user/batch',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(payload),
+                    success: function(res) {
+                        let results = res.content;
+                        let shown = 0;
+                        let intervalId = setInterval(function() {
+                            if (shown >= results.length) {
+                                clearInterval(intervalId);
+                                $('#bulk-progress-bar').removeClass('active');
+                                let tb_users = $('#tb-users').DataTable();
+                                AJAX.getData(OsoriRoute.getUri("users.findAll")).done(function(data) {
+                                    tb_users.clear().rows.add(data.content).draw();
+                                });
+                                return;
+                            }
+                            let r = results[shown];
+                            let isSuccess = r.outcome === 'SUCCESS';
+                            let $label = isSuccess
+                                ? $('<span class="label label-success">').text('등록 완료')
+                                : $('<span class="label label-default">').text('이미 존재');
+                            let $row = $('<tr>').append($('<td>').text(r.email)).append($('<td>').append($label));
+                            $('#bulk-result-list').append($row);
+                            shown++;
+                            let pct = Math.round(shown / total * 100);
+                            $('#bulk-progress-bar').css('width', pct + '%').text(shown + ' / ' + total);
+                        }, 100);
+                    },
+                    error: function(res) {
+                        $('#bulk-form-step').show();
+                        $('#bulk-progress-step').hide();
+                        $('#bulk-register-submit').show();
+                        $('#bulk-register-close').text('취소');
+                        let msg = (res.responseJSON && res.responseJSON.message) ? res.responseJSON.message : '등록 중 오류가 발생했습니다.';
+                        alert(msg);
+                    }
+                });
             });
 		</script>
 	</body>
