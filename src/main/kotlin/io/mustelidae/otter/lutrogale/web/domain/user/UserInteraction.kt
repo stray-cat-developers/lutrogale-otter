@@ -4,16 +4,21 @@ import io.mustelidae.otter.lutrogale.common.DefaultError
 import io.mustelidae.otter.lutrogale.common.ErrorCode
 import io.mustelidae.otter.lutrogale.config.InvalidArgumentException
 import io.mustelidae.otter.lutrogale.config.PolicyException
+import io.mustelidae.otter.lutrogale.web.domain.grant.UserGrantInteraction
+import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources
 import io.mustelidae.otter.lutrogale.web.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Created by seooseok on 2016. 10. 5..
  */
 @Service
+@Transactional
 class UserInteraction(
-    val userRepository: UserRepository,
-    val userFinder: UserFinder,
+    private val userRepository: UserRepository,
+    private val userFinder: UserFinder,
+    private val userGrantInteraction: UserGrantInteraction,
 ) {
 
     fun createBy(email: String, name: String, status: User.Status): User {
@@ -52,6 +57,29 @@ class UserInteraction(
             user.status = status
 
             userRepository.save(user)
+        }
+    }
+
+    fun bulkCreateBy(
+        emails: List<String>,
+        projectId: Long?,
+        authorityDefinitionId: Long?,
+        initialStatus: User.Status,
+    ): List<UserResources.BatchRegister.Result> {
+        if (initialStatus == User.Status.EXPIRE || initialStatus == User.Status.REJECT) {
+            throw InvalidArgumentException("대량 등록 초기 상태는 ALLOW 또는 WAIT만 허용됩니다.")
+        }
+        return emails.map { email ->
+            val existing = userFinder.findBy(email)
+            if (existing != null) {
+                UserResources.BatchRegister.Result(email, UserResources.BatchRegister.Result.Outcome.SKIPPED, null)
+            } else {
+                val user = createBy(email, email.substringBefore("@"), initialStatus)
+                if (initialStatus == User.Status.ALLOW && projectId != null && authorityDefinitionId != null) {
+                    userGrantInteraction.addByAuthorityGrant(user.id!!, projectId, listOf(authorityDefinitionId))
+                }
+                UserResources.BatchRegister.Result(email, UserResources.BatchRegister.Result.Outcome.SUCCESS, user.id)
+            }
         }
     }
 
