@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import org.springframework.http.MediaType
 import org.springframework.http.server.ServletServerHttpRequest
 import org.springframework.util.StreamUtils
@@ -42,6 +43,7 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
             val multiReadRequest = request as? MultiReadHttpServletRequest ?: MultiReadHttpServletRequest(request)
             val wrappedResponse = response as? ContentCachingResponseWrapper ?: ContentCachingResponseWrapper(response)
 
+            MDC.put("txId", transactionId)
             try {
                 run {
                     appendTransactionId(messageMap, transactionId)
@@ -58,22 +60,29 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
 
                 filterChain.doFilter(multiReadRequest, wrappedResponse)
             } finally {
-                run {
-                    appendTransactionId(messageMap, transactionId)
-                    appendHttpMethod(messageMap, request)
-                    appendUrl(messageMap, "res", request)
-                    appendStatus(messageMap, wrappedResponse)
-                    appendLatency(messageMap, startTime)
+                try {
+                    try {
+                        run {
+                            appendTransactionId(messageMap, transactionId)
+                            appendHttpMethod(messageMap, request)
+                            appendUrl(messageMap, "res", request)
+                            appendStatus(messageMap, wrappedResponse)
+                            appendLatency(messageMap, startTime)
 
-                    if (log.isDebugEnabled) {
-                        appendResponseBody(messageMap, wrappedResponse)
+                            if (log.isDebugEnabled) {
+                                appendResponseBody(messageMap, wrappedResponse)
+                            }
+
+                            log.info(messageMap.toJson())
+                            messageMap.clear()
+                        }
+                    } catch (e: Exception) {
+                        log.error("Failed to write response log", e)
                     }
-
-                    log.info(messageMap.toJson())
-                    messageMap.clear()
+                    wrappedResponse.copyBodyToResponse()
+                } finally {
+                    MDC.remove("txId")
                 }
-
-                wrappedResponse.copyBodyToResponse()
             }
         }
     }
