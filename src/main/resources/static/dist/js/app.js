@@ -653,7 +653,8 @@ function _init() {
         start(box);
 
         //Perform ajax call
-        box.find(".box-body").load(settings.source, function () {
+        $.get(settings.source, function (data) {
+          box.find(".box-body").html(data);
           done(box);
         });
       });
