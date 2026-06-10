@@ -150,10 +150,18 @@ sd 'old' 'new' file.kt     # sed 대신
 ### Code Style
 
 - 새 엔티티는 `Audit` 상속, `@Audited(targetAuditMode = NOT_AUDITED)` 적용
-- Controller는 `*Resources` inner object로 Request/Reply DTO를 정의
+- `*Resources.kt` inner class 생성 규칙 (HTTP 메서드 기준):
+  - `POST` → `Request` inner class 하위에 DTO 생성
+  - `PUT`, `PATCH` → `Modify` inner class 하위에 DTO 생성
+  - `DELETE` → `Remove` inner class 하위에 DTO 생성
+  - 응답 DTO는 HTTP 메서드와 무관하게 `Reply` inner class 하위에 생성
 - 비즈니스 로직은 `*Interaction`에. `*Finder`는 읽기 전용.
 - 연관관계 편의 메서드는 `addBy(entity)` / `setBy(entity)` 형식
 - `status = true/false` soft delete 패턴 사용. `@SQLRestriction("status = true")` 적용.
+- `*Resources.kt`의 DTO inner class에는 `@Schema(name = "...")` 어노테이션을 반드시 달고, 이름은 `Lutrogale.{Domain}.{InnerClassPath}` 규칙을 따른다.
+  - `{Domain}`: `*Resources.kt`의 `*` 부분 (예: `User`, `Admin`, `Access`)
+  - `{InnerClassPath}`: 클래스 경로를 점(`.`)으로 이어 씀 (예: `Request.BatchRegister`, `Reply.Simple`, `Modify.Info`)
+  - 예) `Lutrogale.User.Request.BatchRegister`, `Lutrogale.User.Reply.Simple`, `Lutrogale.User.Modify.Info`
 
 ### Testing Rules
 
