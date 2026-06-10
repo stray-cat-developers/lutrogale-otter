@@ -68,7 +68,8 @@
         }).fail(function(xhr){
             $('.form-group').removeClass('has-feedback').addClass('has-error');
             try {
-                $('.help-block').text(JSON.parse(xhr.responseText).message);
+                var response = JSON.parse(xhr.responseText);
+                $('.help-block').text(response.message || '이메일 혹은 비밀번호를 확인해주세요.');
             } catch (e) {
                 $('.help-block').text('이메일 혹은 비밀번호를 확인해주세요.');
             }

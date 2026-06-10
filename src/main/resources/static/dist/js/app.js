@@ -653,10 +653,13 @@ function _init() {
         start(box);
 
         //Perform ajax call
-        $.get(settings.source, function (data) {
-          box.find(".box-body").html(data);
-          done(box);
-        });
+        $.get(settings.source)
+          .done(function (data) {
+            box.find(".box-body").html(data);
+          })
+          .always(function () {
+            done(box);
+          });
       });
     });
 
