@@ -124,7 +124,7 @@ var OPTION = (function() {
             'autoWidth': false,
             'columnDefs': [],
             'language': {
-                'url': '//cdn.datatables.net/plug-ins/1.10.12/i18n/Korean.json'
+                'url': '/static/plugins/datatables/i18n/Korean.json'
             }
         }
     };
