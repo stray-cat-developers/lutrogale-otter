@@ -13,7 +13,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPost
 import org.apache.hc.client5.http.classic.methods.HttpPut
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse
+import org.apache.hc.core5.http.ClassicHttpResponse
 import org.apache.hc.core5.http.Header
 import org.apache.hc.core5.http.io.entity.EntityUtils
 import org.apache.hc.core5.http.io.entity.StringEntity
@@ -33,21 +33,20 @@ open class RestClientSupport(
         url: String,
         headers: List<Pair<String, Any>>,
         body: Any? = null,
-    ): CloseableHttpResponse {
+    ): String {
         val post =
             HttpPost(url).apply {
                 body?.let { entity = StringEntity(it.toJson()) }
                 headers.forEach { addHeader(it.first, it.second) }
             }
-
-        return this.execute(post)
+        return this.execute(post) { response -> handleResponse(response) }
     }
 
     fun CloseableHttpClient.post(
         url: String,
         headers: List<Pair<String, Any>>,
         params: List<Pair<String, String>>? = null,
-    ): CloseableHttpResponse {
+    ): String {
         val post =
             HttpPost(url).apply {
                 params
@@ -56,97 +55,76 @@ open class RestClientSupport(
                     }?.let {
                         entity = UrlEncodedFormEntity(it)
                     }
-
-                headers.forEach {
-                    addHeader(it.first, it.second)
-                }
+                headers.forEach { addHeader(it.first, it.second) }
             }
-
-        return this.execute(post)
+        return this.execute(post) { response -> handleResponse(response) }
     }
 
     fun CloseableHttpClient.put(
         url: String,
         headers: List<Pair<String, Any>>,
         body: Any? = null,
-    ): CloseableHttpResponse {
+    ): String {
         val put =
             HttpPut(url).apply {
-                body?.let {
-                    entity = StringEntity(it.toJson())
-                }
-
-                headers.forEach {
-                    addHeader(it.first, it.second)
-                }
+                body?.let { entity = StringEntity(it.toJson()) }
+                headers.forEach { addHeader(it.first, it.second) }
             }
-        return this.execute(put)
+        return this.execute(put) { response -> handleResponse(response) }
     }
 
     fun CloseableHttpClient.patch(
         url: String,
         headers: List<Pair<String, Any>>,
         body: Any? = null,
-    ): CloseableHttpResponse {
+    ): String {
         val patch =
             HttpPatch(url).apply {
-                body?.let {
-                    entity = StringEntity(it.toJson())
-                }
-
-                headers.forEach {
-                    addHeader(it.first, it.second)
-                }
+                body?.let { entity = StringEntity(it.toJson()) }
+                headers.forEach { addHeader(it.first, it.second) }
             }
-
-        return this.execute(patch)
+        return this.execute(patch) { response -> handleResponse(response) }
     }
 
     fun CloseableHttpClient.delete(
         url: String,
         headers: List<Pair<String, Any>>,
         params: List<Pair<String, Any?>>? = null,
-    ): CloseableHttpResponse {
+    ): String {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + "?$queryString" else url
         val delete =
             HttpDelete(uri).apply {
-                headers.forEach {
-                    addHeader(it.first, it.second)
-                }
+                headers.forEach { addHeader(it.first, it.second) }
             }
-
-        return this.execute(delete)
+        return this.execute(delete) { response -> handleResponse(response) }
     }
 
     fun CloseableHttpClient.get(
         url: String,
         headers: List<Pair<String, Any>>,
         params: List<Pair<String, Any?>>? = null,
-    ): CloseableHttpResponse {
+    ): String {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
         val uri = if (queryString.isNullOrBlank().not()) url + "?$queryString" else url
         val get =
             HttpGet(uri).apply {
-                headers.forEach {
-                    addHeader(it.first, it.second)
-                }
+                headers.forEach { addHeader(it.first, it.second) }
             }
-
-        return this.execute(get)
+        return this.execute(get) { response -> handleResponse(response) }
     }
 
-    fun CloseableHttpResponse.orElseThrow(): String {
-        val response = EntityUtils.toString(this.entity, Charset.defaultCharset())
-        writeLog(this.code, this.headers, response)
+    private fun handleResponse(response: ClassicHttpResponse): String {
+        val body = EntityUtils.toString(response.entity, Charset.defaultCharset())
+        writeLog(response.code, response.headers, body)
 
-        if (this.isOK().not()) {
+        if (HttpStatus.valueOf(response.code).is2xxSuccessful.not()) {
             val error =
-                if (response.isNullOrEmpty()) {
-                    DefaultError(ErrorCode.C000, this.reasonPhrase)
+                if (body.isNullOrEmpty()) {
+                    DefaultError(ErrorCode.C000, response.reasonPhrase)
                 } else {
                     try {
-                        val globalErrorFormat = objectMapper.readValue<GlobalErrorFormat>(response)
+                        val globalErrorFormat = objectMapper.readValue<GlobalErrorFormat>(body)
                         DefaultError(ErrorCode.C000, globalErrorFormat.message).apply {
                             refCode = globalErrorFormat.refCode
                             causeBy =
@@ -156,38 +134,14 @@ open class RestClientSupport(
                                 )
                         }
                     } catch (ex: Exception) {
-                        DefaultError(ErrorCode.C000, response)
+                        DefaultError(ErrorCode.C000, body)
                     }
                 }
-
             throw CommunicationException(error)
         }
 
-        return response
+        return body
     }
-
-    fun <T : ExternalServiceError> CloseableHttpResponse.orElseThrow(clazz: Class<T>): String {
-        val response = EntityUtils.toString(this.entity, Charset.defaultCharset())
-        writeLog(this.code, this.headers, response)
-
-        if (this.isOK().not()) {
-            val error =
-                if (response.isNullOrEmpty()) {
-                    DefaultError(ErrorCode.C000, this.reasonPhrase)
-                } else {
-                    val externalError = objectMapper.readValue(response, clazz)
-                    DefaultError(ErrorCode.C000, externalError.message).apply {
-                        refCode = externalError.code
-                    }
-                }
-
-            throw CommunicationException(error)
-        }
-
-        return response
-    }
-
-    private fun CloseableHttpResponse.isOK(): Boolean = (HttpStatus.valueOf(this.code).is2xxSuccessful)
 
     private fun writeLog(
         code: Int,

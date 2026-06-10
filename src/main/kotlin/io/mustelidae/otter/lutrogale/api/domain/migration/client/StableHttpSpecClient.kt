@@ -50,7 +50,6 @@ class StableHttpSpecClient(
         requestHeader.add(contentType)
         return restClient
             .get(url, requestHeader)
-            .orElseThrow()
     }
 
     /**
@@ -73,6 +72,5 @@ class StableHttpSpecClient(
         requestHeader.add(Pair("Content-Type", ContentType.TEXT_PLAIN))
         return restClient
             .get(url, requestHeader)
-            .orElseThrow()
     }
 }
