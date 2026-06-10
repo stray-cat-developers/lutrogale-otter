@@ -24,7 +24,6 @@ class OpenAPIMigrationInteraction(
     val projectFinder: ProjectFinder,
     private val projectInteraction: ProjectInteraction,
 ) {
-
     @Transactional(readOnly = true)
     fun preview(
         url: String,
@@ -78,10 +77,11 @@ class OpenAPIMigrationInteraction(
         val openAPIJson = httpSpecClient.getOpenAPISpec(url, swaggerSpecType, headers)
         val swaggerSpec = SwaggerSpec(openAPIJson, swaggerSpecType)
 
-        val pathToMenu: PathToMenu = when (migrationType) {
-            TREE -> TreeBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
-            FLAT -> FlatBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
-        }
+        val pathToMenu: PathToMenu =
+            when (migrationType) {
+                TREE -> TreeBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
+                FLAT -> FlatBasePathToMenu(swaggerSpec.openAPI, rootMenuNavigation)
+            }
         return pathToMenu
     }
 }

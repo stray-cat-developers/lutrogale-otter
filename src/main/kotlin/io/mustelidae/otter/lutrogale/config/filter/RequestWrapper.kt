@@ -7,8 +7,9 @@ import jakarta.servlet.http.HttpServletRequestWrapper
  * Request 파라미터 관련 처리
  */
 @Suppress("FoldInitializerAndIfToElvis")
-internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServletRequestWrapper(servletRequest) {
-
+internal class RequestWrapper(
+    servletRequest: HttpServletRequest?,
+) : HttpServletRequestWrapper(servletRequest) {
     override fun getParameterValues(parameter: String): Array<String>? {
         val values = super.getParameterValues(parameter)
 
@@ -19,7 +20,8 @@ internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServlet
             return values
         }
 
-        return values.map { cleanXSS(it) }
+        return values
+            .map { cleanXSS(it) }
             .toTypedArray()
     }
 
@@ -43,9 +45,7 @@ internal class RequestWrapper(servletRequest: HttpServletRequest?) : HttpServlet
      * @param param request 파라미터
      * @return XSS 코드 날린 param
      */
-    private fun cleanXSS(param: String): String {
-        return param.replace(XSS_FORMAT.toRegex(), "")
-    }
+    private fun cleanXSS(param: String): String = param.replace(XSS_FORMAT.toRegex(), "")
 
     companion object {
         private const val XSS_FORMAT =

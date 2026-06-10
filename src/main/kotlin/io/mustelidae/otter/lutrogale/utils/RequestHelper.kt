@@ -24,10 +24,9 @@ object RequestHelper {
         val contentType = request.getHeader(HttpHeaders.CONTENT_TYPE)
         return (
             apiUriPattern.matcher(uri).find() ||
-                !Strings.isNullOrEmpty(accept) && jsonPattern.matcher(accept).find() || !Strings.isNullOrEmpty(
-                    contentType,
-                ) && jsonPattern.matcher(contentType).find()
-            )
+                (!Strings.isNullOrEmpty(accept) && jsonPattern.matcher(accept).find()) ||
+                (!Strings.isNullOrEmpty(contentType) && jsonPattern.matcher(contentType).find())
+        )
     }
 
     @JvmStatic

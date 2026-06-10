@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc
 @SpringBootTest(classes = [Application::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class FlowTestSupport {
-
     @Autowired
     final lateinit var mockMvc: MockMvc
 }

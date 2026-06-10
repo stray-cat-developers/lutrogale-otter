@@ -7,8 +7,6 @@ import org.springframework.data.redis.core.StringRedisTemplate
 
 @Configuration
 class RedisConfiguration {
-
     @Bean
-    fun stringRedisTemplate(connectionFactory: RedisConnectionFactory): StringRedisTemplate =
-        StringRedisTemplate(connectionFactory)
+    fun stringRedisTemplate(connectionFactory: RedisConnectionFactory): StringRedisTemplate = StringRedisTemplate(connectionFactory)
 }

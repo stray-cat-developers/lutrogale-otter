@@ -8,9 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 class UserGrantResources {
-
     class Reply {
-
         @Schema(name = "Lutrogale.UserGrant.Reply.AuthorityGrant")
         data class AuthorityGrant(
             val id: Long,
@@ -19,10 +17,12 @@ class UserGrantResources {
             val projectId: Long,
             val projectName: String,
         ) {
-
             companion object {
-                fun from(authorityDefinition: AuthorityDefinition, regDate: LocalDateTime): AuthorityGrant {
-                    return authorityDefinition.run {
+                fun from(
+                    authorityDefinition: AuthorityDefinition,
+                    regDate: LocalDateTime,
+                ): AuthorityGrant =
+                    authorityDefinition.run {
                         AuthorityGrant(
                             id!!,
                             name,
@@ -31,10 +31,9 @@ class UserGrantResources {
                             project!!.name,
                         )
                     }
-                }
 
-                fun from(authorityDefinition: AuthorityDefinition): AuthorityGrant {
-                    return authorityDefinition.run {
+                fun from(authorityDefinition: AuthorityDefinition): AuthorityGrant =
+                    authorityDefinition.run {
                         AuthorityGrant(
                             id!!,
                             name,
@@ -43,7 +42,6 @@ class UserGrantResources {
                             project!!.name,
                         )
                     }
-                }
             }
         }
 
@@ -58,10 +56,12 @@ class UserGrantResources {
             val projectName: String,
             val fullUrl: String? = null,
         ) {
-
             companion object {
-                fun from(menuNavigation: MenuNavigation, regDate: LocalDateTime): PersonalGrant {
-                    return menuNavigation.run {
+                fun from(
+                    menuNavigation: MenuNavigation,
+                    regDate: LocalDateTime,
+                ): PersonalGrant =
+                    menuNavigation.run {
                         PersonalGrant(
                             id!!,
                             type,
@@ -72,10 +72,13 @@ class UserGrantResources {
                             project!!.name,
                         )
                     }
-                }
 
-                fun from(menuNavigation: MenuNavigation, regDate: LocalDateTime, fullUrl: String?): PersonalGrant {
-                    return menuNavigation.run {
+                fun from(
+                    menuNavigation: MenuNavigation,
+                    regDate: LocalDateTime,
+                    fullUrl: String?,
+                ): PersonalGrant =
+                    menuNavigation.run {
                         PersonalGrant(
                             id!!,
                             type,
@@ -87,7 +90,6 @@ class UserGrantResources {
                             fullUrl,
                         )
                     }
-                }
             }
         }
 

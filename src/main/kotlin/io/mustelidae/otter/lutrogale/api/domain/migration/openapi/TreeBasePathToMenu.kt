@@ -55,24 +55,26 @@ class TreeBasePathToMenu : PathToMenu {
             var child = current.menuNavigations.find { it.uriBlock == "/$part" && it.methodType == RequestMethod.GET }
 
             if (child == null) {
-                val type = when (index) {
-                    0 -> Constant.NavigationType.CATEGORY
-                    1 -> Constant.NavigationType.MENU
-                    else -> Constant.NavigationType.FUNCTION
-                }
+                val type =
+                    when (index) {
+                        0 -> Constant.NavigationType.CATEGORY
+                        1 -> Constant.NavigationType.MENU
+                        else -> Constant.NavigationType.FUNCTION
+                    }
 
                 val name = if (index == 0) apiSpec.summary ?: "[GET] ${transformName(part)}" else "[GET] ${transformName(part)}"
 
-                val newMenu = MenuNavigation(
-                    name,
-                    type,
-                    "/$part",
-                    RequestMethod.GET,
-                    "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
-                    current.treeId,
-                ).also {
-                    it.setBy(project)
-                }
+                val newMenu =
+                    MenuNavigation(
+                        name,
+                        type,
+                        "/$part",
+                        RequestMethod.GET,
+                        "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
+                        current.treeId,
+                    ).also {
+                        it.setBy(project)
+                    }
 
                 menuNavigationRepository.save(newMenu)
                 current.addBy(newMenu)
@@ -87,16 +89,17 @@ class TreeBasePathToMenu : PathToMenu {
                     val sameMenu = current.menuNavigations.find { it.uriBlock == part && it.methodType == method }
 
                     if (sameMenu == null) {
-                        val newMenu = MenuNavigation(
-                            "[$method] ${transformName(part)}",
-                            Constant.NavigationType.FUNCTION,
-                            "/$part",
-                            method,
-                            "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
-                            current.treeId,
-                        ).also {
-                            it.setBy(project)
-                        }
+                        val newMenu =
+                            MenuNavigation(
+                                "[$method] ${transformName(part)}",
+                                Constant.NavigationType.FUNCTION,
+                                "/$part",
+                                method,
+                                "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
+                                current.treeId,
+                            ).also {
+                                it.setBy(project)
+                            }
 
                         menuNavigationRepository.save(newMenu)
                         current.addBy(newMenu)
@@ -114,7 +117,11 @@ class TreeBasePathToMenu : PathToMenu {
         return prettyPrint.toString()
     }
 
-    private fun printTree(print: StringBuilder, menuNavigation: MenuNavigation, depth: Int) {
+    private fun printTree(
+        print: StringBuilder,
+        menuNavigation: MenuNavigation,
+        depth: Int,
+    ) {
         if (menuNavigation.uriBlock != "/") {
             print.append("${"    ".repeat(depth)}- ${menuNavigation.uriBlock} (${menuNavigation.methodType})\n")
         }

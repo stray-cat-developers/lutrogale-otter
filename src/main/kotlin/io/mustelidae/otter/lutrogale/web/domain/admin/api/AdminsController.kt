@@ -41,21 +41,24 @@ class AdminsController(
     @Operation(summary = "어드민 생성 (SUPER 전용)")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody request: AdminResources.Request.Create): Reply<Long> {
+    fun create(
+        @RequestBody request: AdminResources.Request.Create,
+    ): Reply<Long> {
         val sessionInfo = AdminSession(httpSession).infoOrThrow()
         val caller = adminFinder.findBy(sessionInfo.adminId)
         if (caller.role != AdminRole.SUPER) {
             throw PermissionException("어드민 생성은 SUPER 권한만 가능합니다.")
         }
-        val id = adminInteraction.registerBy(
-            request.email,
-            request.pw,
-            request.name,
-            request.description,
-            null,
-            request.role,
-            request.parentAdminId,
-        )
+        val id =
+            adminInteraction.registerBy(
+                request.email,
+                request.pw,
+                request.name,
+                request.description,
+                null,
+                request.role,
+                request.parentAdminId,
+            )
         return id.toReply()
     }
 }

@@ -10,10 +10,11 @@ class UriBaseAuthorizedKey(
     private val accessUris: List<AccessResources.AccessUri>,
 ) : RedisKey {
     override fun getKey(): String {
-        val sortedUris = accessUris
-            .map { "${it.methodType}:${it.uri}" }
-            .sorted()
-            .joinToString("|")
+        val sortedUris =
+            accessUris
+                .map { "${it.methodType}:${it.uri}" }
+                .sorted()
+                .joinToString("|")
         return "${RedisKey.PREFIX}:authz:uri:$apiKey:$email:$sortedUris"
     }
 

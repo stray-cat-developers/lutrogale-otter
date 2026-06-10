@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController
 class NavigationController(
     private val menuNavigationInteraction: MenuNavigationInteraction,
 ) {
-
     @Operation(summary = "메뉴 네비게이션 수정")
     @PutMapping("/navigation/{menuNavigationId}")
     fun modifyInfo(

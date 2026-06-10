@@ -3,7 +3,6 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.api
 import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
 
 class MigrationResources {
-
     class Request {
         data class OpenAPI(
             val url: String,
@@ -13,11 +12,13 @@ class MigrationResources {
             val header: List<Header>? = null,
         ) {
             enum class MigrationType {
-                TREE, FLAT
+                TREE,
+                FLAT,
             }
 
             enum class OpenAPIFormat {
-                JSON, YAML
+                JSON,
+                YAML,
             }
         }
 

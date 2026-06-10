@@ -5,7 +5,6 @@ import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.swagger.v3.oas.annotations.media.Schema
 
 class ProjectResources {
-
     @Schema(name = "Lutrogale.Project.Request")
     data class Request(
         val name: String,
@@ -21,11 +20,9 @@ class ProjectResources {
         val status: Boolean,
         val description: String? = null,
     ) {
-
         companion object {
-
-            fun from(project: Project): Reply {
-                return project.run {
+            fun from(project: Project): Reply =
+                project.run {
                     Reply(
                         id!!,
                         name,
@@ -35,7 +32,6 @@ class ProjectResources {
                         description,
                     )
                 }
-            }
         }
     }
 }

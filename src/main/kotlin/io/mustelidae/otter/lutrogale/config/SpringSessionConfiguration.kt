@@ -9,13 +9,10 @@ import javax.sql.DataSource
 
 @Configuration
 class SpringSessionConfiguration {
-
     @Bean
     @ConditionalOnMissingBean
     fun jdbcSessionDataSourceInitializer(
         dataSource: DataSource,
         properties: JdbcSessionProperties,
-    ): JdbcSessionDataSourceScriptDatabaseInitializer {
-        return JdbcSessionDataSourceScriptDatabaseInitializer(dataSource, properties)
-    }
+    ): JdbcSessionDataSourceScriptDatabaseInitializer = JdbcSessionDataSourceScriptDatabaseInitializer(dataSource, properties)
 }

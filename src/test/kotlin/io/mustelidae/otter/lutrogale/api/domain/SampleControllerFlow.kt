@@ -15,12 +15,13 @@ internal class SampleControllerFlow(
     fun helloWorld(): String {
         val uri = linkTo<SampleController> { helloWorld(1234) }.toUri()
 
-        return mockMvc.get(uri) {
-            contentType = MediaType.APPLICATION_JSON
-            header(RoleHeader.XUser.KEY, 1234)
-        }.andExpect {
-            status { is2xxSuccessful() }
-        }.andReturn()
+        return mockMvc
+            .get(uri) {
+                contentType = MediaType.APPLICATION_JSON
+                header(RoleHeader.XUser.KEY, 1234)
+            }.andExpect {
+                status { is2xxSuccessful() }
+            }.andReturn()
             .response
             .contentAsString
             .fromJson<Reply<String>>()
@@ -30,12 +31,13 @@ internal class SampleControllerFlow(
     fun helloWorld2(): List<String> {
         val uri = linkTo<SampleController> { helloWorld2(1234) }.toUri()
 
-        return mockMvc.get(uri) {
-            contentType = MediaType.APPLICATION_JSON
-            header(RoleHeader.XUser.KEY, 1234)
-        }.andExpect {
-            status { is2xxSuccessful() }
-        }.andReturn()
+        return mockMvc
+            .get(uri) {
+                contentType = MediaType.APPLICATION_JSON
+                header(RoleHeader.XUser.KEY, 1234)
+            }.andExpect {
+                status { is2xxSuccessful() }
+            }.andReturn()
             .response
             .contentAsString
             .fromJson<Replies<String>>()

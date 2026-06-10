@@ -1,7 +1,6 @@
 package io.mustelidae.otter.lutrogale.api.permission
 
 object RoleHeader {
-
     sealed interface Role
 
     data object XAdmin : Role {

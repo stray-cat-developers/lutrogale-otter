@@ -24,15 +24,12 @@ import org.springframework.web.bind.annotation.RestController
 class MenuTreeController(
     private val navigationTreeInteraction: NavigationTreeInteraction,
 ) {
-
     @Operation(summary = "메뉴 트리 추가")
     @PostMapping("/branch")
     fun createBranch(
         @PathVariable projectId: Long,
         @RequestBody request: MenuTreeResources.Request.Branch,
-    ): Reply<Long> {
-        return navigationTreeInteraction.createBranch(projectId, request).toReply()
-    }
+    ): Reply<Long> = navigationTreeInteraction.createBranch(projectId, request).toReply()
 
     @Operation(summary = "메뉴 트리 이동")
     @PutMapping("/branch/{menuNavigationId}")
@@ -47,22 +44,30 @@ class MenuTreeController(
 
     @Operation(summary = "메뉴 트리 삭제")
     @DeleteMapping("/branch/{menuNavigationId}")
-    fun deleteBranch(@PathVariable projectId: Long, @PathVariable menuNavigationId: Long): Reply<Unit> {
+    fun deleteBranch(
+        @PathVariable projectId: Long,
+        @PathVariable menuNavigationId: Long,
+    ): Reply<Unit> {
         navigationTreeInteraction.removeBranch(projectId, menuNavigationId)
         return Unit.toReply()
     }
 
     @Operation(summary = "메뉴 트리 조회")
     @GetMapping("/branch/{menuNavigationId}")
-    fun findBranch(@PathVariable projectId: Long, @PathVariable menuNavigationId: Long): Reply<MenuTreeResources.Reply.TreeBranch> {
-        return navigationTreeInteraction.getTreeBranch(projectId, menuNavigationId)
+    fun findBranch(
+        @PathVariable projectId: Long,
+        @PathVariable menuNavigationId: Long,
+    ): Reply<MenuTreeResources.Reply.TreeBranch> =
+        navigationTreeInteraction
+            .getTreeBranch(projectId, menuNavigationId)
             .toReply()
-    }
 
     @Operation(summary = "메뉴 트리 전체 조회")
     @GetMapping("/branches")
-    fun getAllBranch(@PathVariable projectId: Long): Replies<MenuTreeResources.Reply.TreeBranch> {
-        return navigationTreeInteraction.getTreeBranches(projectId)
+    fun getAllBranch(
+        @PathVariable projectId: Long,
+    ): Replies<MenuTreeResources.Reply.TreeBranch> =
+        navigationTreeInteraction
+            .getTreeBranches(projectId)
             .toReplies()
-    }
 }

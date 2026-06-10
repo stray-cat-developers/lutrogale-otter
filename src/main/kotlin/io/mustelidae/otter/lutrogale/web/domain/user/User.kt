@@ -35,7 +35,7 @@ class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     @Column(length = 50)
     var department: String? = null
@@ -49,7 +49,7 @@ class User(
     @SQLRestriction("status = true")
     @OneToMany(mappedBy = "user", fetch = LAZY, cascade = [ALL])
     var userAuthorityGrants: MutableList<UserAuthorityGrant> = arrayListOf()
-        private set
+        protected set
 
     val authorityDefinitions: List<AuthorityDefinition>
         get() = userAuthorityGrants.map { it.authorityDefinition!! }
@@ -68,7 +68,7 @@ class User(
     @SQLRestriction("status = true")
     @OneToMany(mappedBy = "user", fetch = LAZY, cascade = [ALL])
     var userPersonalGrants: MutableList<UserPersonalGrant> = arrayListOf()
-        private set
+        protected set
 
     val menuNavigations: List<MenuNavigation>
         get() = userPersonalGrants.map { it.menuNavigation!! }
@@ -96,21 +96,19 @@ class User(
         status = Status.EXPIRE
     }
 
-    fun getProjects(): List<Project> {
-        return this.authorityDefinitions.map { it.project!! }
-    }
+    fun getProjects(): List<Project> = this.authorityDefinitions.mapNotNull { it.project }
 
     enum class Status {
-        /* 허가 */
+        // 허가
         ALLOW,
 
-        /* 불가 */
+        // 불가
         REJECT,
 
-        /* 대기 */
+        // 대기
         WAIT,
 
-        /* 만료 */
+        // 만료
         EXPIRE,
     }
 }

@@ -7,7 +7,5 @@ data class HttpAPISpec(
     val methods: List<RequestMethod>,
     val summary: String?,
 ) {
-    fun getUrlParts(): List<String> {
-        return url.split(Regex("(?<!:)/")).filter { it.isNotEmpty() }
-    }
+    fun getUrlParts(): List<String> = url.split(Regex("(?<!:)/")).filter { it.isNotEmpty() }
 }

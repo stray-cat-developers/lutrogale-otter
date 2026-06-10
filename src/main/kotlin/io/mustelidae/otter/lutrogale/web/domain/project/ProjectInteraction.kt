@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional
 class ProjectInteraction(
     private val projectRepository: ProjectRepository,
 ) {
-
-    fun register(name: String, description: String?): Long {
+    fun register(
+        name: String,
+        description: String?,
+    ): Long {
         val project = Project.of(name, description)
         val menuNavigation = MenuNavigation.root()
         project.addBy(menuNavigation)

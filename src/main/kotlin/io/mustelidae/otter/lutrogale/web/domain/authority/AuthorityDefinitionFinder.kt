@@ -15,14 +15,16 @@ import org.springframework.transaction.annotation.Transactional
 class AuthorityDefinitionFinder(
     private val authorityDefinitionRepository: AuthorityDefinitionRepository,
 ) {
-
     fun findByLive(authorityDefinitionId: Long): AuthorityDefinition {
         val authorityDefinition = this.findBy(authorityDefinitionId)
-        if (!authorityDefinition.status) throw throw PolicyException(DefaultError(ErrorCode.PL02, "해당 사용자는 로그인 권한이 만료되었습니다."))
+        if (!authorityDefinition.status) throw PolicyException(DefaultError(ErrorCode.PL02, "해당 권한 그룹은 만료되었습니다."))
         return authorityDefinition
     }
 
-    fun findByLive(projectId: Long, authorityDefinitionId: Long): AuthorityDefinition {
+    fun findByLive(
+        projectId: Long,
+        authorityDefinitionId: Long,
+    ): AuthorityDefinition {
         val authorityDefinition = this.findByLive(authorityDefinitionId)
         if (authorityDefinition.project!!.id != projectId) {
             throw DataPermissionException("해당프로젝트의 권한이 아닙니다.")
@@ -30,24 +32,21 @@ class AuthorityDefinitionFinder(
         return authorityDefinition
     }
 
-    fun findBy(defineId: Long): AuthorityDefinition {
-        return authorityDefinitionRepository.findByIdOrNull(defineId) ?: throw DataNotFindException("정의된 권한이 없습니다.")
-    }
+    fun findBy(defineId: Long): AuthorityDefinition =
+        authorityDefinitionRepository.findByIdOrNull(defineId) ?: throw DataNotFindException("정의된 권한이 없습니다.")
 
-    fun findListBy(projectId: Long): List<AuthorityDefinition> {
-        return authorityDefinitionRepository.findByProjectIdAndStatusTrue(projectId) ?: emptyList()
-    }
+    fun findListBy(projectId: Long): List<AuthorityDefinition> =
+        authorityDefinitionRepository.findByProjectIdAndStatusTrue(projectId) ?: emptyList()
 
-    fun findBy(authorityDefinitionIdGroup: List<Long>): List<AuthorityDefinition> {
-        return authorityDefinitionRepository.findByIdIn(authorityDefinitionIdGroup) ?: emptyList()
-    }
+    fun findBy(authorityDefinitionIdGroup: List<Long>): List<AuthorityDefinition> =
+        authorityDefinitionRepository.findByIdIn(authorityDefinitionIdGroup) ?: emptyList()
 
     fun findByLive(authorityDefinitionIds: List<Long>): List<AuthorityDefinition> {
         val authorityDefinitions = this.findBy(authorityDefinitionIds)
 
         authorityDefinitions.forEach {
             if (!it.status) {
-                throw PolicyException(DefaultError(ErrorCode.PL02, "해당 사용자는 로그인 권한이 만료되었습니다.", causeBy = mapOf("id" to it.id)))
+                throw PolicyException(DefaultError(ErrorCode.PL02, "해당 권한 그룹은 만료되었습니다.", causeBy = mapOf("id" to it.id)))
             }
         }
 

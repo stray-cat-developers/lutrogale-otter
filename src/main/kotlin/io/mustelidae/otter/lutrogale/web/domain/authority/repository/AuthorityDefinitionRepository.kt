@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository
  * 권한 정의 레파지토리
  */
 @Repository
-interface AuthorityDefinitionRepository : JpaRepository<AuthorityDefinition?, Long?> {
+interface AuthorityDefinitionRepository : JpaRepository<AuthorityDefinition, Long> {
     fun findByProjectIdAndStatusTrue(projectId: Long): List<AuthorityDefinition>?
+
     fun findByIdIn(ids: List<Long>): List<AuthorityDefinition>?
 }

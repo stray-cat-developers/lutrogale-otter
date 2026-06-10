@@ -9,8 +9,13 @@ import org.springframework.transaction.annotation.Transactional
 class DefinitionAndNavigationFinder(
     private val authorityNavigationUnitRepository: AuthorityNavigationUnitRepository,
 ) {
-
-    fun findMappings(authorityDefinitionId: Long, menuNavigationIds: List<Long>): List<AuthorityNavigationUnit> {
-        return authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionIdAndMenuNavigationIdIn(authorityDefinitionId, menuNavigationIds) ?: emptyList()
-    }
+    fun findMappings(
+        authorityDefinitionId: Long,
+        menuNavigationIds: List<Long>,
+    ): List<AuthorityNavigationUnit> =
+        authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionIdAndMenuNavigationIdIn(
+            authorityDefinitionId,
+            menuNavigationIds,
+        )
+            ?: emptyList()
 }

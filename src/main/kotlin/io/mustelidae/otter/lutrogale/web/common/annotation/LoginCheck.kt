@@ -12,4 +12,6 @@ package io.mustelidae.otter.lutrogale.web.common.annotation
     AnnotationTarget.CLASS,
 )
 @Retention(AnnotationRetention.RUNTIME)
-annotation class LoginCheck(val enable: Boolean = true)
+annotation class LoginCheck(
+    val enable: Boolean = true,
+)

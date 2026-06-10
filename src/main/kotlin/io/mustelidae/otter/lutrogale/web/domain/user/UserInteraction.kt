@@ -20,15 +20,24 @@ class UserInteraction(
     private val userFinder: UserFinder,
     private val userGrantInteraction: UserGrantInteraction,
 ) {
-
-    fun createBy(email: String, name: String, status: User.Status): User {
-        val user: User = User(name, email).apply {
-            this.status = status
-        }
+    fun createBy(
+        email: String,
+        name: String,
+        status: User.Status,
+    ): User {
+        val user: User =
+            User(name, email).apply {
+                this.status = status
+            }
         return userRepository.save(user)
     }
 
-    fun createBy(email: String, name: String, accessPrivacyInformation: Boolean, department: String?): User {
+    fun createBy(
+        email: String,
+        name: String,
+        accessPrivacyInformation: Boolean,
+        department: String?,
+    ): User {
         val user = this.createBy(email, name, User.Status.ALLOW)
         user.department = department
         user.isPrivacy = accessPrivacyInformation
@@ -36,15 +45,19 @@ class UserInteraction(
     }
 
     fun expireBy(userIdGroup: List<Long>) {
-        val users = userIdGroup.map {
-            userFinder.findBy(it)
-        }
+        val users =
+            userIdGroup.map {
+                userFinder.findBy(it)
+            }
 
         users.map { it.expire() }
         userRepository.saveAll(users)
     }
 
-    fun modifyBy(userIds: List<Long>, status: User.Status) {
+    fun modifyBy(
+        userIds: List<Long>,
+        status: User.Status,
+    ) {
         if (User.Status.EXPIRE === status) {
             throw InvalidArgumentException("만료의 경우 별도 만료 API를 이용해주세요.")
         }
@@ -83,7 +96,12 @@ class UserInteraction(
         }
     }
 
-    fun modifyBy(userId: Long, name: String, department: String, isPrivacy: Boolean) {
+    fun modifyBy(
+        userId: Long,
+        name: String,
+        department: String,
+        isPrivacy: Boolean,
+    ) {
         val user = userFinder.findBy(userId)
         user.apply {
             this.department = department

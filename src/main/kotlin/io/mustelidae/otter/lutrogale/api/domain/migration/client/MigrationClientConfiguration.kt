@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 class MigrationClientConfiguration(
     private val appEnvironment: AppEnvironment,
 ) {
-
     @Bean
     fun httpSpecClient(): HttpSpecClient {
         val env = appEnvironment.default

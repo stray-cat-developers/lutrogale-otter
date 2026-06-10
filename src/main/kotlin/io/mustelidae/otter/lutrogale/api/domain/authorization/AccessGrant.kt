@@ -13,33 +13,41 @@ class AccessGrant(
     val menuNavigationIdGroup: List<Long>? = null,
     val accessUriGroup: List<AccessUri>? = null,
 ) {
-
     companion object {
-        fun ofIdBase(email: String, apiKey: String, menuNavigationIdGroup: List<Long>): AccessGrant {
-            return AccessGrant(
+        fun ofIdBase(
+            email: String,
+            apiKey: String,
+            menuNavigationIdGroup: List<Long>,
+        ): AccessGrant =
+            AccessGrant(
                 email,
                 apiKey,
                 Constant.AuthenticationCheckType.ID,
                 menuNavigationIdGroup,
             )
-        }
 
-        fun ofUrlBase(email: String, apiKey: String, accessUriGroup: List<AccessUri>): AccessGrant {
-            return AccessGrant(
+        fun ofUrlBase(
+            email: String,
+            apiKey: String,
+            accessUriGroup: List<AccessUri>,
+        ): AccessGrant =
+            AccessGrant(
                 email,
                 apiKey,
                 Constant.AuthenticationCheckType.URI,
                 accessUriGroup = accessUriGroup,
             )
-        }
 
-        fun ofOperationBase(email: String, apiKey: String, accessGraphQL: List<AccessGraphQL>): AccessGrant {
-            return AccessGrant(
+        fun ofOperationBase(
+            email: String,
+            apiKey: String,
+            accessGraphQL: List<AccessGraphQL>,
+        ): AccessGrant =
+            AccessGrant(
                 email,
                 apiKey,
                 Constant.AuthenticationCheckType.URI,
                 accessUriGroup = accessGraphQL.map { AccessUri.of("/${it.operation}", it.methodType) },
             )
-        }
     }
 }

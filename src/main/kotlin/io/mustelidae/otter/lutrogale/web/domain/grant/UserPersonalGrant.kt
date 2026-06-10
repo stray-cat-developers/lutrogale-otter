@@ -24,17 +24,17 @@ class UserPersonalGrant : Audit() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false, updatable = false)
     var user: User? = null
-        private set
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menuNavigationId", nullable = false, updatable = false)
     var menuNavigation: MenuNavigation? = null
-        private set
+        protected set
 
     var status = true
 

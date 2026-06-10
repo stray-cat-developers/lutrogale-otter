@@ -19,10 +19,12 @@ class LoginApiController(
     private val httpSession: HttpSession,
     private val adminLoginInteraction: AdminLoginInteraction,
 ) {
-
     @Operation(hidden = true)
     @PostMapping("/v1/check-login")
-    fun checkLogin(@RequestBody request: LoginResources.Request, httpServletRequest: HttpServletRequest): Reply<String> {
+    fun checkLogin(
+        @RequestBody request: LoginResources.Request,
+        httpServletRequest: HttpServletRequest,
+    ): Reply<String> {
         val admin: Admin = adminLoginInteraction.loginCheck(request.email, request.password)
         val sessionInfo = SessionInfo.of(admin)
         AdminSession(httpSession).add(sessionInfo)

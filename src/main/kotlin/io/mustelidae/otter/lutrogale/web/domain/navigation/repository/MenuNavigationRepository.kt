@@ -9,9 +9,22 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface MenuNavigationRepository : JpaRepository<MenuNavigation, Long> {
-    fun findByProjectIdAndId(projectId: Long, nodeId: Long): MenuNavigation?
-    fun findByProjectIdAndTreeId(projectId: Long, treeId: String): MenuNavigation?
+    fun findByProjectIdAndId(
+        projectId: Long,
+        nodeId: Long,
+    ): MenuNavigation?
+
+    fun findByProjectIdAndTreeId(
+        projectId: Long,
+        treeId: String,
+    ): MenuNavigation?
+
     fun findByStatusTrueAndProjectId(projectId: Long): List<MenuNavigation>?
-    fun findByStatusTrueAndProjectIdAndIdIn(projectId: Long, menuNavigationIds: List<Long>): List<MenuNavigation>
+
+    fun findByStatusTrueAndProjectIdAndIdIn(
+        projectId: Long,
+        menuNavigationIds: List<Long>,
+    ): List<MenuNavigation>
+
     fun findByIdIn(menuNavigationIds: List<Long>): List<MenuNavigation>
 }

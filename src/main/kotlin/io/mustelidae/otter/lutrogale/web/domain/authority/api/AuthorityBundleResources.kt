@@ -5,9 +5,7 @@ import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.swagger.v3.oas.annotations.media.Schema
 
 class AuthorityBundleResources {
-
     class Request {
-
         @Schema(name = "Lutrogale.AuthorityBundle.Request.AuthorityBundle")
         data class AuthorityBundle(
             val groupName: String,
@@ -32,15 +30,14 @@ class AuthorityBundleResources {
             val projectId: Long,
         ) {
             companion object {
-                fun from(authorityDefinition: AuthorityDefinition): AuthorityBundle {
-                    return authorityDefinition.run {
+                fun from(authorityDefinition: AuthorityDefinition): AuthorityBundle =
+                    authorityDefinition.run {
                         AuthorityBundle(
                             authorityDefinition.id!!,
                             name,
                             authorityDefinition.project!!.id!!,
                         )
                     }
-                }
             }
         }
     }

@@ -16,11 +16,12 @@ import org.slf4j.LoggerFactory
 class StableHttpSpecClient(
     private val restClient: CloseableHttpClient,
     writeLog: Boolean,
-) : HttpSpecClient, RestClientSupport(
-    Jackson.getMapper(),
-    writeLog,
-    LoggerFactory.getLogger(StableHttpSpecClient::class.java),
-) {
+) : RestClientSupport(
+        Jackson.getMapper(),
+        writeLog,
+        LoggerFactory.getLogger(StableHttpSpecClient::class.java),
+    ),
+    HttpSpecClient {
     /**
      * Open API 스펙을 가져오는 함수.
      *
@@ -29,20 +30,26 @@ class StableHttpSpecClient(
      * @param headers 요청에 추가할 헤더들 list.
      * @return API 스펙의 String 표현값.
      */
-    override fun getOpenAPISpec(url: String, type: SwaggerSpec.Type, headers: List<Pair<String, Any>>?): String {
+    override fun getOpenAPISpec(
+        url: String,
+        type: SwaggerSpec.Type,
+        headers: List<Pair<String, Any>>?,
+    ): String {
         val requestHeader = mutableListOf<Pair<String, Any>>()
 
         headers?.let {
             requestHeader.addAll(it)
         }
 
-        val contentType = when (type) {
-            SwaggerSpec.Type.JSON -> Pair("Content-Type", ContentType.APPLICATION_JSON)
-            SwaggerSpec.Type.YAML -> Pair("Content-Type", "application/yaml")
-        }
+        val contentType =
+            when (type) {
+                SwaggerSpec.Type.JSON -> Pair("Content-Type", "application/json")
+                SwaggerSpec.Type.YAML -> Pair("Content-Type", "application/yaml")
+            }
 
         requestHeader.add(contentType)
-        return restClient.get(url, requestHeader)
+        return restClient
+            .get(url, requestHeader)
             .orElseThrow()
     }
 
@@ -53,7 +60,10 @@ class StableHttpSpecClient(
      * @param headers 요청에 추가할 헤더들 list.
      * @return API 스펙의 String 표현값.
      */
-    override fun getGraphQLSpec(url: String, headers: List<Pair<String, Any>>?): String {
+    override fun getGraphQLSpec(
+        url: String,
+        headers: List<Pair<String, Any>>?,
+    ): String {
         val requestHeader = mutableListOf<Pair<String, Any>>()
 
         headers?.let {
@@ -61,7 +71,8 @@ class StableHttpSpecClient(
         }
 
         requestHeader.add(Pair("Content-Type", ContentType.TEXT_PLAIN))
-        return restClient.get(url, requestHeader)
+        return restClient
+            .get(url, requestHeader)
             .orElseThrow()
     }
 }

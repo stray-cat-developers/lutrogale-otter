@@ -40,41 +40,44 @@ class AuthorizationAuditAspect(
         val checkType = resolveCheckType(pjp.signature.name)
 
         var caughtException: Throwable? = null
-        val result = try {
-            pjp.proceed()
-        } catch (e: Throwable) {
-            caughtException = e
-            null
-        }
+        val result =
+            try {
+                pjp.proceed()
+            } catch (e: Throwable) {
+                caughtException = e
+                null
+            }
 
         try {
             val latencyMs = System.currentTimeMillis() - startTime
 
-            val states = if (caughtException == null) {
-                (result as? Replies<*>)
-                    ?.getContent()
-                    ?.filterIsInstance<AccessResources.Reply.AccessState>()
-                    ?: emptyList()
-            } else {
-                emptyList()
-            }
+            val states =
+                if (caughtException == null) {
+                    (result as? Replies<*>)
+                        ?.getContent()
+                        ?.filterIsInstance<AccessResources.Reply.AccessState>()
+                        ?: emptyList()
+                } else {
+                    emptyList()
+                }
             val totalCount = states.size
             val deniedCount = states.count { !it.hasPermission }
 
-            val entry = linkedMapOf<String, Any?>(
-                "timestamp" to Instant.now().toString(),
-                "txId" to txId,
-                "event" to "authorization_check",
-                "apiKey" to apiKey,
-                "email" to email,
-                "checkType" to checkType,
-                "clientIp" to clientIp,
-                "userAgent" to userAgent,
-                "latencyMs" to latencyMs,
-                "allowed" to (caughtException == null && deniedCount == 0),
-                "deniedCount" to deniedCount,
-                "totalCount" to totalCount,
-            )
+            val entry =
+                linkedMapOf<String, Any?>(
+                    "timestamp" to Instant.now().toString(),
+                    "txId" to txId,
+                    "event" to "authorization_check",
+                    "apiKey" to apiKey,
+                    "email" to email,
+                    "checkType" to checkType,
+                    "clientIp" to clientIp,
+                    "userAgent" to userAgent,
+                    "latencyMs" to latencyMs,
+                    "allowed" to (caughtException == null && deniedCount == 0),
+                    "deniedCount" to deniedCount,
+                    "totalCount" to totalCount,
+                )
             auditLog.info(objectMapper.writeValueAsString(entry))
         } catch (e: Exception) {
             log.warn("Failed to write authorization audit log", e)
@@ -84,21 +87,21 @@ class AuthorizationAuditAspect(
         return result
     }
 
-    private fun extractEmail(args: Array<out Any?>): String {
-        return when (val req = args.getOrNull(1)) {
+    private fun extractEmail(args: Array<out Any?>): String =
+        when (val req = args.getOrNull(1)) {
             is AccessResources.Request.IdBase -> req.email
             is AccessResources.Request.UriBase -> req.email
             is AccessResources.Request.GraphQLBase -> req.email
             else -> ""
         }
-    }
 
-    private fun resolveCheckType(methodName: String): String = when (methodName) {
-        "idChecks" -> "ID"
-        "urlCheck" -> "URI"
-        "graphQLCheck" -> "GRAPHQL"
-        else -> "UNKNOWN"
-    }
+    private fun resolveCheckType(methodName: String): String =
+        when (methodName) {
+            "idChecks" -> "ID"
+            "urlCheck" -> "URI"
+            "graphQLCheck" -> "GRAPHQL"
+            else -> "UNKNOWN"
+        }
 
     private fun maskApiKey(apiKey: String): String {
         if (apiKey.isBlank()) return ""

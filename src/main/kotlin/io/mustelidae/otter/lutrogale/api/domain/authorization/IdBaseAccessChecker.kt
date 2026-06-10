@@ -7,7 +7,6 @@ import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigationFinder
 class IdBaseAccessChecker(
     private val menuNavigationFinder: MenuNavigationFinder,
 ) : AccessChecker {
-
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
         accessGrant: AccessGrant,

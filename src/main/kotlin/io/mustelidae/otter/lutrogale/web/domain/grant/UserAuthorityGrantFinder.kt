@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional
 class UserAuthorityGrantFinder(
     private val userAuthorityGrantRepository: UserAuthorityGrantRepository,
 ) {
-
-    fun findByUserAndDefinition(userId: Long, authorityDefinitionIds: List<Long>): List<UserAuthorityGrant> {
-        return userAuthorityGrantRepository.findAllByUserIdAndAuthorityDefinitionIdInAndStatusTrue(userId, authorityDefinitionIds) ?: emptyList()
-    }
+    fun findByUserAndDefinition(
+        userId: Long,
+        authorityDefinitionIds: List<Long>,
+    ): List<UserAuthorityGrant> =
+        userAuthorityGrantRepository.findAllByUserIdAndAuthorityDefinitionIdInAndStatusTrue(userId, authorityDefinitionIds)
+            ?: emptyList()
 }

@@ -23,13 +23,14 @@ class UserGrantController(
     private val userGrantInteraction: UserGrantInteraction,
     private val userFinder: UserFinder,
 ) {
-
     @Operation(summary = "할당된 권한 조회")
     @GetMapping("/{userId}/grants")
-    fun findUsersGrants(@PathVariable userId: Long): Reply<UserResources.Reply.Detail> {
-        return userFinder.getUserDetail(userId)
+    fun findUsersGrants(
+        @PathVariable userId: Long,
+    ): Reply<UserResources.Reply.Detail> =
+        userFinder
+            .getUserDetail(userId)
             .toReply()
-    }
 
     @Operation(summary = "권한 그룹 추가")
     @PostMapping("/{userId}/grant/project/{projectId}/authority-bundle/{authIds}")
@@ -77,13 +78,17 @@ class UserGrantController(
 
     @Operation(summary = "사용자의 모든 권한 조회")
     @GetMapping("/{userId}/grant/project/{projectId}")
-    fun findGrantsForUser(@PathVariable projectId: Long, @PathVariable userId: Long): Reply<UserGrantResources.Reply.UserGrant> {
+    fun findGrantsForUser(
+        @PathVariable projectId: Long,
+        @PathVariable userId: Long,
+    ): Reply<UserGrantResources.Reply.UserGrant> {
         val authorityGrantResources = userGrantInteraction.getUserAuthorityGrants(userId, projectId)
         val personalGrantResources = userGrantInteraction.getUserPersonalGrants(userId, projectId)
 
-        return UserGrantResources.Reply.UserGrant(
-            authorityGrantResources,
-            personalGrantResources,
-        ).toReply()
+        return UserGrantResources.Reply
+            .UserGrant(
+                authorityGrantResources,
+                personalGrantResources,
+            ).toReply()
     }
 }

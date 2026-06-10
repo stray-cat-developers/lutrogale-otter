@@ -40,21 +40,24 @@ class EmbeddedDbInitializer(
         assignGrant(userId, projectId)
     }
 
-    private fun assignGrant(userId: Long, projectId: Long) {
+    private fun assignGrant(
+        userId: Long,
+        projectId: Long,
+    ) {
         userGrantController.assignAuthorityGrant(userId, projectId, listOf(1))
         userGrantController.assignPersonalGrant(userId, projectId, listOf(5))
     }
 
-    private fun addUser(): Long {
-        return userController.create(
-            UserResources.Request(
-                USER_EMAIL,
-                "Lutrogale Otter",
-                false,
-                "Otter World",
-            ),
-        ).content!!
-    }
+    private fun addUser(): Long =
+        userController
+            .create(
+                UserResources.Request(
+                    USER_EMAIL,
+                    "Lutrogale Otter",
+                    false,
+                    "Otter World",
+                ),
+            ).content!!
 
     private fun setupDefinition(projectId: Long) {
         authorityController.create(
@@ -128,27 +131,28 @@ class EmbeddedDbInitializer(
         )
     }
 
-    private fun addProject(): Long {
-        return projectController.create(
-            ProjectResources.Request(
-                "Otter Project",
-                "This is Sample Project",
-            ),
-        ).content!!
-    }
+    private fun addProject(): Long =
+        projectController
+            .create(
+                ProjectResources.Request(
+                    "Otter Project",
+                    "This is Sample Project",
+                ),
+            ).content!!
 
     private fun setupAdminIfNotExist() {
         val supervisor = adminRepository.findByIdOrNull(1)
 
         if (supervisor == null) {
-            val admin = Admin.of(
-                "admin@osori.com",
-                "admin",
-                "슈퍼 관리자",
-                "오소리의 모든 권한을 가지고 있습니다.",
-                "/static/dist/img/osori.png",
-                AdminRole.SUPER,
-            )
+            val admin =
+                Admin.of(
+                    "admin@osori.com",
+                    "admin",
+                    "슈퍼 관리자",
+                    "오소리의 모든 권한을 가지고 있습니다.",
+                    "/static/dist/img/osori.png",
+                    AdminRole.SUPER,
+                )
             adminRepository.save(admin)
         }
     }

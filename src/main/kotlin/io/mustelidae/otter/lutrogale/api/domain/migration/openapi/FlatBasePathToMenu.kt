@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.OpenAPI
 import java.util.concurrent.atomic.AtomicInteger
 
 class FlatBasePathToMenu : PathToMenu {
-
     constructor(openApi: OpenAPI, rootMenuNavigation: MenuNavigation) {
         this.pathWithHttpMethods = PathCollector(openApi).collectPathAndMethods()
         this.rootMenuNavigation = rootMenuNavigation
@@ -33,17 +32,18 @@ class FlatBasePathToMenu : PathToMenu {
 
         for (apiSpec in sortedPaths) {
             for (method in apiSpec.methods) {
-                val newMenu = MenuNavigation(
-                    apiSpec.summary ?: "[$method] ${transformName(apiSpec.url)}",
-                    Constant.NavigationType.FUNCTION,
-                    apiSpec.url,
-                    method,
-                    "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
-                    rootMenuNavigation.treeId,
-                ).also {
-                    it.setBy(project)
-                    it.setBy(rootMenuNavigation)
-                }
+                val newMenu =
+                    MenuNavigation(
+                        apiSpec.summary ?: "[$method] ${transformName(apiSpec.url)}",
+                        Constant.NavigationType.FUNCTION,
+                        apiSpec.url,
+                        method,
+                        "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
+                        rootMenuNavigation.treeId,
+                    ).also {
+                        it.setBy(project)
+                        it.setBy(rootMenuNavigation)
+                    }
 
                 menuNavigationRepository.save(newMenu)
             }

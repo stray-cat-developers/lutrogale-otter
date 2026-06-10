@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping
 class LogoutController(
     private val httpSession: HttpSession,
 ) {
-
     @GetMapping("/logout")
     fun logout(): String {
         httpSession.invalidate()

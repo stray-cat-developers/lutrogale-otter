@@ -32,7 +32,6 @@ import java.time.format.DateTimeFormatter
 class WebConfiguration(
     private val adminLoginHandlerInterceptor: AdminLoginHandlerInterceptor,
 ) : DelegatingWebMvcConfiguration() {
-
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(adminLoginHandlerInterceptor)
         super.addInterceptors(registry)
@@ -54,56 +53,63 @@ class WebConfiguration(
     }
 
     @Bean
-    fun requestResponseLogFilter(): FilterRegistrationBean<RequestResponseLogFilter> {
-        return FilterRegistrationBean<RequestResponseLogFilter>().apply {
+    fun requestResponseLogFilter(): FilterRegistrationBean<RequestResponseLogFilter> =
+        FilterRegistrationBean<RequestResponseLogFilter>().apply {
             filter = RequestResponseLogFilter()
             order = 1
         }
-    }
 
     @Bean
-    fun crossScriptingFilter(): FilterRegistrationBean<*> {
-        return FilterRegistrationBean<CrossScriptingFilter>().apply {
+    fun crossScriptingFilter(): FilterRegistrationBean<*> =
+        FilterRegistrationBean<CrossScriptingFilter>().apply {
             filter = CrossScriptingFilter()
             order = 2
         }
-    }
 
     @Bean
-    fun loginFilter(): FilterRegistrationBean<*> {
-        return FilterRegistrationBean<UrlBaseLoginFilter>().apply {
+    fun loginFilter(): FilterRegistrationBean<*> =
+        FilterRegistrationBean<UrlBaseLoginFilter>().apply {
             filter = UrlBaseLoginFilter()
             order = 3
         }
-    }
 
     override fun addViewControllers(registry: ViewControllerRegistry) {
-        registry.addViewController("/swagger-ui/")
+        registry
+            .addViewController("/swagger-ui/")
             .setViewName("forward:/swagger-ui/index.html")
-        registry.addViewController("/")
+        registry
+            .addViewController("/")
             .setViewName("forward:/dashboard")
 
         registry.addViewController("/view/management/admins").setViewName("management/admin/admins")
         registry.addViewController("/view/management/members").setViewName("management/member/members")
         registry.addViewController("/view/management/new-member").setViewName("management/member/new-member")
-        registry.addViewController("/view/management/new-member/{userId}/authority-grant")
+        registry
+            .addViewController("/view/management/new-member/{userId}/authority-grant")
             .setViewName("management/member/new-member-authority")
-        registry.addViewController("/view/management/new-member/{userId}/personal-grant")
+        registry
+            .addViewController("/view/management/new-member/{userId}/personal-grant")
             .setViewName("management/member/new-member-personal")
-        registry.addViewController("/view/management/new-member/{userId}/complete")
+        registry
+            .addViewController("/view/management/new-member/{userId}/complete")
             .setViewName("management/member/complete")
         registry.addViewController("/view/profile").setViewName("profile")
         registry.addViewController("/view/new-project").setViewName("project/new/input-project")
-        registry.addViewController("/view/new-project/{projectId}/navi")
+        registry
+            .addViewController("/view/new-project/{projectId}/navi")
             .setViewName("project/new/input-navigation-tree")
-        registry.addViewController("/view/new-project/{projectId}/auth-groups")
+        registry
+            .addViewController("/view/new-project/{projectId}/auth-groups")
             .setViewName("project/new/input-authority-groups")
         registry.addViewController("/view/new-project/{projectId}/complete").setViewName("project/new/complete")
-        registry.addViewController("/view/project/{projectId}/configuration/navigation")
+        registry
+            .addViewController("/view/project/{projectId}/configuration/navigation")
             .setViewName("project/configuration/navigation")
-        registry.addViewController("/view/project/{projectId}/configuration/authority")
+        registry
+            .addViewController("/view/project/{projectId}/configuration/authority")
             .setViewName("project/configuration/authority-groups")
-        registry.addViewController("/view/project/{projectId}/configuration/members")
+        registry
+            .addViewController("/view/project/{projectId}/configuration/members")
             .setViewName("project/configuration/members")
 
         super.addViewControllers(registry)

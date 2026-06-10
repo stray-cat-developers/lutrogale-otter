@@ -27,7 +27,6 @@ open class RestClientSupport(
     private val writeLog: Boolean,
     private val log: Logger,
 ) {
-
     private fun <T> T.toJson(): String = objectMapper.writeValueAsString(this)
 
     fun CloseableHttpClient.post(
@@ -35,10 +34,11 @@ open class RestClientSupport(
         headers: List<Pair<String, Any>>,
         body: Any? = null,
     ): CloseableHttpResponse {
-        val post = HttpPost(url).apply {
-            body?.let { entity = StringEntity(it.toJson()) }
-            headers.forEach { addHeader(it.first, it.second) }
-        }
+        val post =
+            HttpPost(url).apply {
+                body?.let { entity = StringEntity(it.toJson()) }
+                headers.forEach { addHeader(it.first, it.second) }
+            }
 
         return this.execute(post)
     }
@@ -48,17 +48,19 @@ open class RestClientSupport(
         headers: List<Pair<String, Any>>,
         params: List<Pair<String, String>>? = null,
     ): CloseableHttpResponse {
-        val post = HttpPost(url).apply {
-            params?.map {
-                BasicNameValuePair(it.first, it.second)
-            }?.let {
-                entity = UrlEncodedFormEntity(it)
-            }
+        val post =
+            HttpPost(url).apply {
+                params
+                    ?.map {
+                        BasicNameValuePair(it.first, it.second)
+                    }?.let {
+                        entity = UrlEncodedFormEntity(it)
+                    }
 
-            headers.forEach {
-                addHeader(it.first, it.second)
+                headers.forEach {
+                    addHeader(it.first, it.second)
+                }
             }
-        }
 
         return this.execute(post)
     }
@@ -68,15 +70,16 @@ open class RestClientSupport(
         headers: List<Pair<String, Any>>,
         body: Any? = null,
     ): CloseableHttpResponse {
-        val put = HttpPut(url).apply {
-            body?.let {
-                entity = StringEntity(it.toJson())
-            }
+        val put =
+            HttpPut(url).apply {
+                body?.let {
+                    entity = StringEntity(it.toJson())
+                }
 
-            headers.forEach {
-                addHeader(it.first, it.second)
+                headers.forEach {
+                    addHeader(it.first, it.second)
+                }
             }
-        }
         return this.execute(put)
     }
 
@@ -85,15 +88,16 @@ open class RestClientSupport(
         headers: List<Pair<String, Any>>,
         body: Any? = null,
     ): CloseableHttpResponse {
-        val patch = HttpPatch(url).apply {
-            body?.let {
-                entity = StringEntity(it.toJson())
-            }
+        val patch =
+            HttpPatch(url).apply {
+                body?.let {
+                    entity = StringEntity(it.toJson())
+                }
 
-            headers.forEach {
-                addHeader(it.first, it.second)
+                headers.forEach {
+                    addHeader(it.first, it.second)
+                }
             }
-        }
 
         return this.execute(patch)
     }
@@ -104,12 +108,13 @@ open class RestClientSupport(
         params: List<Pair<String, Any?>>? = null,
     ): CloseableHttpResponse {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
-        val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
-        val delete = HttpDelete(uri).apply {
-            headers.forEach {
-                addHeader(it.first, it.second)
+        val uri = if (queryString.isNullOrBlank().not()) url + "?$queryString" else url
+        val delete =
+            HttpDelete(uri).apply {
+                headers.forEach {
+                    addHeader(it.first, it.second)
+                }
             }
-        }
 
         return this.execute(delete)
     }
@@ -120,12 +125,13 @@ open class RestClientSupport(
         params: List<Pair<String, Any?>>? = null,
     ): CloseableHttpResponse {
         val queryString = params?.joinToString("&") { "${it.first}=${it.second}" }
-        val uri = if (queryString.isNullOrBlank().not()) url + queryString?.let { "?$it" } else url
-        val get = HttpGet(uri).apply {
-            headers.forEach {
-                addHeader(it.first, it.second)
+        val uri = if (queryString.isNullOrBlank().not()) url + "?$queryString" else url
+        val get =
+            HttpGet(uri).apply {
+                headers.forEach {
+                    addHeader(it.first, it.second)
+                }
             }
-        }
 
         return this.execute(get)
     }
@@ -135,22 +141,24 @@ open class RestClientSupport(
         writeLog(this.code, this.headers, response)
 
         if (this.isOK().not()) {
-            val error = if (response.isNullOrEmpty()) {
-                DefaultError(ErrorCode.C000, this.reasonPhrase)
-            } else {
-                try {
-                    val globalErrorFormat = objectMapper.readValue<GlobalErrorFormat>(response)
-                    DefaultError(ErrorCode.C000, globalErrorFormat.message).apply {
-                        refCode = globalErrorFormat.refCode
-                        causeBy = mapOf(
-                            "type" to globalErrorFormat.type,
-                            "description" to globalErrorFormat.description,
-                        )
+            val error =
+                if (response.isNullOrEmpty()) {
+                    DefaultError(ErrorCode.C000, this.reasonPhrase)
+                } else {
+                    try {
+                        val globalErrorFormat = objectMapper.readValue<GlobalErrorFormat>(response)
+                        DefaultError(ErrorCode.C000, globalErrorFormat.message).apply {
+                            refCode = globalErrorFormat.refCode
+                            causeBy =
+                                mapOf(
+                                    "type" to globalErrorFormat.type,
+                                    "description" to globalErrorFormat.description,
+                                )
+                        }
+                    } catch (ex: Exception) {
+                        DefaultError(ErrorCode.C000, response)
                     }
-                } catch (ex: Exception) {
-                    DefaultError(ErrorCode.C000, response)
                 }
-            }
 
             throw CommunicationException(error)
         }
@@ -163,14 +171,15 @@ open class RestClientSupport(
         writeLog(this.code, this.headers, response)
 
         if (this.isOK().not()) {
-            val error = if (response.isNullOrEmpty()) {
-                DefaultError(ErrorCode.C000, this.reasonPhrase)
-            } else {
-                val externalError = objectMapper.readValue(response, clazz)
-                DefaultError(ErrorCode.C000, externalError.message).apply {
-                    refCode = externalError.code
+            val error =
+                if (response.isNullOrEmpty()) {
+                    DefaultError(ErrorCode.C000, this.reasonPhrase)
+                } else {
+                    val externalError = objectMapper.readValue(response, clazz)
+                    DefaultError(ErrorCode.C000, externalError.message).apply {
+                        refCode = externalError.code
+                    }
                 }
-            }
 
             throw CommunicationException(error)
         }
@@ -178,11 +187,13 @@ open class RestClientSupport(
         return response
     }
 
-    private fun CloseableHttpResponse.isOK(): Boolean {
-        return (HttpStatus.valueOf(this.code).is2xxSuccessful)
-    }
+    private fun CloseableHttpResponse.isOK(): Boolean = (HttpStatus.valueOf(this.code).is2xxSuccessful)
 
-    private fun writeLog(code: Int, headers: Array<Header>, responseBody: String) {
+    private fun writeLog(
+        code: Int,
+        headers: Array<Header>,
+        responseBody: String,
+    ) {
         if (writeLog) {
             log.info("status=$code, headers=${headers.toJson()} responseBody=$responseBody")
         }

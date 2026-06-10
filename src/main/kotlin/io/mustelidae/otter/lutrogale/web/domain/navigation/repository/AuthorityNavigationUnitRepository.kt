@@ -29,7 +29,9 @@ interface AuthorityNavigationUnitRepository : JpaRepository<AuthorityNavigationU
             "WHERE an.status = true " +
             "AND an.authorityDefinition.id = :authorityDefinitionId",
     )
-    fun findByStatusTrueAndAuthorityDefinitionId(@Param("authorityDefinitionId") authorityDefinitionId: Long): List<AuthorityNavigationUnit>?
+    fun findByStatusTrueAndAuthorityDefinitionId(
+        @Param("authorityDefinitionId") authorityDefinitionId: Long,
+    ): List<AuthorityNavigationUnit>?
 
     @Query(
         "SELECT DISTINCT an " +
@@ -37,5 +39,7 @@ interface AuthorityNavigationUnitRepository : JpaRepository<AuthorityNavigationU
             "WHERE an.status = true " +
             "AND an.authorityDefinition.id in (:authorityDefinitionIdGroup)",
     )
-    fun findByStatusTrueAndAuthorityDefinitionIdGroup(@Param("authorityDefinitionIdGroup") authorityDefinitionIdGroup: List<Long>): List<AuthorityNavigationUnit>?
+    fun findByStatusTrueAndAuthorityDefinitionIdGroup(
+        @Param("authorityDefinitionIdGroup") authorityDefinitionIdGroup: List<Long>,
+    ): List<AuthorityNavigationUnit>?
 }

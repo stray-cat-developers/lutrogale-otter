@@ -87,7 +87,11 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         }
     }
 
-    private fun appendUrl(messageMap: MutableMap<String, Any?>, prefix: String, request: HttpServletRequest) {
+    private fun appendUrl(
+        messageMap: MutableMap<String, Any?>,
+        prefix: String,
+        request: HttpServletRequest,
+    ) {
         messageMap.apply {
             this["transfer"] = prefix
             this["uri"] = request.requestURI
@@ -97,13 +101,19 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         }
     }
 
-    private fun appendReqHeader(messageMap: MutableMap<String, Any?>, request: HttpServletRequest) {
+    private fun appendReqHeader(
+        messageMap: MutableMap<String, Any?>,
+        request: HttpServletRequest,
+    ) {
         val headers = ServletServerHttpRequest(request).headers
 
         messageMap["headers"] = headers
     }
 
-    private fun appendHttpMethod(messageMap: MutableMap<String, Any?>, request: HttpServletRequest) {
+    private fun appendHttpMethod(
+        messageMap: MutableMap<String, Any?>,
+        request: HttpServletRequest,
+    ) {
         messageMap.apply {
             this["method"] = request.method
             this["contentType"] = request.contentType
@@ -111,29 +121,45 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         }
     }
 
-    private fun appendTransactionId(messageMap: MutableMap<String, Any?>, transactionId: String) {
+    private fun appendTransactionId(
+        messageMap: MutableMap<String, Any?>,
+        transactionId: String,
+    ) {
         messageMap["txId"] = transactionId
     }
 
-    private fun appendRequestBody(messageMap: MutableMap<String, Any?>, request: MultiReadHttpServletRequest) {
-        val requestBody = try {
-            StreamUtils.copyToString(request.inputStream, defaultCharset).trimIndent()
-        } catch (e: IOException) {
-            """{ "error": "Failed to read request body.", "cause": "${e.message}" }""".trimIndent()
-        }
+    private fun appendRequestBody(
+        messageMap: MutableMap<String, Any?>,
+        request: MultiReadHttpServletRequest,
+    ) {
+        val requestBody =
+            try {
+                StreamUtils.copyToString(request.inputStream, defaultCharset).trimIndent()
+            } catch (e: IOException) {
+                """{ "error": "Failed to read request body.", "cause": "${e.message}" }""".trimIndent()
+            }
 
         messageMap["requestBody"] = PrivacyLogFilter.masking(requestBody)
     }
 
-    private fun appendStatus(messageMap: MutableMap<String, Any?>, wrappedResponse: ContentCachingResponseWrapper) {
+    private fun appendStatus(
+        messageMap: MutableMap<String, Any?>,
+        wrappedResponse: ContentCachingResponseWrapper,
+    ) {
         messageMap["status"] = wrappedResponse.status
     }
 
-    private fun appendLatency(messageMap: MutableMap<String, Any?>, startTime: Long) {
+    private fun appendLatency(
+        messageMap: MutableMap<String, Any?>,
+        startTime: Long,
+    ) {
         messageMap["latency"] = "${System.currentTimeMillis() - startTime}ms"
     }
 
-    private fun appendResponseBody(messageMap: MutableMap<String, Any?>, wrappedResponse: ContentCachingResponseWrapper) {
+    private fun appendResponseBody(
+        messageMap: MutableMap<String, Any?>,
+        wrappedResponse: ContentCachingResponseWrapper,
+    ) {
         // Web Page는 로그에서 제외한다.
         if (wrappedResponse.contentType != MediaType.APPLICATION_JSON_VALUE) {
             return
@@ -155,11 +181,13 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
                 uri.startsWith("/swagger-ui") ||
                 uri.startsWith("/v3/api-docs") ||
                 uri.startsWith("/v2/api-docs")
-            )
+        )
     }
 }
 
-internal class MultiReadHttpServletRequest(request: HttpServletRequest) : HttpServletRequestWrapper(request) {
+internal class MultiReadHttpServletRequest(
+    request: HttpServletRequest,
+) : HttpServletRequestWrapper(request) {
     private var cachedBytes: ByteArray? = null
 
     @Throws(IOException::class)
@@ -175,14 +203,13 @@ internal class MultiReadHttpServletRequest(request: HttpServletRequest) : HttpSe
     }
 
     @Throws(IOException::class)
-    override fun getReader(): BufferedReader {
-        return BufferedReader(InputStreamReader(inputStream))
-    }
+    override fun getReader(): BufferedReader = BufferedReader(InputStreamReader(inputStream))
 
     inner class CachedServletInputStream : ServletInputStream() {
-
         override fun isReady(): Boolean = true
+
         override fun isFinished(): Boolean = true
+
         override fun setReadListener(listener: ReadListener) {
             // NOSONAR
         }
@@ -190,9 +217,7 @@ internal class MultiReadHttpServletRequest(request: HttpServletRequest) : HttpSe
         private val input: ByteArrayInputStream = ByteArrayInputStream(cachedBytes)
 
         @Throws(IOException::class)
-        override fun read(): Int {
-            return input.read()
-        }
+        override fun read(): Int = input.read()
     }
 }
 
@@ -201,18 +226,19 @@ private object PrivacyLogFilter {
 
     private const val STRING_PATTERN = "\"%s\"\\s*:\\s*\"([^\"]+)\",?"
     private const val NUMBER_PATTERN = "\"%s\"\\s*:\\s*([0-9]+)"
-    private val privacyTargetPatterns = listOf(
-        STRING_PATTERN.format("latitude").toRegex(),
-        STRING_PATTERN.format("address").toRegex(),
-        STRING_PATTERN.format("phone").toRegex(),
-        STRING_PATTERN.format("plateNumber").toRegex(),
-        NUMBER_PATTERN.format("userId").toRegex(),
-        NUMBER_PATTERN.format("latitude").toRegex(),
-        NUMBER_PATTERN.format("longitude").toRegex(),
-    )
+    private val privacyTargetPatterns =
+        listOf(
+            STRING_PATTERN.format("latitude").toRegex(),
+            STRING_PATTERN.format("address").toRegex(),
+            STRING_PATTERN.format("phone").toRegex(),
+            STRING_PATTERN.format("plateNumber").toRegex(),
+            NUMBER_PATTERN.format("userId").toRegex(),
+            NUMBER_PATTERN.format("latitude").toRegex(),
+            NUMBER_PATTERN.format("longitude").toRegex(),
+        )
 
-    fun masking(input: String): String {
-        return try {
+    fun masking(input: String): String =
+        try {
             var replace = input
             for (pattern in privacyTargetPatterns) {
                 val matchResults = pattern.findAll(replace)
@@ -227,5 +253,4 @@ private object PrivacyLogFilter {
             logger.error("", e)
             "Privacy Masking Error"
         }
-    }
 }

@@ -27,10 +27,11 @@ class UsersController(
     private val userInteraction: UserInteraction,
     private val userFinder: UserFinder,
 ) {
-
     @Operation(summary = "사용자 리스트 조회")
     @GetMapping
-    fun findAll(@RequestParam(required = false) status: String?): Replies<UserResources.Reply.Simple> {
+    fun findAll(
+        @RequestParam(required = false) status: String?,
+    ): Replies<UserResources.Reply.Simple> {
         var users = userFinder.findByLive()
         status?.let {
             users = users.filter { user -> user.status == User.Status.valueOf(it) }
@@ -51,7 +52,9 @@ class UsersController(
 
     @Operation(summary = "사용자 정보 일괄 만료")
     @DeleteMapping("/{userIds}")
-    fun expireStatus(@PathVariable userIds: List<Long>): Reply<Unit> {
+    fun expireStatus(
+        @PathVariable userIds: List<Long>,
+    ): Reply<Unit> {
         userInteraction.expireBy(userIds)
         return Unit.toReply()
     }

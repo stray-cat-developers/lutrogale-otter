@@ -7,24 +7,25 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SwaggerConfiguration {
+    @Bean
+    fun default(): GroupedOpenApi =
+        GroupedOpenApi
+            .builder()
+            .group("API")
+            .addOpenApiCustomizer {
+                it.info.version("v1")
+                it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
+            }.packagesToScan("io.mustelidae.otter.lutrogale.api")
+            .build()
 
     @Bean
-    fun default(): GroupedOpenApi = GroupedOpenApi.builder()
-        .group("API")
-        .addOpenApiCustomizer {
-            it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
-        }
-        .packagesToScan("io.mustelidae.otter.lutrogale.api")
-        .build()
-
-    @Bean
-    fun maintenance(): GroupedOpenApi = GroupedOpenApi.builder()
-        .group("Maintenance")
-        .addOpenApiCustomizer {
-            it.info.version("v1")
-            it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
-        }
-        .packagesToScan("io.mustelidae.otter.lutrogale.web")
-        .build()
+    fun maintenance(): GroupedOpenApi =
+        GroupedOpenApi
+            .builder()
+            .group("Maintenance")
+            .addOpenApiCustomizer {
+                it.info.version("v1")
+                it.components.schemas.putAll(ModelConverters.getInstance().read(GlobalErrorFormat::class.java))
+            }.packagesToScan("io.mustelidae.otter.lutrogale.web")
+            .build()
 }

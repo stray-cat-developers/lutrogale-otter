@@ -26,15 +26,17 @@ class AuthorityBundleInteraction(
     private val authorityDefinitionFinder: AuthorityDefinitionFinder,
     private val menuNavigationFinder: MenuNavigationFinder,
 ) {
-
     fun hasMenuNavigations(authorityDefinitionId: Long): List<MenuNavigation> {
         val authorityNavigationUnits =
             authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionId(authorityDefinitionId) ?: emptyList()
 
-        return authorityNavigationUnits.map { it.menuNavigation!! }
+        return authorityNavigationUnits.mapNotNull { it.menuNavigation }
     }
 
-    fun addBy(authorityDefinitionId: Long, navigationIdGroup: List<Long>) {
+    fun addBy(
+        authorityDefinitionId: Long,
+        navigationIdGroup: List<Long>,
+    ) {
         val authorityDefinition = authorityDefinitionFinder.findByLive(authorityDefinitionId)
         val projectId = authorityDefinition.project!!.id!!
         val menuNavigations = menuNavigationFinder.findByLive(projectId, navigationIdGroup)
@@ -45,17 +47,22 @@ class AuthorityBundleInteraction(
             putInParentMenuNavigation(targetMenuNavigations, menuNavigation)
         }
 
-        val mappingUnits = targetMenuNavigations.map {
-            AuthorityNavigationUnit().apply {
-                setBy(it)
-                setBy(authorityDefinition)
+        val mappingUnits =
+            targetMenuNavigations.map {
+                AuthorityNavigationUnit().apply {
+                    setBy(it)
+                    setBy(authorityDefinition)
+                }
             }
-        }
 
         authorityNavigationUnitRepository.saveAll(mappingUnits)
     }
 
-    fun createBundle(projectId: Long, name: String, menuNavigationIdGroup: List<Long>): Long {
+    fun createBundle(
+        projectId: Long,
+        name: String,
+        menuNavigationIdGroup: List<Long>,
+    ): Long {
         val project = projectFinder.findBy(projectId)
         val authorityDefinition = authorityDefinitionInteraction.createBy(project, name)
         this.addBy(authorityDefinition.id!!, menuNavigationIdGroup)
@@ -63,9 +70,7 @@ class AuthorityBundleInteraction(
         return authorityDefinitionRepository.save(authorityDefinition).id!!
     }
 
-    fun getBundles(projectId: Long): List<AuthorityDefinition> {
-        return authorityDefinitionFinder.findListBy(projectId)
-    }
+    fun getBundles(projectId: Long): List<AuthorityDefinition> = authorityDefinitionFinder.findListBy(projectId)
 
     fun lookInBundle(authorityDefinitionId: Long): List<ReplyOfMenuNavigation> {
         val menuNavigations = this.hasMenuNavigations(authorityDefinitionId)
@@ -90,26 +95,38 @@ class AuthorityBundleInteraction(
         }
     }
 
-    fun mappingNavigationAndDefinition(projectId: Long, authorityDefinitionId: Long, menuNavigationId: Long) {
+    fun mappingNavigationAndDefinition(
+        projectId: Long,
+        authorityDefinitionId: Long,
+        menuNavigationId: Long,
+    ) {
         val authorityDefinition = authorityDefinitionFinder.findBy(authorityDefinitionId)
         val menuNavigation = menuNavigationFinder.findByMenuNavigationId(projectId, menuNavigationId)
 
-        val mappingUnit = AuthorityNavigationUnit().apply {
-            setBy(menuNavigation)
-            setBy(authorityDefinition)
-        }
+        val mappingUnit =
+            AuthorityNavigationUnit().apply {
+                setBy(menuNavigation)
+                setBy(authorityDefinition)
+            }
 
         authorityNavigationUnitRepository.save(mappingUnit)
     }
 
-    fun expireBy(projectId: Long, authorityDefinitionId: Long) {
+    fun expireBy(
+        projectId: Long,
+        authorityDefinitionId: Long,
+    ) {
         val authorityDefinition = authorityDefinitionFinder.findByLive(projectId, authorityDefinitionId)
 
         authorityDefinition.expire()
         authorityDefinitionRepository.save(authorityDefinition)
     }
 
-    fun removeMappingNavigationAndDefinition(projectId: Long, authorityDefinitionId: Long, menuNavigationIdGroup: List<Long>) {
+    fun removeMappingNavigationAndDefinition(
+        projectId: Long,
+        authorityDefinitionId: Long,
+        menuNavigationIdGroup: List<Long>,
+    ) {
         val mappingUnits = definitionAndNavigationFinder.findMappings(authorityDefinitionId, menuNavigationIdGroup)
 
         mappingUnits.map { it.expire() }

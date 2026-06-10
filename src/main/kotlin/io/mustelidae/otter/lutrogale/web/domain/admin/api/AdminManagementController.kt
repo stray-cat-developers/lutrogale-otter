@@ -32,7 +32,9 @@ class AdminManagementController(
     @Operation(summary = "어드민 만료 (SUPER 전용)")
     @PostMapping("/{adminId}/expire")
     @ResponseStatus(HttpStatus.CREATED)
-    fun expire(@PathVariable adminId: Long): Reply<Unit> {
+    fun expire(
+        @PathVariable adminId: Long,
+    ): Reply<Unit> {
         val sessionInfo = AdminSession(httpSession).infoOrThrow()
         val caller = adminFinder.findBy(sessionInfo.adminId)
         if (caller.role != AdminRole.SUPER) {

@@ -8,7 +8,6 @@ import org.testcontainers.utility.DockerImageName
 
 @TestConfiguration(proxyBeanMethods = false)
 class TestRedisConfiguration {
-
     @Bean
     @ServiceConnection(name = "redis")
     fun redisContainer(): GenericContainer<*> =

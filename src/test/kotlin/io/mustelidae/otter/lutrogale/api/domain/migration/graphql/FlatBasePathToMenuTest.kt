@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod
 
 class FlatBasePathToMenuTest {
-
     @Test
     fun graphQLTestGETAndPOST() {
         val schema = DummyHttpSpecClient.TWEET_GRAPHQL
         val rootMenuNavigation = MenuNavigation.root()
-        val project = Project("gql test", null, "").apply {
-            addBy(rootMenuNavigation)
-        }
+        val project =
+            Project("gql test", null, "").apply {
+                addBy(rootMenuNavigation)
+            }
         val menuNavigationRepository: MenuNavigationRepository = mockk()
         every { menuNavigationRepository.save(any()) } returns MenuNavigation.root()
         val httpOperation = HttpOperation.GET_AND_POST
@@ -35,9 +35,10 @@ class FlatBasePathToMenuTest {
     fun graphQLTestOnlyGET() {
         val schema = DummyHttpSpecClient.TWEET_GRAPHQL
         val rootMenuNavigation = MenuNavigation.root()
-        val project = Project("gql test", null, "").apply {
-            addBy(rootMenuNavigation)
-        }
+        val project =
+            Project("gql test", null, "").apply {
+                addBy(rootMenuNavigation)
+            }
         val menuNavigationRepository: MenuNavigationRepository = mockk()
         every { menuNavigationRepository.save(any()) } returns MenuNavigation.root()
         val httpOperation = HttpOperation.ONLY_GET
@@ -53,9 +54,10 @@ class FlatBasePathToMenuTest {
     fun graphQLTestOnlyPOST() {
         val schema = DummyHttpSpecClient.TWEET_GRAPHQL
         val rootMenuNavigation = MenuNavigation.root()
-        val project = Project("gql test", null, "").apply {
-            addBy(rootMenuNavigation)
-        }
+        val project =
+            Project("gql test", null, "").apply {
+                addBy(rootMenuNavigation)
+            }
         val menuNavigationRepository: MenuNavigationRepository = mockk()
         every { menuNavigationRepository.save(any()) } returns MenuNavigation.root()
         val httpOperation = HttpOperation.ONLY_POST

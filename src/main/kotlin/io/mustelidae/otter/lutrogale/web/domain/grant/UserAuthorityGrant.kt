@@ -24,17 +24,17 @@ class UserAuthorityGrant : Audit() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", updatable = false, nullable = false)
     var user: User? = null
-        private set
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authorityDefinitionId", updatable = false, nullable = false)
     var authorityDefinition: AuthorityDefinition? = null
-        private set
+        protected set
 
     var status = true
 

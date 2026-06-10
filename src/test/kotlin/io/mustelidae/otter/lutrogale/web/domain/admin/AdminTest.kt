@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 
 internal class AdminTest {
-
     @Test
     fun `Admin-of 로 생성한 어드민은 즉시 활성 상태이다`() {
         val admin = Admin.of("test@test.com", "password", "테스트", null, null)

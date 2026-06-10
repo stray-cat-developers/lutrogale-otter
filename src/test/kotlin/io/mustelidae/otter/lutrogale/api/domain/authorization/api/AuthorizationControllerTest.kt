@@ -17,14 +17,16 @@ import org.springframework.web.bind.annotation.RequestMethod
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class AuthorizationControllerTest : FlowTestSupport() {
-
     @Autowired private lateinit var projectRepository: ProjectRepository
 
     @Autowired private lateinit var redisTemplate: StringRedisTemplate
 
     @BeforeEach
     fun clearCache() {
-        redisTemplate.connectionFactory?.connection?.flushAll()
+        redisTemplate.connectionFactory
+            ?.connection
+            ?.serverCommands()
+            ?.flushAll()
     }
 
     @Test

@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 class AdminResources {
-
     @Schema(name = "Lutrogale.Admin.Modify")
     class Modify(
         val description: String,
@@ -23,11 +22,9 @@ class AdminResources {
         val img: String? = null,
         val role: AdminRole,
     ) {
-
         companion object {
-
-            fun from(admin: Admin): Reply {
-                return admin.run {
+            fun from(admin: Admin): Reply =
+                admin.run {
                     Reply(
                         id!!,
                         email,
@@ -37,12 +34,10 @@ class AdminResources {
                         role,
                     )
                 }
-            }
         }
     }
 
     class Request {
-
         @Schema(name = "Lutrogale.Admin.Request.Create")
         class Create(
             val email: String,
@@ -71,8 +66,8 @@ class AdminResources {
         val children: List<AdminRow>,
     ) {
         companion object {
-            fun from(admin: Admin): AdminRow {
-                return AdminRow(
+            fun from(admin: Admin): AdminRow =
+                AdminRow(
                     id = admin.id!!,
                     email = admin.email,
                     name = admin.name,
@@ -82,7 +77,6 @@ class AdminResources {
                     parentAdminId = admin.parentAdmin?.id,
                     children = admin.admins.map { from(it) },
                 )
-            }
         }
     }
 }

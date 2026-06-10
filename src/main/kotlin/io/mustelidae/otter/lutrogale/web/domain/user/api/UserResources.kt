@@ -14,14 +14,14 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
 
 class UserResources {
-
     class BatchRegister {
-
         @Schema(name = "Lutrogale.User.BatchRegister.Request")
         data class Request(
             @field:Size(min = 1, max = 10)
-            val emails: List<@Email @NotBlank
-            String,>,
+            val emails: List<
+                @Email @NotBlank
+                String,
+            >,
             val projectId: Long?,
             val authorityDefinitionId: Long?,
             val initialStatus: User.Status,
@@ -46,7 +46,6 @@ class UserResources {
     )
 
     class Modify {
-
         @Schema(name = "Lutrogale.User.Modify.Info")
         data class Info(
             val isPrivacy: Boolean,
@@ -58,9 +57,7 @@ class UserResources {
         data class UserState(
             val status: String,
         ) {
-            fun getStatus(): User.Status {
-                return User.Status.valueOf(this.status.uppercase())
-            }
+            fun getStatus(): User.Status = User.Status.valueOf(this.status.uppercase())
         }
     }
 
@@ -76,8 +73,8 @@ class UserResources {
             val department: String? = null,
         ) {
             companion object {
-                fun from(user: User): Simple {
-                    return user.run {
+                fun from(user: User): Simple =
+                    user.run {
                         Simple(
                             id!!,
                             email,
@@ -88,7 +85,6 @@ class UserResources {
                             department,
                         )
                     }
-                }
             }
         }
 

@@ -37,7 +37,11 @@ class CrossScriptingFilter : Filter {
      * @throws ServletException
      */
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+    override fun doFilter(
+        request: ServletRequest,
+        response: ServletResponse,
+        chain: FilterChain,
+    ) {
         chain.doFilter(RequestWrapper(request as HttpServletRequest), response)
     }
 

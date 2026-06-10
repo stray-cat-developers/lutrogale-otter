@@ -1,7 +1,8 @@
 package io.mustelidae.otter.lutrogale.common
 
-enum class ErrorCode(val summary: String) {
-
+enum class ErrorCode(
+    val summary: String,
+) {
     H000("Human error"),
 
     HD00("Data not found"),

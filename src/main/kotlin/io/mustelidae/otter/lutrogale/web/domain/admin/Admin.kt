@@ -30,24 +30,24 @@ class Admin(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     @Column(nullable = false)
     var pw: String? = null
-        private set
+        protected set
 
     var status = true
-        private set
+        protected set
 
     @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     var role: AdminRole = AdminRole.REGULAR
-        private set
+        protected set
 
     @ManyToOne
     @JoinColumn(name = "parentId")
     var parentAdmin: Admin? = null
-        private set
+        protected set
 
     @SQLRestriction("status = true")
     @OneToMany(
@@ -83,11 +83,17 @@ class Admin(
     companion object {
         private val passwordEncoder = BCryptPasswordEncoder(10)
 
-        fun of(email: String, pw: String, name: String, description: String?, img: String?, role: AdminRole = AdminRole.REGULAR): Admin {
-            return Admin(email, name, description, img).apply {
+        fun of(
+            email: String,
+            pw: String,
+            name: String,
+            description: String?,
+            img: String?,
+            role: AdminRole = AdminRole.REGULAR,
+        ): Admin =
+            Admin(email, name, description, img).apply {
                 setPassword(pw)
                 this.role = role
             }
-        }
     }
 }
