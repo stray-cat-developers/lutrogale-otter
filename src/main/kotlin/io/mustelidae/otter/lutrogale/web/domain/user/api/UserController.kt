@@ -51,8 +51,8 @@ class UserController(
     @ResponseStatus(HttpStatus.CREATED)
     fun batchCreate(
         @RequestBody @Valid
-        request: UserResources.BatchRegister.Request,
-    ): Replies<UserResources.BatchRegister.Result> {
+        request: UserResources.Request.BatchRegister,
+    ): Replies<UserResources.Reply.BatchRegister> {
         val sessionInfo = AdminSession(httpSession).infoOrThrow()
         val caller = adminFinder.findBy(sessionInfo.adminId)
         if (caller.role != AdminRole.SUPER) {

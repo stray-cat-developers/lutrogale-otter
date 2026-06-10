@@ -78,20 +78,20 @@ class UserInteraction(
         projectId: Long?,
         authorityDefinitionId: Long?,
         initialStatus: User.Status,
-    ): List<UserResources.BatchRegister.Result> {
+    ): List<UserResources.Reply.BatchRegister> {
         if (initialStatus == User.Status.EXPIRE || initialStatus == User.Status.REJECT) {
             throw InvalidArgumentException("대량 등록 초기 상태는 ALLOW 또는 WAIT만 허용됩니다.")
         }
         return emails.map { email ->
             val existing = userFinder.findBy(email)
             if (existing != null) {
-                UserResources.BatchRegister.Result(email, UserResources.BatchRegister.Result.Outcome.SKIPPED, null)
+                UserResources.Reply.BatchRegister(email, UserResources.Reply.BatchRegister.Outcome.SKIPPED, null)
             } else {
                 val user = createBy(email, email.substringBefore("@"), initialStatus)
                 if (initialStatus == User.Status.ALLOW && projectId != null && authorityDefinitionId != null) {
                     userGrantInteraction.addByAuthorityGrant(user.id!!, projectId, listOf(authorityDefinitionId))
                 }
-                UserResources.BatchRegister.Result(email, UserResources.BatchRegister.Result.Outcome.SUCCESS, user.id)
+                UserResources.Reply.BatchRegister(email, UserResources.Reply.BatchRegister.Outcome.SUCCESS, user.id)
             }
         }
     }
