@@ -17,7 +17,7 @@ class AuthorityDefinitionFinder(
 ) {
     fun findByLive(authorityDefinitionId: Long): AuthorityDefinition {
         val authorityDefinition = this.findBy(authorityDefinitionId)
-        if (!authorityDefinition.status) throw throw PolicyException(DefaultError(ErrorCode.PL02, "해당 사용자는 로그인 권한이 만료되었습니다."))
+        if (!authorityDefinition.status) throw PolicyException(DefaultError(ErrorCode.PL02, "해당 권한 그룹은 만료되었습니다."))
         return authorityDefinition
     }
 
@@ -46,7 +46,7 @@ class AuthorityDefinitionFinder(
 
         authorityDefinitions.forEach {
             if (!it.status) {
-                throw PolicyException(DefaultError(ErrorCode.PL02, "해당 사용자는 로그인 권한이 만료되었습니다.", causeBy = mapOf("id" to it.id)))
+                throw PolicyException(DefaultError(ErrorCode.PL02, "해당 권한 그룹은 만료되었습니다.", causeBy = mapOf("id" to it.id)))
             }
         }
 

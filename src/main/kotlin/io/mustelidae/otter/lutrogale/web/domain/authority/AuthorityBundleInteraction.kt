@@ -30,7 +30,7 @@ class AuthorityBundleInteraction(
         val authorityNavigationUnits =
             authorityNavigationUnitRepository.findByStatusTrueAndAuthorityDefinitionId(authorityDefinitionId) ?: emptyList()
 
-        return authorityNavigationUnits.map { it.menuNavigation!! }
+        return authorityNavigationUnits.mapNotNull { it.menuNavigation }
     }
 
     fun addBy(

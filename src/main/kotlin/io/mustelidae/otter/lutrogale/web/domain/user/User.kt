@@ -96,7 +96,7 @@ class User(
         status = Status.EXPIRE
     }
 
-    fun getProjects(): List<Project> = this.authorityDefinitions.map { it.project!! }
+    fun getProjects(): List<Project> = this.authorityDefinitions.mapNotNull { it.project }
 
     enum class Status {
         // 허가

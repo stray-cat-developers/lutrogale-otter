@@ -45,7 +45,7 @@ class SwaggerSpec(
                         val treeNode = Jackson.getYmlMapper().readTree(originalSpec)
                         treeNode.get("swagger") ?: treeNode.get("openapi")
                     } catch (e: Exception) {
-                        throw IllegalStateException("The format of the Open API Spec is not YAML Type.")
+                        throw IllegalStateException("The format of the Open API Spec is not YAML Type.", e)
                     }
                 }
             }

@@ -21,7 +21,7 @@ class MenuNavigationFinder(
 
         menuNavigations.forEach {
             if (!it.status) {
-                throw PolicyException(DefaultError(ErrorCode.PL02, "해당 사용자는 로그인 권한이 만료되었습니다."))
+                throw PolicyException(DefaultError(ErrorCode.PL02, "해당 메뉴 네비게이션은 만료되었습니다."))
             }
         }
 
@@ -50,7 +50,7 @@ class MenuNavigationFinder(
     fun findByLive(menuNavigationId: Long): MenuNavigation {
         val menuNavigation: MenuNavigation =
             menuNavigationRepository.findByIdOrNull(menuNavigationId)
-                ?: throw DataNotFindException("사용자 정보가 없습니다.")
+                ?: throw DataNotFindException("메뉴 네비게이션 정보가 없습니다.")
         if (!menuNavigation.status) {
             throw PolicyException(DefaultError(ErrorCode.PL02, "해당 사용자는 로그인 권한이 만료되었습니다."))
         }

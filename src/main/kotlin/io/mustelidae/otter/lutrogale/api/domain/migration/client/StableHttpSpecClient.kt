@@ -43,7 +43,7 @@ class StableHttpSpecClient(
 
         val contentType =
             when (type) {
-                SwaggerSpec.Type.JSON -> Pair("Content-Type", ContentType.APPLICATION_JSON)
+                SwaggerSpec.Type.JSON -> Pair("Content-Type", "application/json")
                 SwaggerSpec.Type.YAML -> Pair("Content-Type", "application/yaml")
             }
 
