@@ -6,16 +6,24 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.client5.http.impl.classic.HttpClients
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder
 import org.apache.hc.core5.util.TimeValue
-import java.util.concurrent.TimeUnit
+import org.apache.hc.core5.util.Timeout
+import org.apache.hc.client5.http.config.ConnectionConfig as HttpConnectionConfig
 
 object RestClient {
     fun new(connInfo: ConnectionConfig): CloseableHttpClient {
+        val httpConnConfig =
+            HttpConnectionConfig
+                .custom()
+                .setConnectTimeout(Timeout.ofMilliseconds(connInfo.connTimeout.toLong()))
+                .setTimeToLive(TimeValue.ofSeconds(connInfo.connLiveDuration))
+                .build()
+
         val manager =
             PoolingHttpClientConnectionManagerBuilder
                 .create()
                 .setMaxConnPerRoute(connInfo.perRoute)
                 .setMaxConnTotal(connInfo.connTotal)
-                .setConnectionTimeToLive(TimeValue.ofSeconds(connInfo.connLiveDuration))
+                .setDefaultConnectionConfig(httpConnConfig)
                 .build()
 
         return HttpClients
@@ -24,8 +32,7 @@ object RestClient {
             .setDefaultRequestConfig(
                 RequestConfig
                     .custom()
-                    .setConnectTimeout(connInfo.connTimeout.toLong(), TimeUnit.SECONDS)
-                    .setResponseTimeout(connInfo.readTimeout * 2, TimeUnit.SECONDS)
+                    .setResponseTimeout(Timeout.ofMilliseconds(connInfo.readTimeout * 2))
                     .build(),
             ).build()
     }

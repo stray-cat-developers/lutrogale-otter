@@ -50,6 +50,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 
     implementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.20")
+    implementation("javax.xml.bind:jaxb-api:2.3.1") // swagger-parser-v2-converter uses javax.xml.bind (removed in JDK 11+)
 
     kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
     implementation("com.querydsl:querydsl-core:5.1.0")
