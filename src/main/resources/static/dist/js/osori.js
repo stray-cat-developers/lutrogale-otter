@@ -47,12 +47,12 @@ var AJAX = (function() {
 var OPTION = (function() {
     var DEFAULT = {
         'jstree': {
-            'plugins': ['contextmenu', 'dnd', 'changed', 'crrm', 'sort', 'types'],
+            'plugins': ['contextmenu', 'dnd', 'changed', 'sort', 'types'],
             'core': {
                 'check_callback': true,
                 'data': [],
                 'themes': {
-                    'name': 'proton',
+                    'name': 'default',
                     'responsive': true
                 }
             },
@@ -124,7 +124,7 @@ var OPTION = (function() {
             'autoWidth': false,
             'columnDefs': [],
             'language': {
-                'url': '//cdn.datatables.net/plug-ins/1.10.12/i18n/Korean.json'
+                'url': '/static/plugins/datatables/i18n/Korean.json'
             }
         }
     };

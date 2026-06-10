@@ -27,8 +27,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="inputProjectDescription">설명</label>
-                                        <div id="inputProjectDescription" data-placeholder="Place some text here"  style="font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
-                                        </div>
+                                        <textarea id="inputProjectDescription" class="form-control" rows="4" placeholder="Place some text here"></textarea>
                                     </div>
                                 </div>
                                 <!-- /.box-body -->
@@ -44,9 +43,6 @@
         </@layout.baseWrapper>
 
         <script>
-            $.fn.wysihtml5.defaultOptions.locale = 'ko-KR';
-            $("#inputProjectDescription").wysihtml5();
-
             $('#btn_submit').click(function(){
                 if($('#inputProjectName').val() === ""){
                     $('.form-group:first').removeClass('has-feedback').addClass('has-error');
@@ -59,7 +55,7 @@
                     url: OsoriRoute.getUri("project.create"),
                     data: {
                         name: $('#inputProjectName').val(),
-                        description: $('#inputProjectDescription').html()
+                        description: $('#inputProjectDescription').val()
                     }
                 };
 
