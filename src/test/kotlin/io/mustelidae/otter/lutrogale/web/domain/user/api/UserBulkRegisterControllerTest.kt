@@ -47,7 +47,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
     @Test
     fun `SUPER 어드민이 신규 이메일 목록을 등록하면 모두 SUCCESS를 반환한다`() {
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf("bulk1@test.com", "bulk2@test.com"),
                 projectId = null,
                 authorityDefinitionId = null,
@@ -57,14 +57,14 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
         val results = flow.bulkRegister(superSession, request)
 
         results.size shouldBe 2
-        results.all { it.outcome == UserResources.BatchRegister.Result.Outcome.SUCCESS } shouldBe true
+        results.all { it.outcome == UserResources.Reply.BatchRegister.Outcome.SUCCESS } shouldBe true
         results.all { it.userId != null } shouldBe true
     }
 
     @Test
     fun `이미 등록된 이메일은 SKIPPED를 반환하고 신규 이메일은 SUCCESS를 반환한다`() {
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf(EmbeddedDbInitializer.USER_EMAIL, "new-user@test.com"),
                 projectId = null,
                 authorityDefinitionId = null,
@@ -74,14 +74,14 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
         val results = flow.bulkRegister(superSession, request)
 
         results.size shouldBe 2
-        results.first { it.email == EmbeddedDbInitializer.USER_EMAIL }.outcome shouldBe UserResources.BatchRegister.Result.Outcome.SKIPPED
-        results.first { it.email == "new-user@test.com" }.outcome shouldBe UserResources.BatchRegister.Result.Outcome.SUCCESS
+        results.first { it.email == EmbeddedDbInitializer.USER_EMAIL }.outcome shouldBe UserResources.Reply.BatchRegister.Outcome.SKIPPED
+        results.first { it.email == "new-user@test.com" }.outcome shouldBe UserResources.Reply.BatchRegister.Outcome.SUCCESS
     }
 
     @Test
     fun `전부 중복 이메일이면 전부 SKIPPED를 반환한다`() {
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf(EmbeddedDbInitializer.USER_EMAIL),
                 projectId = null,
                 authorityDefinitionId = null,
@@ -91,7 +91,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
         val results = flow.bulkRegister(superSession, request)
 
         results.size shouldBe 1
-        results.first().outcome shouldBe UserResources.BatchRegister.Result.Outcome.SKIPPED
+        results.first().outcome shouldBe UserResources.Reply.BatchRegister.Outcome.SKIPPED
         results.first().userId shouldBe null
     }
 
@@ -99,7 +99,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
     fun `ALLOW 상태로 등록하고 권한그룹 선택 시 사용자가 생성되고 권한이 부여된다`() {
         val email = "bulk-with-grant@test.com"
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf(email),
                 projectId = projectId,
                 authorityDefinitionId = authorityDefinitionId,
@@ -108,7 +108,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
 
         val results = flow.bulkRegister(superSession, request)
 
-        results.first().outcome shouldBe UserResources.BatchRegister.Result.Outcome.SUCCESS
+        results.first().outcome shouldBe UserResources.Reply.BatchRegister.Outcome.SUCCESS
         val userId = results.first().userId!!
         val user = userRepository.findById(userId).orElseThrow()
         user.status shouldBe User.Status.ALLOW
@@ -119,7 +119,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
     fun `WAIT 상태로 등록하면 사용자만 생성되고 권한은 부여되지 않는다`() {
         val email = "bulk-wait@test.com"
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf(email),
                 projectId = projectId,
                 authorityDefinitionId = authorityDefinitionId,
@@ -128,7 +128,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
 
         val results = flow.bulkRegister(superSession, request)
 
-        results.first().outcome shouldBe UserResources.BatchRegister.Result.Outcome.SUCCESS
+        results.first().outcome shouldBe UserResources.Reply.BatchRegister.Outcome.SUCCESS
         val userId = results.first().userId!!
         val user = userRepository.findById(userId).orElseThrow()
         user.status shouldBe User.Status.WAIT
@@ -141,7 +141,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
         val regularSession = flow.login("regular@bulk-test.com", "pw")
 
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf("some@test.com"),
                 projectId = null,
                 authorityDefinitionId = null,
@@ -156,7 +156,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
     @Test
     fun `이메일 11개를 입력하면 400을 반환한다`() {
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = (1..11).map { "overflow$it@test.com" },
                 projectId = null,
                 authorityDefinitionId = null,
@@ -172,7 +172,7 @@ internal class UserBulkRegisterControllerTest : FlowTestSupport() {
     fun `이름은 이메일 at 앞부분으로 설정된다`() {
         val email = "john.doe@example.com"
         val request =
-            UserResources.BatchRegister.Request(
+            UserResources.Request.BatchRegister(
                 emails = listOf(email),
                 projectId = null,
                 authorityDefinitionId = null,
