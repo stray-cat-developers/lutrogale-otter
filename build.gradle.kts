@@ -66,7 +66,7 @@ dependencies {
     implementation("com.google.guava:guava:33.6.0-jre")
     implementation("commons-io:commons-io:2.14.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
+    implementation("org.apache.httpcomponents.client5:httpclient5")
     testImplementation("io.mockk:mockk:1.14.3")
     testImplementation("com.h2database:h2")
     implementation("com.graphql-java:graphql-java:25.0")
