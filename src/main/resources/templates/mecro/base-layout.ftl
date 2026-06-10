@@ -6,7 +6,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <!-- Bootstrap 3.3.6 -->
+    <!-- Bootstrap 3.4.1 -->
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-switch.min.css">
     <!-- Theme style -->
@@ -26,7 +26,7 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
-    <!-- Bootstrap 3.3.6 -->
+    <!-- Bootstrap 3.4.1 -->
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap-switch.min.js"></script>
 
