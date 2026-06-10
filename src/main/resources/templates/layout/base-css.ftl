@@ -12,6 +12,6 @@
 <!-- nav-wizard -->
 <link rel="stylesheet" href="/static/plugins/nav-wizard/bootstrap-nav-wizard.css">
 <!-- jstree -->
-<link rel="stylesheet" href="/static/plugins/jstree/themes/proton/style.min.css">
+<link rel="stylesheet" href="/static/plugins/jstree/themes/default/style.min.css">
 
 <link rel="stylesheet" href="/static/dist/css/index.css">

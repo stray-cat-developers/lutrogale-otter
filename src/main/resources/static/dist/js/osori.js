@@ -52,7 +52,7 @@ var OPTION = (function() {
                 'check_callback': true,
                 'data': [],
                 'themes': {
-                    'name': 'proton',
+                    'name': 'default',
                     'responsive': true
                 }
             },
