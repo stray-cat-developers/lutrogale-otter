@@ -47,7 +47,7 @@ var AJAX = (function() {
 var OPTION = (function() {
     var DEFAULT = {
         'jstree': {
-            'plugins': ['contextmenu', 'dnd', 'changed', 'crrm', 'sort', 'types'],
+            'plugins': ['contextmenu', 'dnd', 'changed', 'sort', 'types'],
             'core': {
                 'check_callback': true,
                 'data': [],
