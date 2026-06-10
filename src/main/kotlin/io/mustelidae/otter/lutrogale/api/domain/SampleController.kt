@@ -14,21 +14,17 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/v1/sample")
 class SampleController {
-
     @Operation(hidden = true)
     @GetMapping
     fun helloWorld(
         @RequestHeader(RoleHeader.XUser.KEY) userId: Long,
-    ): Reply<String> {
-        return "Hello World"
+    ): Reply<String> =
+        "Hello World"
             .toReply()
-    }
 
     @Operation(hidden = true)
     @GetMapping("/list")
     fun helloWorld2(
         @RequestHeader(RoleHeader.XUser.KEY) userId: Long,
-    ): Replies<String> {
-        return listOf("a", "b", "c").toReplies()
-    }
+    ): Replies<String> = listOf("a", "b", "c").toReplies()
 }

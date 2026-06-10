@@ -25,8 +25,10 @@ class UserGrantInteraction(
     private val userPersonalGrantFinder: UserPersonalGrantFinder,
     private val menuNavigationFinder: MenuNavigationFinder,
 ) {
-
-    fun getUserAuthorityGrants(id: Long, projectId: Long): List<AuthorityGrant> {
+    fun getUserAuthorityGrants(
+        id: Long,
+        projectId: Long,
+    ): List<AuthorityGrant> {
         val user = userFinder.findBy(id)
 
         return user.userAuthorityGrants
@@ -36,10 +38,14 @@ class UserGrantInteraction(
             }
     }
 
-    fun getUserPersonalGrants(id: Long, projectId: Long): List<PersonalGrant> {
+    fun getUserPersonalGrants(
+        id: Long,
+        projectId: Long,
+    ): List<PersonalGrant> {
         val user = userFinder.findBy(id)
 
-        return user.userPersonalGrants.filter { it.menuNavigation!!.project!!.id == projectId }
+        return user.userPersonalGrants
+            .filter { it.menuNavigation!!.project!!.id == projectId }
             .map {
                 PersonalGrant.from(
                     it.menuNavigation!!,
@@ -49,7 +55,11 @@ class UserGrantInteraction(
             }
     }
 
-    fun addByAuthorityGrant(userId: Long, projectId: Long, authorityDefinitionIds: List<Long>) {
+    fun addByAuthorityGrant(
+        userId: Long,
+        projectId: Long,
+        authorityDefinitionIds: List<Long>,
+    ) {
         val user = userFinder.findByStatusAllow(userId)
         val authorityDefinitions = authorityDefinitionFinder.findByLive(authorityDefinitionIds)
 
@@ -63,17 +73,22 @@ class UserGrantInteraction(
             }
         }
 
-        val mappingGrants = authorityDefinitions.map {
-            UserAuthorityGrant().apply {
-                setBy(user)
-                setBy(it)
+        val mappingGrants =
+            authorityDefinitions.map {
+                UserAuthorityGrant().apply {
+                    setBy(user)
+                    setBy(it)
+                }
             }
-        }
 
         userAuthorityGrantRepository.saveAll(mappingGrants)
     }
 
-    fun removeByAuthorityGrant(userId: Long, projectId: Long, authorityDefinitionIdGroup: List<Long>) {
+    fun removeByAuthorityGrant(
+        userId: Long,
+        projectId: Long,
+        authorityDefinitionIdGroup: List<Long>,
+    ) {
         userFinder.findByStatusAllow(userId)
         val authorityDefinitions = authorityDefinitionFinder.findByLive(authorityDefinitionIdGroup)
 
@@ -89,7 +104,11 @@ class UserGrantInteraction(
         userAuthorityGrantRepository.saveAll(mappingGrants)
     }
 
-    fun addByPersonalGrant(userId: Long, projectId: Long, menuNavigationIds: List<Long>) {
+    fun addByPersonalGrant(
+        userId: Long,
+        projectId: Long,
+        menuNavigationIds: List<Long>,
+    ) {
         val user = userFinder.findByStatusAllow(userId)
         val menuNavigations: List<MenuNavigation> = menuNavigationFinder.findByLive(menuNavigationIds)
         for (menuNavigation in menuNavigations) {
@@ -102,16 +121,21 @@ class UserGrantInteraction(
             }
         }
 
-        val mappingGrants = menuNavigations.map {
-            UserPersonalGrant().apply {
-                setBy(user)
-                setBy(it)
+        val mappingGrants =
+            menuNavigations.map {
+                UserPersonalGrant().apply {
+                    setBy(user)
+                    setBy(it)
+                }
             }
-        }
         userPersonalGrantRepository.saveAll(mappingGrants)
     }
 
-    fun removeByPersonalGrant(userId: Long, projectId: Long, menuNavigationIds: List<Long>) {
+    fun removeByPersonalGrant(
+        userId: Long,
+        projectId: Long,
+        menuNavigationIds: List<Long>,
+    ) {
         userFinder.findByStatusAllow(userId)
         val menuNavigations: List<MenuNavigation> = menuNavigationFinder.findByLive(menuNavigationIds)
 

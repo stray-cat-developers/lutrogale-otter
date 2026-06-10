@@ -1,22 +1,28 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.springframework.boot") version "3.2.2"
+    id("org.springframework.boot") version "3.5.14"
     id("io.spring.dependency-management") version "1.1.4"
-    id("org.jmailen.kotlinter") version "3.14.0"
+    id("org.jmailen.kotlinter") version "5.5.0"
     id("com.avast.gradle.docker-compose") version "0.17.6"
     id("com.google.cloud.tools.jib") version "3.4.5"
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
-    kotlin("plugin.allopen") version "1.9.22"
-    kotlin("plugin.noarg") version "1.9.22"
-    kotlin("kapt") version "1.9.22"
+    kotlin("jvm") version "2.4.0"
+    kotlin("plugin.spring") version "2.4.0"
+    kotlin("plugin.jpa") version "2.4.0"
+    kotlin("plugin.allopen") version "2.4.0"
+    kotlin("plugin.noarg") version "2.4.0"
+    kotlin("kapt") version "2.4.0"
 }
 
 group = "io.mustelidae.otter.lutrogale"
 version = "1.0.3"
-java.sourceCompatibility = JavaVersion.VERSION_21
+
+kotlin {
+    jvmToolchain(21)
+    compilerOptions {
+        freeCompilerArgs.add("-Xjsr305=strict")
+    }
+}
 
 repositories {
     mavenLocal()
@@ -26,7 +32,7 @@ repositories {
 ext["log4j2.version"] = "2.17.1"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.4.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -49,22 +55,21 @@ dependencies {
     implementation("com.querydsl:querydsl-core:5.1.0")
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
 
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.6.2")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:6.1.11")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16")
 
     implementation("com.mysql:mysql-connector-j:9.4.0")
 
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
     implementation("org.springframework.session:spring-session-jdbc")
     implementation("org.springframework.data:spring-data-envers")
-    implementation("com.google.guava:guava:32.0.0-android")
+    implementation("com.google.guava:guava:33.6.0-jre")
     implementation("commons-io:commons-io:2.14.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
-    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("io.mockk:mockk:1.14.3")
     testImplementation("com.h2database:h2")
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
-    implementation("com.graphql-java:graphql-java:22.3")
+    implementation("com.graphql-java:graphql-java:25.0")
 
     implementation("org.springframework.security:spring-security-crypto")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -73,24 +78,18 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
 }
 
-tasks.withType<KotlinCompile>().all {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "21"
-    }
-}
-
-
 tasks.getByName<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()
 
-    // Testcontainers: DOCKER_HOST가 없으면 Rancher Desktop 소켓을 자동으로 탐지
-    if (System.getenv("DOCKER_HOST") == null) {
-        val rdSock = file("${System.getProperty("user.home")}/.rd/docker.sock")
-        if (rdSock.exists()) {
+    // Testcontainers: Rancher Desktop 소켓이 있으면 DOCKER_HOST 자동 설정 및 Ryuk 비활성화
+    val rdSock = file("${System.getProperty("user.home")}/.rd/docker.sock")
+    if (rdSock.exists()) {
+        if (System.getenv("DOCKER_HOST") == null) {
             environment("DOCKER_HOST", "unix://${rdSock.absolutePath}")
-            // Rancher Desktop은 Ryuk(socket mount)를 지원하지 않으므로 비활성화
+        }
+        // Rancher Desktop은 Ryuk(socket mount)를 지원하지 않으므로 비활성화
+        if (System.getenv("TESTCONTAINERS_RYUK_DISABLED") == null) {
             environment("TESTCONTAINERS_RYUK_DISABLED", "true")
         }
     }

@@ -30,11 +30,10 @@ class AdminSession(
         adminName = sessionInfo.adminName
     }
 
-    fun getAdminId(): Long? {
-        return if (adminId != null) {
+    fun getAdminId(): Long? =
+        if (adminId != null) {
             adminId as Long
         } else {
             null
         }
-    }
 }

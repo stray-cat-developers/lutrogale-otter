@@ -33,6 +33,10 @@ class SpringSessionAttributes : Serializable {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(referencedColumnName = "PRIMARY_ID", name = "SESSION_PRIMARY_ID", foreignKey = ForeignKey(name = "SPRING_SESSION_ATTRIBUTES_FK"))
+    @JoinColumn(
+        referencedColumnName = "PRIMARY_ID",
+        name = "SESSION_PRIMARY_ID",
+        foreignKey = ForeignKey(name = "SPRING_SESSION_ATTRIBUTES_FK"),
+    )
     var springSession: SpringSession? = null
 }

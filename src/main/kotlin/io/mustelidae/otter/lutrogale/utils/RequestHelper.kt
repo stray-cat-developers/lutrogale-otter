@@ -27,7 +27,7 @@ object RequestHelper {
                 !Strings.isNullOrEmpty(accept) && jsonPattern.matcher(accept).find() || !Strings.isNullOrEmpty(
                     contentType,
                 ) && jsonPattern.matcher(contentType).find()
-            )
+        )
     }
 
     @JvmStatic

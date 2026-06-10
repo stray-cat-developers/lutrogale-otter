@@ -19,7 +19,6 @@ class GraphQLMigrationInteraction(
     val projectFinder: ProjectFinder,
     val projectInteraction: ProjectInteraction,
 ) {
-
     @Transactional(readOnly = true)
     fun preview(
         url: String,

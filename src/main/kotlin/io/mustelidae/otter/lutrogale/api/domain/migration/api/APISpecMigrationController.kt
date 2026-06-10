@@ -23,10 +23,11 @@ class APISpecMigrationController(
     private val openAPIMigrationInteraction: OpenAPIMigrationInteraction,
     private val graphQLMigrationInteraction: GraphQLMigrationInteraction,
 ) {
-
     @PostMapping("/openapi/preview")
     @ResponseStatus(HttpStatus.OK)
-    fun previewOpenAPI(@RequestBody request: MigrationResources.Request.OpenAPI): Reply<String> {
+    fun previewOpenAPI(
+        @RequestBody request: MigrationResources.Request.OpenAPI,
+    ): Reply<String> {
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
 
@@ -37,7 +38,10 @@ class APISpecMigrationController(
 
     @PostMapping("/openapi/generate/project/{projectId}")
     @ResponseStatus(HttpStatus.CREATED)
-    fun generateOpenAPI(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.OpenAPI): Reply<Long> {
+    fun generateOpenAPI(
+        @PathVariable projectId: Long,
+        @RequestBody request: MigrationResources.Request.OpenAPI,
+    ): Reply<Long> {
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
 
@@ -47,7 +51,9 @@ class APISpecMigrationController(
 
     @PostMapping("/graphql/preview")
     @ResponseStatus(HttpStatus.OK)
-    fun previewGraphQL(@RequestBody request: MigrationResources.Request.GraphQL): Reply<String> {
+    fun previewGraphQL(
+        @RequestBody request: MigrationResources.Request.GraphQL,
+    ): Reply<String> {
         val header = request.header?.map { it.key to it.value }?.toList()
 
         val preview = graphQLMigrationInteraction.preview(request.url, request.httpOperation, header)
@@ -57,7 +63,10 @@ class APISpecMigrationController(
 
     @PostMapping("/graphql/generate/project/{projectId}")
     @ResponseStatus(HttpStatus.CREATED)
-    fun generateGraphQL(@PathVariable projectId: Long, @RequestBody request: MigrationResources.Request.GraphQL): Reply<Long> {
+    fun generateGraphQL(
+        @PathVariable projectId: Long,
+        @RequestBody request: MigrationResources.Request.GraphQL,
+    ): Reply<Long> {
         val header = request.header?.map { it.key to it.value }?.toList()
 
         val rootMenuId = graphQLMigrationInteraction.generate(projectId, request.url, request.httpOperation, header)

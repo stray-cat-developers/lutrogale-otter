@@ -15,7 +15,6 @@ class AccessCheckerHandler(
     private val menuNavigationInteraction: MenuNavigationInteraction,
     private val menuNavigationFinder: MenuNavigationFinder,
 ) {
-
     fun handle(checkType: AuthenticationCheckType): AccessChecker {
         if (checkType === AuthenticationCheckType.ID) {
             return IdBaseAccessChecker(menuNavigationFinder)

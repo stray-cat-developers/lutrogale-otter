@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController
 class AuthorityController(
     private val authorityBundleInteraction: AuthorityBundleInteraction,
 ) {
-
     @Operation(summary = "권한 그룹 생성")
     @PostMapping("/{projectId}/authority-bundle")
     fun create(
@@ -39,7 +38,9 @@ class AuthorityController(
 
     @Operation(summary = "권한 그룹 조회")
     @GetMapping("/{projectId}/authority-bundles")
-    fun findAll(@PathVariable projectId: Long): Replies<AuthorityBundleResources.Reply.AuthorityBundle> {
+    fun findAll(
+        @PathVariable projectId: Long,
+    ): Replies<AuthorityBundleResources.Reply.AuthorityBundle> {
         val authorityDefinitions = authorityBundleInteraction.getBundles(projectId)
         return authorityDefinitions
             .map { AuthorityBundleResources.Reply.AuthorityBundle.from(it) }
@@ -51,10 +52,10 @@ class AuthorityController(
     fun findBundlesNavigations(
         @PathVariable projectId: Long,
         @PathVariable authId: Long,
-    ): Replies<ReplyOfMenuNavigation> {
-        return authorityBundleInteraction.lookInBundle(authId)
+    ): Replies<ReplyOfMenuNavigation> =
+        authorityBundleInteraction
+            .lookInBundle(authId)
             .toReplies()
-    }
 
     @Operation(summary = "권한 그룹의 메뉴 네비게이션 트리 구조 조회")
     @GetMapping("/{projectId}/authority-bundle/{authId}/branches")

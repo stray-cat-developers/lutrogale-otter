@@ -14,9 +14,7 @@ open class Reply<T>() {
         this.content = content
     }
 
-    override fun toString(): String {
-        return String.format("Resource { content: %s, %s }", content, super.toString())
-    }
+    override fun toString(): String = String.format("Resource { content: %s, %s }", content, super.toString())
 }
 
 fun <T> T.toReply(): Reply<T> = Reply(this)

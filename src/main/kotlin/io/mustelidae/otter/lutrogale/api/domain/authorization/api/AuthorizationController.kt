@@ -32,7 +32,6 @@ class AuthorizationController(
     private val projectFinder: ProjectFinder,
     private val menuNavigationInteraction: MenuNavigationInteraction,
 ) {
-
     @Operation(summary = "메뉴ID 기반 권한 체크")
     @PostMapping("authorization-check/id")
     fun idChecks(
@@ -43,9 +42,10 @@ class AuthorizationController(
         val ids = request.ids
         val email = request.email
         if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
-            val accessStates = ids.map {
-                AccessResources.Reply.AccessState.ofDenied(it, "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.")
-            }
+            val accessStates =
+                ids.map {
+                    AccessResources.Reply.AccessState.ofDenied(it, "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.")
+                }
             return accessStates.toReplies()
         }
         val accessGrant = AccessGrant.ofIdBase(email, apiKey, ids)
@@ -84,7 +84,13 @@ class AuthorizationController(
     ): Replies<AccessResources.Reply.AccessState> {
         val email = request.email
         if (!clientCertificationInteraction.isAuthorizedUserIfAddNotFoundUser(email)) {
-            val accessStates = request.graphQLs.map { AccessResources.Reply.AccessState.ofDenied(it.operation, "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.") }
+            val accessStates =
+                request.graphQLs.map {
+                    AccessResources.Reply.AccessState.ofDenied(
+                        it.operation,
+                        "최초 접근한 사용자이며 사용자의 권한 등록이 필요합니다.",
+                    )
+                }
             return accessStates.toReplies()
         }
 
@@ -103,18 +109,21 @@ class AuthorizationController(
         val user = userFinder.findBy(userEmail) ?: throw DataNotFindException(userEmail, "사용자가 존재하지 않습니다.")
         val project = projectFinder.findByLiveProjectOfApiKey(apiKey)
 
-        val groupMenuNavigations = user.authorityDefinitions
-            .filter { it.project!!.id == project.id }
-            .flatMap { it.menuNavigations }
+        val groupMenuNavigations =
+            user.authorityDefinitions
+                .filter { it.project!!.id == project.id }
+                .flatMap { it.menuNavigations }
 
-        val personalMenuNavigations = user.menuNavigations
-            .filter { it.project!!.id == project.id }
+        val personalMenuNavigations =
+            user.menuNavigations
+                .filter { it.project!!.id == project.id }
 
         val navigations = groupMenuNavigations.plus(personalMenuNavigations)
 
-        val urls = navigations.map {
-            AccessResources.AccessUri.of(menuNavigationInteraction.getFullUrl(it), it.methodType)
-        }
+        val urls =
+            navigations.map {
+                AccessResources.AccessUri.of(menuNavigationInteraction.getFullUrl(it), it.methodType)
+            }
 
         return urls.toReplies()
     }

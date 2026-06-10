@@ -17,12 +17,23 @@ class AdminInteraction(
     private val adminRepository: AdminRepository,
     private val adminFinder: AdminFinder,
 ) {
-    fun register(email: String, pw: String, name: String, description: String?, img: String?): Admin {
+    fun register(
+        email: String,
+        pw: String,
+        name: String,
+        description: String?,
+        img: String?,
+    ): Admin {
         val admin = Admin.of(email, pw, name, description, img)
         return adminRepository.save(admin)
     }
 
-    fun modifyBy(adminId: Long, imageUrl: String, description: String, pw: String?) {
+    fun modifyBy(
+        adminId: Long,
+        imageUrl: String,
+        description: String,
+        pw: String?,
+    ) {
         val admin = adminFinder.findBy(adminId)
 
         admin.apply {
@@ -31,13 +42,21 @@ class AdminInteraction(
         }
 
         if (pw.isNullOrEmpty().not()) {
-            admin.setPassword(pw!!)
+            admin.setPassword(pw)
         }
 
         adminRepository.save(admin)
     }
 
-    fun registerBy(email: String, pw: String, name: String, description: String?, img: String?, role: AdminRole, parentAdminId: Long?): Long {
+    fun registerBy(
+        email: String,
+        pw: String,
+        name: String,
+        description: String?,
+        img: String?,
+        role: AdminRole,
+        parentAdminId: Long?,
+    ): Long {
         val admin = Admin.of(email, pw, name, description, img, role)
         if (parentAdminId != null) {
             val parentAdmin = adminFinder.findBy(parentAdminId)
@@ -46,7 +65,10 @@ class AdminInteraction(
         return adminRepository.save(admin).id!!
     }
 
-    fun expireBy(adminId: Long, requestingAdminId: Long) {
+    fun expireBy(
+        adminId: Long,
+        requestingAdminId: Long,
+    ) {
         if (adminId == requestingAdminId) {
             throw PolicyException(DefaultError(ErrorCode.PL02, "본인 계정은 만료할 수 없습니다."))
         }
@@ -55,7 +77,12 @@ class AdminInteraction(
         adminRepository.save(admin)
     }
 
-    fun changePasswordBy(targetAdminId: Long, requestingAdminId: Long, callerRole: AdminRole, newPw: String) {
+    fun changePasswordBy(
+        targetAdminId: Long,
+        requestingAdminId: Long,
+        callerRole: AdminRole,
+        newPw: String,
+    ) {
         if (callerRole == AdminRole.REGULAR && targetAdminId != requestingAdminId) {
             throw PermissionException("본인 계정의 비밀번호만 변경할 수 있습니다.")
         }

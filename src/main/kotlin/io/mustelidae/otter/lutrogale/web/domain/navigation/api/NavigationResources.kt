@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.bind.annotation.RequestMethod
 
 class NavigationResources {
-
     @Schema(name = "Lutrogale.Navigation.Modify")
     class Modify(
         val name: String,
@@ -25,10 +24,12 @@ class NavigationResources {
             val methodType: RequestMethod,
             val fullUrl: String? = null,
         ) {
-
             companion object {
-                fun from(menuNavigation: MenuNavigation, fullUrl: String): ReplyOfMenuNavigation {
-                    return menuNavigation.run {
+                fun from(
+                    menuNavigation: MenuNavigation,
+                    fullUrl: String,
+                ): ReplyOfMenuNavigation =
+                    menuNavigation.run {
                         ReplyOfMenuNavigation(
                             id!!,
                             type,
@@ -38,7 +39,6 @@ class NavigationResources {
                             fullUrl,
                         )
                     }
-                }
             }
         }
     }

@@ -20,7 +20,11 @@ class UrlBaseLoginFilter : Filter {
     }
 
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+    override fun doFilter(
+        request: ServletRequest,
+        response: ServletResponse,
+        chain: FilterChain,
+    ) {
         val servletRequest = request as HttpServletRequest
         if (servletRequest.requestURI.startsWith("/view")) {
             try {

@@ -18,18 +18,11 @@ class ProjectFinder(
     private val projectRepository: ProjectRepository,
     private val menuNavigationInteraction: MenuNavigationInteraction,
 ) {
+    fun findAllByLive(): List<Project> = findAll().filter { it.status }
 
-    fun findAllByLive(): List<Project> {
-        return findAll().filter { it.status }
-    }
+    protected fun findAll(): List<Project> = projectRepository.findAll()
 
-    protected fun findAll(): List<Project> {
-        return projectRepository.findAll()
-    }
-
-    fun findBy(id: Long): Project {
-        return projectRepository.findByIdOrNull(id) ?: throw DataNotFindException("프로젝트 정보가 없습니다.")
-    }
+    fun findBy(id: Long): Project = projectRepository.findByIdOrNull(id) ?: throw DataNotFindException("프로젝트 정보가 없습니다.")
 
     fun findByLive(id: Long): Project {
         val project = findBy(id)

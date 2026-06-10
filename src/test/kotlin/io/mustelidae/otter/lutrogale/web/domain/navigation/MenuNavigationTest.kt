@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod
 
 class MenuNavigationTest
 
-fun MenuNavigation.Companion.aFixture(apiKey: String): MenuNavigation {
-    return MenuNavigation(
+fun MenuNavigation.Companion.aFixture(apiKey: String): MenuNavigation =
+    MenuNavigation(
         "Test",
         Constant.NavigationType.FUNCTION,
         "/",
@@ -18,4 +18,3 @@ fun MenuNavigation.Companion.aFixture(apiKey: String): MenuNavigation {
     ).apply {
         setBy(Project.aFixture(apiKey))
     }
-}

@@ -59,6 +59,4 @@ class DataAuthentication(
     }
 }
 
-private fun Array<out RoleHeader.Role>.hasRole(role: RoleHeader.Role): Boolean {
-    return (this.find { it == role } != null)
-}
+private fun Array<out RoleHeader.Role>.hasRole(role: RoleHeader.Role): Boolean = (this.find { it == role } != null)

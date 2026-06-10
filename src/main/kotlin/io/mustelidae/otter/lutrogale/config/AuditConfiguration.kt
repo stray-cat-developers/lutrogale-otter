@@ -13,15 +13,11 @@ import java.util.Optional
 @Configuration
 @EnableJpaAuditing
 class AuditConfiguration {
-
     @Bean
-    internal fun auditorAware(): AuditorAware<*> {
-        return AuditorAwareImpl()
-    }
+    internal fun auditorAware(): AuditorAware<*> = AuditorAwareImpl()
 }
 
 class AuditorAwareImpl : AuditorAware<String> {
-
     override fun getCurrentAuditor(): Optional<String> {
         if (RequestContextHolder.getRequestAttributes() != null) {
             val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request

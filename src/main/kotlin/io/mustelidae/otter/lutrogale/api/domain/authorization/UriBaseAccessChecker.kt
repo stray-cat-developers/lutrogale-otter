@@ -9,7 +9,6 @@ import org.springframework.web.util.pattern.PathPatternParser
 class UriBaseAccessChecker(
     private val menuNavigationInteraction: MenuNavigationInteraction,
 ) : AccessChecker {
-
     override fun validate(
         sourceNavigationGroup: List<MenuNavigation>,
         accessGrant: AccessGrant,

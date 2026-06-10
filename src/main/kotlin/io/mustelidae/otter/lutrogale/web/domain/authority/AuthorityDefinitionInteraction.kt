@@ -13,11 +13,14 @@ import org.springframework.transaction.annotation.Transactional
 class AuthorityDefinitionInteraction(
     private val authorityDefinitionRepository: AuthorityDefinitionRepository,
 ) {
-
-    fun createBy(project: Project, name: String): AuthorityDefinition {
-        val authorityDefinition: AuthorityDefinition = AuthorityDefinition(name).apply {
-            setBy(project)
-        }
+    fun createBy(
+        project: Project,
+        name: String,
+    ): AuthorityDefinition {
+        val authorityDefinition: AuthorityDefinition =
+            AuthorityDefinition(name).apply {
+                setBy(project)
+            }
         return authorityDefinitionRepository.save(authorityDefinition)
     }
 }

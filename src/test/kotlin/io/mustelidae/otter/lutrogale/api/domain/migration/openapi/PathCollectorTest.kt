@@ -4,8 +4,8 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class PathCollectorTest {
-
-    val v3Json = """
+    val v3Json =
+        """
         {
            "openapi":"3.0.1",
            "info":{
@@ -219,7 +219,7 @@ class PathCollectorTest {
               }
            }
         }
-    """.trimIndent()
+        """.trimIndent()
 
     @Test
     fun collectTest() {

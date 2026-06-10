@@ -7,9 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.bind.annotation.RequestMethod
 
 class MenuTreeResources {
-
     class Request {
-
         @Schema(name = "Lutrogale.MenuTree.Request.Branch")
         class Branch(
             val treeId: String,
@@ -50,21 +48,19 @@ class MenuTreeResources {
             @JsonProperty(value = "a_attr")
             val replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation? = null,
         ) {
-
             companion object {
                 fun of(
                     treeId: String,
                     parentTreeId: String,
                     replyOfMenuNavigation: NavigationResources.Reply.ReplyOfMenuNavigation,
-                ): TreeBranch {
-                    return TreeBranch(
+                ): TreeBranch =
+                    TreeBranch(
                         treeId,
                         parentTreeId,
                         replyOfMenuNavigation.name,
                         replyOfMenuNavigation.type.name,
                         replyOfMenuNavigation,
                     )
-                }
             }
         }
     }

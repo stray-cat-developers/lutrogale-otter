@@ -38,7 +38,10 @@ class ExceptionConfiguration(
     @ExceptionHandler(value = [RuntimeException::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
-    fun handleGlobalException(e: RuntimeException, request: HttpServletRequest): GlobalErrorFormat {
+    fun handleGlobalException(
+        e: RuntimeException,
+        request: HttpServletRequest,
+    ): GlobalErrorFormat {
         log.error("Unexpected error", e)
         return errorForm(request, e, DefaultError(ErrorCode.S000, "Oops, something went wrong."))
     }
@@ -46,9 +49,10 @@ class ExceptionConfiguration(
     @ExceptionHandler(value = [InvalidDataAccessApiUsageException::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
-    fun handleInvalidDataAccessApiUsageException(e: InvalidDataAccessApiUsageException, request: HttpServletRequest): GlobalErrorFormat {
-        return errorForm(request, e, DefaultError(ErrorCode.SD01, e.message!!))
-    }
+    fun handleInvalidDataAccessApiUsageException(
+        e: InvalidDataAccessApiUsageException,
+        request: HttpServletRequest,
+    ): GlobalErrorFormat = errorForm(request, e, DefaultError(ErrorCode.SD01, e.message!!))
 
     /**
      * policy is not defined.
@@ -56,9 +60,10 @@ class ExceptionConfiguration(
     @ExceptionHandler(value = [IllegalStateException::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
-    fun handleIllegalStateException(e: IllegalStateException, request: HttpServletRequest): GlobalErrorFormat {
-        return errorForm(request, e, DefaultError(ErrorCode.P000, "Oops, something went wrong."))
-    }
+    fun handleIllegalStateException(
+        e: IllegalStateException,
+        request: HttpServletRequest,
+    ): GlobalErrorFormat = errorForm(request, e, DefaultError(ErrorCode.P000, "Oops, something went wrong."))
 
     /**
      * Development mistakes declared by developers
@@ -66,9 +71,10 @@ class ExceptionConfiguration(
     @ExceptionHandler(value = [DevelopMistakeException::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
-    fun handleDevelopMistakeException(e: DevelopMistakeException, request: HttpServletRequest): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    fun handleDevelopMistakeException(
+        e: DevelopMistakeException,
+        request: HttpServletRequest,
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
     /**
      * Invalid input
@@ -76,7 +82,10 @@ class ExceptionConfiguration(
     @ExceptionHandler(value = [IllegalArgumentException::class])
     @ResponseStatus(BAD_REQUEST)
     @ResponseBody
-    fun handleIllegalArgumentException(e: IllegalArgumentException, request: HttpServletRequest): GlobalErrorFormat {
+    fun handleIllegalArgumentException(
+        e: IllegalArgumentException,
+        request: HttpServletRequest,
+    ): GlobalErrorFormat {
         log.error("[T] wrong input.", e)
         return errorForm(request, e, DefaultError(ErrorCode.HI01, "Invalid input"))
     }
@@ -87,8 +96,8 @@ class ExceptionConfiguration(
     fun handleMethodArgumentNotValidException(
         e: MethodArgumentNotValidException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(
+    ): GlobalErrorFormat =
+        errorForm(
             request,
             e,
             DefaultError(
@@ -98,7 +107,6 @@ class ExceptionConfiguration(
                 },
             ),
         )
-    }
 
     @ExceptionHandler(value = [CommunicationException::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
@@ -106,9 +114,7 @@ class ExceptionConfiguration(
     fun handleCommunicationException(
         e: CommunicationException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
     /**
      * human error
@@ -119,9 +125,7 @@ class ExceptionConfiguration(
     fun handleHumanException(
         e: HumanException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
     /**
      * application policy
@@ -132,9 +136,7 @@ class ExceptionConfiguration(
     fun policyException(
         e: PolicyException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
     /**
      * unauthorized
@@ -145,9 +147,7 @@ class ExceptionConfiguration(
     fun unAuthorizedException(
         e: UnAuthorizedException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
     /**
      * data not found
@@ -158,9 +158,7 @@ class ExceptionConfiguration(
     fun dataNotFindException(
         e: DataNotFindException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
     @ExceptionHandler(value = [PreconditionFailException::class])
     @ResponseStatus(PRECONDITION_FAILED)
@@ -168,16 +166,19 @@ class ExceptionConfiguration(
     fun preconditionFailException(
         e: PreconditionFailException,
         request: HttpServletRequest,
-    ): GlobalErrorFormat {
-        return errorForm(request, e, e.error)
-    }
+    ): GlobalErrorFormat = errorForm(request, e, e.error)
 
-    private fun errorForm(request: HttpServletRequest, e: Exception, error: ErrorSource): GlobalErrorFormat {
-        val errorAttributeOptions = if (env.activeProfiles.contains("prod").not()) {
-            ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)
-        } else {
-            ErrorAttributeOptions.defaults()
-        }
+    private fun errorForm(
+        request: HttpServletRequest,
+        e: Exception,
+        error: ErrorSource,
+    ): GlobalErrorFormat {
+        val errorAttributeOptions =
+            if (env.activeProfiles.contains("prod").not()) {
+                ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)
+            } else {
+                ErrorAttributeOptions.defaults()
+            }
 
         val errorAttributes =
             DefaultErrorAttributes().getErrorAttributes(ServletWebRequest(request), errorAttributeOptions)
@@ -193,13 +194,14 @@ class ExceptionConfiguration(
     }
 
     private fun methodArgumentNotValidExceptionErrorForm(errors: List<FieldError>) =
-        errors.map {
-            ValidationError(
-                field = it.field,
-                rejectedValue = it.rejectedValue.toString(),
-                message = it.defaultMessage,
-            )
-        }.toList()
+        errors
+            .map {
+                ValidationError(
+                    field = it.field,
+                    rejectedValue = it.rejectedValue.toString(),
+                    message = it.defaultMessage,
+                )
+            }.toList()
 
     private data class ValidationError(
         val field: String,

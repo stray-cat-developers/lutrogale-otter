@@ -46,24 +46,30 @@ class ClientCertificationInteraction(
         }
     }
 
-    fun check(checkResource: AccessGrant): List<AccessResources.Reply.AccessState> {
-        return when (checkResource.authenticationCheckType) {
+    fun check(checkResource: AccessGrant): List<AccessResources.Reply.AccessState> =
+        when (checkResource.authenticationCheckType) {
             AuthenticationCheckType.ID -> {
-                val ids = checkResource.menuNavigationIdGroup
-                    ?: throw DevelopMistakeException("ID 체크에는 menuNavigationIdGroup이 필요합니다")
+                val ids =
+                    checkResource.menuNavigationIdGroup
+                        ?: throw DevelopMistakeException("ID 체크에는 menuNavigationIdGroup이 필요합니다")
                 val key = IdBaseAuthorizedKey(checkResource.apiKey, checkResource.email, ids).getKey()
                 checkWithCache(key, IdBaseAuthorizedKey.TTL, checkResource)
             }
+
             AuthenticationCheckType.URI -> {
-                val uris = checkResource.accessUriGroup
-                    ?: throw DevelopMistakeException("URI 체크에는 accessUriGroup이 필요합니다")
+                val uris =
+                    checkResource.accessUriGroup
+                        ?: throw DevelopMistakeException("URI 체크에는 accessUriGroup이 필요합니다")
                 val key = UriBaseAuthorizedKey(checkResource.apiKey, checkResource.email, uris).getKey()
                 checkWithCache(key, UriBaseAuthorizedKey.TTL, checkResource)
             }
         }
-    }
 
-    private fun checkWithCache(cacheKey: String, ttl: Duration, checkResource: AccessGrant): List<AccessResources.Reply.AccessState> {
+    private fun checkWithCache(
+        cacheKey: String,
+        ttl: Duration,
+        checkResource: AccessGrant,
+    ): List<AccessResources.Reply.AccessState> {
         try {
             val cached = redisTemplate.opsForValue().get(cacheKey)
             if (cached != null) {
@@ -97,7 +103,10 @@ class ClientCertificationInteraction(
         return accessChecker.validate(menuNavigations, checkResource)
     }
 
-    private fun getNavigationsOfUser(user: User, project: Project): List<MenuNavigation> {
+    private fun getNavigationsOfUser(
+        user: User,
+        project: Project,
+    ): List<MenuNavigation> {
         val menuNavigations: MutableList<MenuNavigation> = ArrayList()
         val authorityDefinitions = user.authorityDefinitions
         if (authorityDefinitions.isEmpty()) {

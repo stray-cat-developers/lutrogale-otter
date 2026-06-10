@@ -9,23 +9,25 @@ import org.apache.hc.core5.util.TimeValue
 import java.util.concurrent.TimeUnit
 
 object RestClient {
-
     fun new(connInfo: ConnectionConfig): CloseableHttpClient {
-        val manager = PoolingHttpClientConnectionManagerBuilder.create()
-            .setMaxConnPerRoute(connInfo.perRoute)
-            .setMaxConnTotal(connInfo.connTotal)
-            .setConnectionTimeToLive(TimeValue.ofSeconds(connInfo.connLiveDuration))
-            .build()
+        val manager =
+            PoolingHttpClientConnectionManagerBuilder
+                .create()
+                .setMaxConnPerRoute(connInfo.perRoute)
+                .setMaxConnTotal(connInfo.connTotal)
+                .setConnectionTimeToLive(TimeValue.ofSeconds(connInfo.connLiveDuration))
+                .build()
 
-        return HttpClients.custom()
+        return HttpClients
+            .custom()
             .setConnectionManager(manager)
             .setDefaultRequestConfig(
-                RequestConfig.custom()
+                RequestConfig
+                    .custom()
                     .setConnectTimeout(connInfo.connTimeout.toLong(), TimeUnit.SECONDS)
                     .setResponseTimeout(connInfo.readTimeout * 2, TimeUnit.SECONDS)
                     .build(),
-            )
-            .build()
+            ).build()
     }
 }
 
@@ -37,8 +39,8 @@ data class ConnectionConfig(
     val connLiveDuration: Long,
 ) {
     companion object {
-        fun from(connection: AppEnvironment.Connection): ConnectionConfig {
-            return connection.run {
+        fun from(connection: AppEnvironment.Connection): ConnectionConfig =
+            connection.run {
                 ConnectionConfig(
                     connectionTimeout.toInt(),
                     responseTimeout,
@@ -47,6 +49,5 @@ data class ConnectionConfig(
                     30,
                 )
             }
-        }
     }
 }

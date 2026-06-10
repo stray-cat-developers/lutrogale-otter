@@ -15,12 +15,23 @@ import java.time.ZoneId
  */
 @Configuration
 class OsoriErrorViewResolver : ErrorViewResolver {
-    override fun resolveErrorView(request: HttpServletRequest, status: HttpStatus, model: Map<String?, Any?>?): ModelAndView {
+    override fun resolveErrorView(
+        request: HttpServletRequest,
+        status: HttpStatus,
+        model: Map<String?, Any?>?,
+    ): ModelAndView {
         val mav = ModelAndView("error")
         if (RequestHelper.isApiRequest(request)) mav.addObject("format", "json")
         mav.addObject("code", status.value())
         mav.addObject("message", status.reasonPhrase)
-        mav.addObject("timestamp", LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
+        mav.addObject(
+            "timestamp",
+            LocalDateTime
+                .now()
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli(),
+        )
         return mav
     }
 }

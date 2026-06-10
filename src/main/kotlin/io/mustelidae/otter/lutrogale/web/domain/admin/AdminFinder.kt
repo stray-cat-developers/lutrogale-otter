@@ -16,7 +16,6 @@ class AdminFinder(
     private val adminRepository: AdminRepository,
     private val adminDSLRepository: AdminDSLRepository,
 ) {
-
     fun findBy(id: Long): Admin {
         val admin = adminRepository.findByIdOrNull(id) ?: throw DataNotFindException("어드민 정보가 존재하지 않습니다.")
         if (!admin.status) {

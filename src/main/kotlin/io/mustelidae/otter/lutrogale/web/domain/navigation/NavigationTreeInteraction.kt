@@ -22,22 +22,25 @@ class NavigationTreeInteraction(
     private val menuNavigationFinder: MenuNavigationFinder,
     private val projectFinder: ProjectFinder,
 ) {
-
-    fun createBranch(projectId: Long, branch: Branch): Long {
+    fun createBranch(
+        projectId: Long,
+        branch: Branch,
+    ): Long {
         val project = projectFinder.findByLive(projectId)
         val parentMenuNavigation =
             menuNavigationRepository.findByProjectIdAndTreeId(projectId, branch.parentTreeId)
 
-        val menuNavigation = MenuNavigation(
-            branch.name,
-            branch.type,
-            branch.getRefineUriBlock(),
-            branch.methodType,
-            branch.treeId,
-            branch.parentTreeId,
-        ).apply {
-            setBy(project)
-        }
+        val menuNavigation =
+            MenuNavigation(
+                branch.name,
+                branch.type,
+                branch.getRefineUriBlock(),
+                branch.methodType,
+                branch.treeId,
+                branch.parentTreeId,
+            ).apply {
+                setBy(project)
+            }
 
         parentMenuNavigation?.let {
             menuNavigation.setBy(it)
@@ -60,7 +63,10 @@ class NavigationTreeInteraction(
         return treeBranches
     }
 
-    fun getTreeBranch(projectId: Long, menuNavigationId: Long): MenuTreeResources.Reply.TreeBranch {
+    fun getTreeBranch(
+        projectId: Long,
+        menuNavigationId: Long,
+    ): MenuTreeResources.Reply.TreeBranch {
         val navigation = menuNavigationFinder.findByMenuNavigationId(projectId, menuNavigationId)
         return this.getTreeBranch(navigation)
     }
@@ -71,7 +77,11 @@ class NavigationTreeInteraction(
         return MenuTreeResources.Reply.TreeBranch.of(menuNavigation.treeId, menuNavigation.parentTreeId, menuNavigationResource)
     }
 
-    fun moveBranch(projectId: Long, nodeId: Long, newParentId: String?): Boolean {
+    fun moveBranch(
+        projectId: Long,
+        nodeId: Long,
+        newParentId: String?,
+    ): Boolean {
         val navigation = menuNavigationFinder.findByMenuNavigationId(projectId, nodeId)
         navigation.parentTreeId = newParentId!!
         val parentMenuNavigation = menuNavigationFinder.findByTreeId(projectId, newParentId)
@@ -79,7 +89,10 @@ class NavigationTreeInteraction(
         return true
     }
 
-    fun removeBranch(projectId: Long, id: Long): Boolean {
+    fun removeBranch(
+        projectId: Long,
+        id: Long,
+    ): Boolean {
         val menuNavigation = menuNavigationFinder.findByMenuNavigationId(projectId, id)
         menuNavigation.expire()
 

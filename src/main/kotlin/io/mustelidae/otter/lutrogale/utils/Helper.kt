@@ -11,6 +11,4 @@ fun LocalDateTime.toDateString(): String {
     return formatter.format(this)
 }
 
-fun String.toDecode(): String {
-    return URLDecoder.decode(this, Charset.defaultCharset())
-}
+fun String.toDecode(): String = URLDecoder.decode(this, Charset.defaultCharset())

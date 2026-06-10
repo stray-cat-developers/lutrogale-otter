@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class AdminDSLRepository : QuerydslRepositorySupport(Admin::class.java) {
-
-    fun findAllActive(): List<Admin> {
-        return from(admin)
-            .leftJoin(admin.admins).fetchJoin()
-            .leftJoin(admin.parentAdmin).fetchJoin()
+    fun findAllActive(): List<Admin> =
+        from(admin)
+            .leftJoin(admin.admins)
+            .fetchJoin()
+            .leftJoin(admin.parentAdmin)
+            .fetchJoin()
             .where(admin.status.isTrue)
             .fetch()
             .distinct()
-    }
 }

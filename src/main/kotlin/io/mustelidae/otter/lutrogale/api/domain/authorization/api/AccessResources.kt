@@ -6,10 +6,10 @@ import jakarta.validation.constraints.Email
 import org.springframework.web.bind.annotation.RequestMethod
 
 class AccessResources {
-
     @Schema(name = "Lutrogale.Access.CheckWay")
     enum class CheckWay {
-        ID, URI
+        ID,
+        URI,
     }
 
     class Request {
@@ -44,41 +44,42 @@ class AccessResources {
             val checkWay: CheckWay,
             val cause: String? = null,
         ) {
-
             companion object {
-                fun ofAccept(targetMenuNavigationId: Long): AccessState {
-                    return AccessState(
+                fun ofAccept(targetMenuNavigationId: Long): AccessState =
+                    AccessState(
                         targetMenuNavigationId.toString(),
                         true,
                         CheckWay.ID,
                     )
-                }
 
-                fun ofDenied(targetMenuNavigationId: Long, cause: String?): AccessState {
-                    return AccessState(
+                fun ofDenied(
+                    targetMenuNavigationId: Long,
+                    cause: String?,
+                ): AccessState =
+                    AccessState(
                         targetMenuNavigationId.toString(),
                         false,
                         CheckWay.ID,
                         cause,
                     )
-                }
 
-                fun ofAccept(targetUrl: String): AccessState {
-                    return AccessState(
+                fun ofAccept(targetUrl: String): AccessState =
+                    AccessState(
                         targetUrl,
                         true,
                         CheckWay.URI,
                     )
-                }
 
-                fun ofDenied(targetUrl: String, cause: String?): AccessState {
-                    return AccessState(
+                fun ofDenied(
+                    targetUrl: String,
+                    cause: String?,
+                ): AccessState =
+                    AccessState(
                         targetUrl,
                         false,
                         CheckWay.URI,
                         cause,
                     )
-                }
             }
         }
     }
@@ -89,9 +90,10 @@ class AccessResources {
         val methodType: RequestMethod,
     ) {
         companion object {
-            fun of(uri: String, requestMethod: RequestMethod): AccessUri {
-                return AccessUri(uri, requestMethod)
-            }
+            fun of(
+                uri: String,
+                requestMethod: RequestMethod,
+            ): AccessUri = AccessUri(uri, requestMethod)
         }
     }
 

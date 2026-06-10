@@ -39,32 +39,32 @@ class MenuNavigation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     @ManyToOne
     @JoinColumn(name = "projectId")
     var project: Project? = null
-        private set
+        protected set
 
     @ManyToOne
     @JoinColumn(name = "parentId")
     var parentMenuNavigation: MenuNavigation? = null
-        private set
+        protected set
 
     @OneToMany(mappedBy = "parentMenuNavigation", fetch = LAZY, cascade = [ALL])
     var menuNavigations: MutableList<MenuNavigation> = ArrayList()
-        private set
+        protected set
 
     @OneToMany(mappedBy = "menuNavigation", fetch = LAZY, cascade = [ALL])
     var authorityNavigationUnits: MutableList<AuthorityNavigationUnit> = arrayListOf()
-        private set
+        protected set
 
     @OneToMany(mappedBy = "menuNavigation", fetch = LAZY, cascade = [ALL])
     var userPersonalGrants: MutableList<UserPersonalGrant> = arrayListOf()
-        private set
+        protected set
 
     var status = true
-        private set
+        protected set
 
     fun setBy(parentMenuNavigation: MenuNavigation) {
         this.parentMenuNavigation = parentMenuNavigation
@@ -110,8 +110,8 @@ class MenuNavigation(
     }
 
     companion object {
-        fun root(): MenuNavigation {
-            return MenuNavigation(
+        fun root(): MenuNavigation =
+            MenuNavigation(
                 name = "root",
                 type = Constant.NavigationType.CATEGORY,
                 uriBlock = "/",
@@ -119,6 +119,5 @@ class MenuNavigation(
                 treeId = "1",
                 parentTreeId = "#",
             )
-        }
     }
 }

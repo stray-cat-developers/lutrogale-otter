@@ -6,7 +6,6 @@ import org.springframework.http.server.PathContainer
 import org.springframework.web.util.pattern.PathPatternParser
 
 class AuditorAwareImplTest {
-
     @Test
     fun getCurrentAuditor() {
         // Given

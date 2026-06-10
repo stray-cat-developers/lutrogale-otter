@@ -5,7 +5,6 @@ import io.mustelidae.otter.lutrogale.api.config.FlowTestSupport
 import org.junit.jupiter.api.Test
 
 internal class SampleControllerTest : FlowTestSupport() {
-
     @Test
     fun helloWorld() {
         // Given

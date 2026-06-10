@@ -17,26 +17,19 @@ class UserFinder(
     val userRepository: UserRepository,
     val userDSLRepository: UserDSLRepository,
 ) {
-
-    fun findBy(id: Long): User {
-        return userRepository.findByIdOrNull(id)
+    fun findBy(id: Long): User =
+        userRepository.findByIdOrNull(id)
             ?: throw DataNotFindException("사용자 정보가 없습니다.")
-    }
 
-    fun findBy(email: String): User? {
-        return userRepository.findByEmail(email)
-    }
+    fun findBy(email: String): User? = userRepository.findByEmail(email)
 
-    fun findBy(status: User.Status): List<User> {
-        return findAll()
+    fun findBy(status: User.Status): List<User> =
+        findAll()
             .stream()
             .filter { user: User -> user.status == status }
             .collect(Collectors.toList())
-    }
 
-    fun findByLive(): List<User> {
-        return findAll().filter { it.status != User.Status.EXPIRE }
-    }
+    fun findByLive(): List<User> = findAll().filter { it.status != User.Status.EXPIRE }
 
     fun findByStatusAllow(id: Long): User {
         val user = this.findBy(id)
@@ -47,9 +40,7 @@ class UserFinder(
         return user
     }
 
-    fun findAllByJoinedProjectUsers(projectId: Long): List<User> {
-        return userDSLRepository.findAllByJoinedProjectUsers(projectId)
-    }
+    fun findAllByJoinedProjectUsers(projectId: Long): List<User> = userDSLRepository.findAllByJoinedProjectUsers(projectId)
 
     fun getUserDetail(id: Long): UserResources.Reply.Detail {
         val user = this.findBy(id)
@@ -60,7 +51,5 @@ class UserFinder(
         return UserResources.Reply.Detail.from(user, projects, userAuthorityGrants, userPersonalGrants)
     }
 
-    fun findAll(): List<User> {
-        return userRepository.findAll()
-    }
+    fun findAll(): List<User> = userRepository.findAll()
 }

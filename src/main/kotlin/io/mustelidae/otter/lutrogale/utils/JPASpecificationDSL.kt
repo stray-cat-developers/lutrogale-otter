@@ -20,9 +20,16 @@ import kotlin.reflect.KProperty1
 
 // Helper to allow joining to Properties
 fun <Z, T, R> From<Z, T>.join(prop: KProperty1<T, R?>): Join<T, R> = this.join<T, R>(prop.name)
-fun <Z, T, R> From<Z, T>.join(prop: KProperty1<T, R?>, joinType: JoinType): Join<T, R> = this.join<T, R>(prop.name, joinType)
+
+fun <Z, T, R> From<Z, T>.join(
+    prop: KProperty1<T, R?>,
+    joinType: JoinType,
+): Join<T, R> = this.join<T, R>(prop.name, joinType)
+
 fun <Z, T, R> From<Z, T>.innerJoin(prop: KProperty1<T, R?>): Join<T, R> = join(prop, INNER)
+
 fun <Z, T, R> From<Z, T>.leftJoin(prop: KProperty1<T, R?>): Join<T, R> = join(prop, LEFT)
+
 fun <Z, T, R> From<Z, T>.rightJoin(prop: KProperty1<T, R?>): Join<T, R> = join(prop, RIGHT)
 
 // Helper to enable get by Property
@@ -42,25 +49,36 @@ fun <T, R> KProperty1<T, R?>.equal(x: R): Specification<T> = spec { equal(it, x)
 fun <T, R> KProperty1<T, R?>.notEqual(x: R): Specification<T> = spec { notEqual(it, x) }
 
 // Ignores empty collection otherwise an empty 'in' predicate will be generated which will never match any results
-fun <T, R : Any> KProperty1<T, R?>.`in`(values: Collection<R>): Specification<T> = if (values.isNotEmpty()) {
-    spec { path ->
-        `in`(path).apply { values.forEach { this.value(it) } }
+fun <T, R : Any> KProperty1<T, R?>.`in`(values: Collection<R>): Specification<T> =
+    if (values.isNotEmpty()) {
+        spec { path ->
+            `in`(path).apply { values.forEach { this.value(it) } }
+        }
+    } else {
+        Specification { _, _, cb -> cb.conjunction() }
     }
-} else {
-    Specification.where(null)
-}
 
 // Comparison
 fun <T> KProperty1<T, Number?>.le(x: Number) = spec { le(it, x) }
 
 fun <T> KProperty1<T, Number?>.lt(x: Number) = spec { lt(it, x) }
+
 fun <T> KProperty1<T, Number?>.ge(x: Number) = spec { ge(it, x) }
+
 fun <T> KProperty1<T, Number?>.gt(x: Number) = spec { gt(it, x) }
+
 fun <T, R : Comparable<R>> KProperty1<T, R?>.lessThan(x: R) = spec { lessThan(it, x) }
+
 fun <T, R : Comparable<R>> KProperty1<T, R?>.lessThanOrEqualTo(x: R) = spec { lessThanOrEqualTo(it, x) }
+
 fun <T, R : Comparable<R>> KProperty1<T, R?>.greaterThan(x: R) = spec { greaterThan(it, x) }
+
 fun <T, R : Comparable<R>> KProperty1<T, R?>.greaterThanOrEqualTo(x: R) = spec { greaterThanOrEqualTo(it, x) }
-fun <T, R : Comparable<R>> KProperty1<T, R?>.between(x: R, y: R) = spec { between(it, x, y) }
+
+fun <T, R : Comparable<R>> KProperty1<T, R?>.between(
+    x: R,
+    y: R,
+) = spec { between(it, x, y) }
 
 // True/False
 fun <T> KProperty1<T, Boolean?>.isTrue() = spec { isTrue(it) }
@@ -76,37 +94,39 @@ fun <T, R> KProperty1<T, R?>.isNotNull() = spec { isNotNull(it) }
 fun <T, R : Collection<*>> KProperty1<T, R?>.isEmpty() = spec { isEmpty(it) }
 
 fun <T, R : Collection<*>> KProperty1<T, R?>.isNotEmpty() = spec { isNotEmpty(it) }
+
 fun <T, E, R : Collection<E>> KProperty1<T, R?>.isMember(elem: E) = spec { isMember(elem, it) }
+
 fun <T, E, R : Collection<E>> KProperty1<T, R?>.isNotMember(elem: E) = spec { isNotMember(elem, it) }
 
 // Strings
 fun <T> KProperty1<T, String?>.like(x: String): Specification<T> = spec { like(it, x) }
 
-fun <T> KProperty1<T, String?>.like(x: String, escapeChar: Char): Specification<T> = spec { like(it, x, escapeChar) }
+fun <T> KProperty1<T, String?>.like(
+    x: String,
+    escapeChar: Char,
+): Specification<T> = spec { like(it, x, escapeChar) }
+
 fun <T> KProperty1<T, String?>.notLike(x: String): Specification<T> = spec { notLike(it, x) }
-fun <T> KProperty1<T, String?>.notLike(x: String, escapeChar: Char): Specification<T> = spec { notLike(it, x, escapeChar) }
+
+fun <T> KProperty1<T, String?>.notLike(
+    x: String,
+    escapeChar: Char,
+): Specification<T> = spec { notLike(it, x, escapeChar) }
 
 // And
 infix fun <T> Specification<T>.and(other: Specification<T>): Specification<T> = this.and(other)
 
-inline fun <reified T> and(vararg specs: Specification<T>?): Specification<T> {
-    return and(specs.toList())
-}
+inline fun <reified T> and(vararg specs: Specification<T>?): Specification<T> = and(specs.toList())
 
-inline fun <reified T> and(specs: Iterable<Specification<T>?>): Specification<T> {
-    return combineSpecification(specs, Specification<T>::and)
-}
+inline fun <reified T> and(specs: Iterable<Specification<T>?>): Specification<T> = combineSpecification(specs, Specification<T>::and)
 
 // Or
 infix fun <T> Specification<T>.or(other: Specification<T>): Specification<T> = this.or(other)
 
-inline fun <reified T> or(vararg specs: Specification<T>?): Specification<T> {
-    return or(specs.toList())
-}
+inline fun <reified T> or(vararg specs: Specification<T>?): Specification<T> = or(specs.toList())
 
-inline fun <reified T> or(specs: Iterable<Specification<T>?>): Specification<T> {
-    return combineSpecification(specs, Specification<T>::or)
-}
+inline fun <reified T> or(specs: Iterable<Specification<T>?>): Specification<T> = combineSpecification(specs, Specification<T>::or)
 
 // Not
 operator fun <T> Specification<T>.not(): Specification<T> = Specification.not(this)
@@ -115,9 +135,7 @@ operator fun <T> Specification<T>.not(): Specification<T> = Specification.not(th
 inline fun <reified T> combineSpecification(
     specs: Iterable<Specification<T>?>,
     operation: Specification<T>.(Specification<T>) -> Specification<T>,
-): Specification<T> {
-    return specs.filterNotNull().fold(emptySpecification()) { existing, new -> existing.operation(new) }
-}
+): Specification<T> = specs.filterNotNull().fold(emptySpecification()) { existing, new -> existing.operation(new) }
 
 // Empty Specification
-inline fun <reified T> emptySpecification(): Specification<T> = Specification.where(null)
+inline fun <reified T> emptySpecification(): Specification<T> = Specification { _, _, cb -> cb.conjunction() }

@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.post
 import org.springframework.web.bind.annotation.RequestMethod
 
 internal class AuthorizationAuditFlowTest : FlowTestSupport() {
-
     @Autowired private lateinit var projectRepository: ProjectRepository
 
     @Autowired private lateinit var objectMapper: ObjectMapper
@@ -117,18 +116,20 @@ internal class AuthorizationAuditFlowTest : FlowTestSupport() {
 
     @Test
     fun `잘못된 apiKey로 요청 시 예외가 발생해도 감사 로그에 allowed=false로 기록된다`() {
-        val request = AccessResources.Request.UriBase(
-            EmbeddedDbInitializer.USER_EMAIL,
-            listOf(AccessResources.AccessUri("/applications/1234/reviews/1234", RequestMethod.GET)),
-        )
+        val request =
+            AccessResources.Request.UriBase(
+                EmbeddedDbInitializer.USER_EMAIL,
+                listOf(AccessResources.AccessUri("/applications/1234/reviews/1234", RequestMethod.GET)),
+            )
 
-        mockMvc.post("/v1/verification/authorization-check/uri") {
-            contentType = MediaType.APPLICATION_JSON
-            header(RoleHeader.XSystem.KEY, "invalid-api-key-that-does-not-exist")
-            content = objectMapper.writeValueAsString(request)
-        }.andExpect {
-            status { is4xxClientError() }
-        }
+        mockMvc
+            .post("/v1/verification/authorization-check/uri") {
+                contentType = MediaType.APPLICATION_JSON
+                header(RoleHeader.XSystem.KEY, "invalid-api-key-that-does-not-exist")
+                content = objectMapper.writeValueAsString(request)
+            }.andExpect {
+                status { is4xxClientError() }
+            }
 
         listAppender.list.size shouldBeGreaterThan 0
         val entry = objectMapper.readValue<Map<String, Any>>(listAppender.list.last().message)

@@ -35,20 +35,22 @@ class FlatBasePathToMenu(
         val type = typeDefinitionRegistry.types()
 
         val query = type["Query"] as ObjectTypeDefinition
-        val queryMethod = when (httpOperation) {
-            HttpOperation.ONLY_GET -> RequestMethod.GET
-            HttpOperation.ONLY_POST -> RequestMethod.POST
-            HttpOperation.GET_AND_POST -> RequestMethod.GET
-        }
+        val queryMethod =
+            when (httpOperation) {
+                HttpOperation.ONLY_GET -> RequestMethod.GET
+                HttpOperation.ONLY_POST -> RequestMethod.POST
+                HttpOperation.GET_AND_POST -> RequestMethod.GET
+            }
 
         processFieldDefinitions(query, queryMethod, atomicInt, menuNavigationRepository)
 
         val mutation = type["Mutation"] as ObjectTypeDefinition
-        val mutationMethod = when (httpOperation) {
-            HttpOperation.ONLY_GET -> RequestMethod.GET
-            HttpOperation.ONLY_POST -> RequestMethod.POST
-            HttpOperation.GET_AND_POST -> RequestMethod.POST
-        }
+        val mutationMethod =
+            when (httpOperation) {
+                HttpOperation.ONLY_GET -> RequestMethod.GET
+                HttpOperation.ONLY_POST -> RequestMethod.POST
+                HttpOperation.GET_AND_POST -> RequestMethod.POST
+            }
 
         processFieldDefinitions(mutation, mutationMethod, atomicInt, menuNavigationRepository)
     }
@@ -60,17 +62,18 @@ class FlatBasePathToMenu(
         menuNavigationRepository: MenuNavigationRepository,
     ) {
         for (field in query.fieldDefinitions) {
-            val newMenu = MenuNavigation(
-                field.description?.content ?: "[$method] ${transformName(field.name)}",
-                Constant.NavigationType.FUNCTION,
-                field.name,
-                method,
-                "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
-                rootMenuNavigation.treeId,
-            ).also {
-                it.setBy(project)
-                it.setBy(rootMenuNavigation)
-            }
+            val newMenu =
+                MenuNavigation(
+                    field.description?.content ?: "[$method] ${transformName(field.name)}",
+                    Constant.NavigationType.FUNCTION,
+                    field.name,
+                    method,
+                    "j${rootMenuNavigation.treeId}_${atomicInt.getAndIncrement()}",
+                    rootMenuNavigation.treeId,
+                ).also {
+                    it.setBy(project)
+                    it.setBy(rootMenuNavigation)
+                }
 
             menuNavigationRepository.save(newMenu)
         }

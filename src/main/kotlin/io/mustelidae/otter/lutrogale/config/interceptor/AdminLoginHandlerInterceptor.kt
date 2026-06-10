@@ -19,7 +19,11 @@ import org.springframework.web.servlet.ModelAndView
 @Configuration
 class AdminLoginHandlerInterceptor : HandlerInterceptor {
     @Throws(Exception::class)
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         // Handler가 HandlerMethod가 아닌 경우는 Login을 체크 할 수 없기 때문에 true를 반환한다.
         if (handler !is HandlerMethod) return true
         if (!RequestHelper.hasLoginCheckAnnotation(handler)) return true

@@ -29,14 +29,13 @@ class ProjectController(
     private val userFinder: UserFinder,
     private val projectFinder: ProjectFinder,
 ) {
-
     @Operation(summary = "프로젝트 전체 조회")
     @GetMapping("/projects")
-    fun findAll(): Replies<ProjectResources.Reply> {
-        return projectFinder.findAllByLive()
+    fun findAll(): Replies<ProjectResources.Reply> =
+        projectFinder
+            .findAllByLive()
             .map { ProjectResources.Reply.from(it) }
             .toReplies()
-    }
 
     @Operation(summary = "프로젝트 추가")
     @PostMapping("/project")
@@ -49,30 +48,37 @@ class ProjectController(
 
     @Operation(summary = "프로젝트 조회")
     @GetMapping(value = ["/project/{id}"])
-    fun findOne(@PathVariable id: Long): Reply<ProjectResources.Reply> {
+    fun findOne(
+        @PathVariable id: Long,
+    ): Reply<ProjectResources.Reply> {
         val project = projectFinder.findBy(id)
         return ProjectResources.Reply.from(project).toReply()
     }
 
     @Operation(summary = "프로젝트에 할당된 사용자 전체 조회")
     @GetMapping("/project/{id}/users")
-    fun findUsersProject(@PathVariable id: Long): Replies<UserResources.Reply.Detail> {
+    fun findUsersProject(
+        @PathVariable id: Long,
+    ): Replies<UserResources.Reply.Detail> {
         val users = userFinder.findAllByJoinedProjectUsers(id)
-        return users.map {
-            UserResources.Reply.Detail.from(
-                it,
-                it.getProjects(),
-                it.userAuthorityGrants,
-                it.userPersonalGrants,
-            )
-        }.toReplies()
+        return users
+            .map {
+                UserResources.Reply.Detail.from(
+                    it,
+                    it.getProjects(),
+                    it.userAuthorityGrants,
+                    it.userPersonalGrants,
+                )
+            }.toReplies()
     }
 
     @Operation(summary = "프로젝트에 할당된 메뉴 네비게이션 전체 조회")
     @GetMapping("/project/{id}/navigations")
     @ResponseBody
-    fun findNavigationsProject(@PathVariable id: Long): Replies<ReplyOfMenuNavigation> {
-        return projectFinder.findAllByIncludeNavigationsProject(id)
+    fun findNavigationsProject(
+        @PathVariable id: Long,
+    ): Replies<ReplyOfMenuNavigation> =
+        projectFinder
+            .findAllByIncludeNavigationsProject(id)
             .toReplies()
-    }
 }

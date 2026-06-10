@@ -32,20 +32,20 @@ class AuthorityDefinition(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     @ManyToOne
     @JoinColumn(name = "projectId")
     var project: Project? = null
-        private set
+        protected set
 
     var status = true
-        private set
+        protected set
 
     @OneToMany(mappedBy = "authorityDefinition", fetch = LAZY)
     @SQLRestriction("status = true")
     var authorityNavigationUnits: MutableList<AuthorityNavigationUnit> = arrayListOf()
-        private set
+        protected set
 
     @OneToMany(
         mappedBy = "authorityDefinition",
@@ -54,7 +54,7 @@ class AuthorityDefinition(
     )
     @SQLRestriction("status = true")
     var userAuthorityGrants: MutableList<UserAuthorityGrant> = arrayListOf()
-        private set
+        protected set
 
     fun expire() {
         status = false

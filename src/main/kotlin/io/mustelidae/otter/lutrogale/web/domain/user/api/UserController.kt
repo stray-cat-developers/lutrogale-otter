@@ -36,7 +36,6 @@ class UserController(
     private val adminFinder: AdminFinder,
     private val httpSession: HttpSession,
 ) {
-
     @Operation(summary = "사용자 추가")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,20 +58,23 @@ class UserController(
         if (caller.role != AdminRole.SUPER) {
             throw PermissionException("사용자 대량 등록은 SUPER 권한만 가능합니다.")
         }
-        return userInteraction.bulkCreateBy(
-            request.emails,
-            request.projectId,
-            request.authorityDefinitionId,
-            request.initialStatus,
-        ).toReplies()
+        return userInteraction
+            .bulkCreateBy(
+                request.emails,
+                request.projectId,
+                request.authorityDefinitionId,
+                request.initialStatus,
+            ).toReplies()
     }
 
     @Operation(summary = "사용자 조회")
     @GetMapping("/{userId}")
-    fun findOne(@PathVariable userId: Long): Reply<UserResources.Reply.Detail> {
-        return userFinder.getUserDetail(userId)
+    fun findOne(
+        @PathVariable userId: Long,
+    ): Reply<UserResources.Reply.Detail> =
+        userFinder
+            .getUserDetail(userId)
             .toReply()
-    }
 
     @Operation(summary = "사용자 수정")
     @PutMapping("/{userId}")
@@ -86,7 +88,9 @@ class UserController(
 
     @Operation(summary = "사용자가 할당된 프로젝트 리스트 조회")
     @GetMapping("/{userId}/projects")
-    fun findUsersProjects(@PathVariable userId: Long): Replies<ProjectResources.Reply> {
+    fun findUsersProjects(
+        @PathVariable userId: Long,
+    ): Replies<ProjectResources.Reply> {
         val reply = userFinder.getUserDetail(userId)
         return reply.projects!!
             .toReplies()

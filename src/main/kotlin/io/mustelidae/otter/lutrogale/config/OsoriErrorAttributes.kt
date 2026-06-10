@@ -15,7 +15,10 @@ import java.util.Date
  */
 @Configuration
 class OsoriErrorAttributes : DefaultErrorAttributes() {
-    fun getErrorAttributes(requestAttributes: RequestAttributes, includeStackTrace: Boolean): Map<String, Any?> {
+    fun getErrorAttributes(
+        requestAttributes: RequestAttributes,
+        includeStackTrace: Boolean,
+    ): Map<String, Any?> {
         val errorAttributes: MutableMap<String, Any?> = LinkedHashMap()
         errorAttributes["timestamp"] = Date()
         addCode(errorAttributes, requestAttributes)
@@ -23,7 +26,10 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
         return errorAttributes
     }
 
-    private fun addCode(errorAttributes: MutableMap<String, Any?>, requestAttributes: RequestAttributes) {
+    private fun addCode(
+        errorAttributes: MutableMap<String, Any?>,
+        requestAttributes: RequestAttributes,
+    ) {
         val status = getAttribute<Int>(requestAttributes, "jakarta.servlet.error.status_code")
         if (status == null) {
             errorAttributes["code"] = "S998"
@@ -32,7 +38,10 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
         errorAttributes["code"] = status
     }
 
-    private fun addErrorDetails(errorAttributes: MutableMap<String, Any?>, requestAttributes: RequestAttributes) {
+    private fun addErrorDetails(
+        errorAttributes: MutableMap<String, Any?>,
+        requestAttributes: RequestAttributes,
+    ) {
         var error: Throwable? = getError(requestAttributes as WebRequest?)
         if (error != null) {
             while (error is ServletException && error.cause != null) {
@@ -50,7 +59,10 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
         }
     }
 
-    private fun addErrorMessage(errorAttributes: MutableMap<String, Any?>, error: Throwable?) {
+    private fun addErrorMessage(
+        errorAttributes: MutableMap<String, Any?>,
+        error: Throwable?,
+    ) {
         val result: BindingResult? = extractBindingResult(error)
         if (result == null) {
             errorAttributes["message"] = error!!.message
@@ -60,7 +72,7 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
             errorAttributes["message"] = (
                 "Validation failed for object='" + result.objectName +
                     "'. Error count: " + result.errorCount
-                )
+            )
         } else {
             errorAttributes["message"] = "No errors"
         }
@@ -77,7 +89,8 @@ class OsoriErrorAttributes : DefaultErrorAttributes() {
         return null
     }
 
-    private fun <T> getAttribute(requestAttributes: RequestAttributes, name: String): Any? {
-        return requestAttributes.getAttribute(name, RequestAttributes.SCOPE_REQUEST)
-    }
+    private fun <T> getAttribute(
+        requestAttributes: RequestAttributes,
+        name: String,
+    ): Any? = requestAttributes.getAttribute(name, RequestAttributes.SCOPE_REQUEST)
 }

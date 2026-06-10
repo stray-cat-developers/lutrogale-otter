@@ -41,30 +41,34 @@ class DbInitializer(
         assignGrant(userId, projectId, authorityDefinitionId)
     }
 
-    private fun assignGrant(userId: Long, projectId: Long, authorityDefinitionId: Long) {
+    private fun assignGrant(
+        userId: Long,
+        projectId: Long,
+        authorityDefinitionId: Long,
+    ) {
         userGrantController.assignAuthorityGrant(userId, projectId, listOf(authorityDefinitionId))
     }
 
-    private fun addUser(timestamp: Long): Long {
-        return userController.create(
-            UserResources.Request(
-                "test-$timestamp@otter.com",
-                "Lutrogale Otter",
-                false,
-                "Otter World",
-            ),
-        ).content!!
-    }
+    private fun addUser(timestamp: Long): Long =
+        userController
+            .create(
+                UserResources.Request(
+                    "test-$timestamp@otter.com",
+                    "Lutrogale Otter",
+                    false,
+                    "Otter World",
+                ),
+            ).content!!
 
-    private fun setupDefinition(projectId: Long): Long {
-        return authorityController.create(
-            projectId,
-            AuthorityBundleResources.Request.AuthorityBundle(
-                "Only View Group",
-                listOf(1, 2, 3),
-            ),
-        ).content!!
-    }
+    private fun setupDefinition(projectId: Long): Long =
+        authorityController
+            .create(
+                projectId,
+                AuthorityBundleResources.Request.AuthorityBundle(
+                    "Only View Group",
+                    listOf(1, 2, 3),
+                ),
+            ).content!!
 
     private fun setupMenuTree(projectId: Long) {
         menuTreeController.createBranch(
@@ -128,27 +132,28 @@ class DbInitializer(
         )
     }
 
-    private fun addProject(timestamp: Long): Long {
-        return projectController.create(
-            ProjectResources.Request(
-                "Otter Project $timestamp",
-                "This is Sample Project created at $timestamp",
-            ),
-        ).content!!
-    }
+    private fun addProject(timestamp: Long): Long =
+        projectController
+            .create(
+                ProjectResources.Request(
+                    "Otter Project $timestamp",
+                    "This is Sample Project created at $timestamp",
+                ),
+            ).content!!
 
     private fun setupAdminIfNotExist() {
         val supervisor = adminRepository.findByIdOrNull(1)
 
         if (supervisor == null) {
-            val admin = Admin.of(
-                "admin@osori.com",
-                "admin",
-                "슈퍼 관리자",
-                "오소리의 모든 권한을 가지고 있습니다.",
-                "/static/dist/img/osori.png",
-                AdminRole.SUPER,
-            )
+            val admin =
+                Admin.of(
+                    "admin@osori.com",
+                    "admin",
+                    "슈퍼 관리자",
+                    "오소리의 모든 권한을 가지고 있습니다.",
+                    "/static/dist/img/osori.png",
+                    AdminRole.SUPER,
+                )
             adminRepository.save(admin)
         }
     }

@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserPersonalGrantFinder(
     private val userPersonalGrantRepository: UserPersonalGrantRepository,
 ) {
-    fun findByUserAndMenu(userId: Long, menuNavigationIds: List<Long>): List<UserPersonalGrant> {
-        return userPersonalGrantRepository.findAllByUserIdAndMenuNavigationIdInAndStatusTrue(userId, menuNavigationIds)
-    }
+    fun findByUserAndMenu(
+        userId: Long,
+        menuNavigationIds: List<Long>,
+    ): List<UserPersonalGrant> = userPersonalGrantRepository.findAllByUserIdAndMenuNavigationIdInAndStatusTrue(userId, menuNavigationIds)
 }

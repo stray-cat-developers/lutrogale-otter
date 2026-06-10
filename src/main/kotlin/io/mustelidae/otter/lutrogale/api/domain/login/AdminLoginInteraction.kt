@@ -16,10 +16,14 @@ import org.springframework.transaction.annotation.Transactional
 class AdminLoginInteraction(
     private val adminFinder: AdminFinder,
 ) {
-    fun loginCheck(email: String, pw: String): Admin {
+    fun loginCheck(
+        email: String,
+        pw: String,
+    ): Admin {
         val loginFailedError = DefaultError(ErrorCode.HA02, "로그인이 실패했습니다. 이메일과 비밀번호를 다시 확인해 주세요.")
-        val admin = adminFinder.findByEmailOrNull(email)
-            ?: throw HumanException(loginFailedError)
+        val admin =
+            adminFinder.findByEmailOrNull(email)
+                ?: throw HumanException(loginFailedError)
         if (!admin.matchesPassword(pw)) throw HumanException(loginFailedError)
         if (!admin.status) throw HumanException(loginFailedError)
         return admin

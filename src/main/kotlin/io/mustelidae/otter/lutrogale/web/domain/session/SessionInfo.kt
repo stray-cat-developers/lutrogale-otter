@@ -10,14 +10,12 @@ class SessionInfo(
     val adminEmail: String,
     val adminName: String? = null,
 ) {
-
     companion object {
-        fun of(admin: Admin): SessionInfo {
-            return SessionInfo(
+        fun of(admin: Admin): SessionInfo =
+            SessionInfo(
                 admin.id!!,
                 admin.email,
                 admin.name,
             )
-        }
     }
 }

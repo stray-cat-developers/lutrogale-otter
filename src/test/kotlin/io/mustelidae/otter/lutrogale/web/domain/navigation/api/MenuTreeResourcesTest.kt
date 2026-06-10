@@ -6,18 +6,18 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod
 
 internal class MenuTreeResourcesTest {
-
     @Test
     fun uriBlockNoPrefix() {
         // Given
-        val request = MenuTreeResources.Request.Branch(
-            "",
-            "",
-            "",
-            "asdfasdf/adfasf/{fasdf}",
-            Constant.NavigationType.MENU,
-            RequestMethod.DELETE,
-        )
+        val request =
+            MenuTreeResources.Request.Branch(
+                "",
+                "",
+                "",
+                "asdfasdf/adfasf/{fasdf}",
+                Constant.NavigationType.MENU,
+                RequestMethod.DELETE,
+            )
         // When
         val refineBlock = request.getRefineUriBlock()
         // Then
@@ -27,14 +27,15 @@ internal class MenuTreeResourcesTest {
     @Test
     fun uriBlockHasPostfix() {
         // Given
-        val request = MenuTreeResources.Request.Branch(
-            "",
-            "",
-            "",
-            "asdfasdf/adfasf/{fasdf}/",
-            Constant.NavigationType.MENU,
-            RequestMethod.DELETE,
-        )
+        val request =
+            MenuTreeResources.Request.Branch(
+                "",
+                "",
+                "",
+                "asdfasdf/adfasf/{fasdf}/",
+                Constant.NavigationType.MENU,
+                RequestMethod.DELETE,
+            )
         // When
         val refineBlock = request.getRefineUriBlock()
         // Then

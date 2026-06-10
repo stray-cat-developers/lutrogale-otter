@@ -13,7 +13,6 @@ import java.time.LocalDateTime
 @MappedSuperclass
 @EntityListeners(value = [AuditingEntityListener::class])
 open class Audit {
-
     @CreatedBy
     @LastModifiedBy
     @Column(length = 120)
@@ -21,9 +20,9 @@ open class Audit {
 
     @CreatedDate
     var createdAt: LocalDateTime? = null
-        private set
+        protected set
 
     @LastModifiedDate
     var modifiedAt: LocalDateTime? = null
-        private set
+        protected set
 }

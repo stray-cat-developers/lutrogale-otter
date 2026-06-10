@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.web.bind.annotation.RequestMethod
 
 class UriBaseAccessCheckerTest {
-
     @Test
     fun validate() {
         check("/Targets/{id}/Summary/{sid}", "/Targets/34234/Summary/234") shouldBe true
@@ -26,7 +25,10 @@ class UriBaseAccessCheckerTest {
         check("/Targets/{num:[0-9]+}/Summary/{sid}/test", "/Targets/abcd/Summary/234") shouldBe false
     }
 
-    private fun check(patternUrl: String, targetUrl: String): Boolean {
+    private fun check(
+        patternUrl: String,
+        targetUrl: String,
+    ): Boolean {
         // Given
         val apiKey = "test"
         val menuNavigationInteraction: MenuNavigationInteraction = mockk()
@@ -35,14 +37,16 @@ class UriBaseAccessCheckerTest {
         val menuNavigations = listOf(menuNavigation)
         every { menuNavigationInteraction.getFullUrl(menuNavigation) } returns patternUrl
 
-        val accessGrant = AccessGrant(
-            "test@osori.com",
-            "test",
-            Constant.AuthenticationCheckType.URI,
-            accessUriGroup = listOf(
-                AccessResources.AccessUri(targetUrl, RequestMethod.GET),
-            ),
-        )
+        val accessGrant =
+            AccessGrant(
+                "test@osori.com",
+                "test",
+                Constant.AuthenticationCheckType.URI,
+                accessUriGroup =
+                    listOf(
+                        AccessResources.AccessUri(targetUrl, RequestMethod.GET),
+                    ),
+            )
 
         val checker = UriBaseAccessChecker(menuNavigationInteraction)
         val accesses = checker.validate(menuNavigations, accessGrant)

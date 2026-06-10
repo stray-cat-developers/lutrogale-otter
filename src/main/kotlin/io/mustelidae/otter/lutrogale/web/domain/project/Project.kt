@@ -37,10 +37,10 @@ class Project(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-        private set
+        protected set
 
     var status = true
-        private set
+        protected set
 
     @SQLRestriction("status = true")
     @OneToMany(
@@ -49,7 +49,7 @@ class Project(
         cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH],
     )
     var menuNavigations: MutableList<MenuNavigation> = arrayListOf()
-        private set
+        protected set
 
     @SQLRestriction("status = true")
     @OneToMany(
@@ -58,7 +58,7 @@ class Project(
         cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH],
     )
     var authorityDefinitions: MutableList<AuthorityDefinition> = arrayListOf()
-        private set
+        protected set
 
     fun expire() {
         status = false
@@ -79,8 +79,16 @@ class Project(
     }
 
     companion object {
-        fun of(name: String, description: String?): Project {
-            val time: Long = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        fun of(
+            name: String,
+            description: String?,
+        ): Project {
+            val time: Long =
+                LocalDateTime
+                    .now()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli()
             return Project(
                 name,
                 description,
