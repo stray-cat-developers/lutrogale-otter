@@ -4,12 +4,10 @@ import io.mustelidae.otter.lutrogale.common.Constant
 import io.mustelidae.otter.lutrogale.utils.toDateString
 import io.mustelidae.otter.lutrogale.web.domain.authority.AuthorityDefinition
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation
-import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 class UserGrantResources {
     class Reply {
-        @Schema(name = "Lutrogale.UserGrant.Reply.AuthorityGrant")
         data class AuthorityGrant(
             val id: Long,
             val name: String,
@@ -45,7 +43,6 @@ class UserGrantResources {
             }
         }
 
-        @Schema(name = "Lutrogale.UserGrant.Reply.PersonalGrant")
         data class PersonalGrant(
             val id: Long,
             val type: Constant.NavigationType,
@@ -93,7 +90,6 @@ class UserGrantResources {
             }
         }
 
-        @Schema(name = "Lutrogale.UserGrant.Reply.UserGrant")
         data class UserGrant(
             val authorityDefinitions: List<AuthorityGrant>,
             val menuNavigations: List<PersonalGrant>,

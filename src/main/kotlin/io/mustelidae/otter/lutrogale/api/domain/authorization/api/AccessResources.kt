@@ -1,33 +1,28 @@
 package io.mustelidae.otter.lutrogale.api.domain.authorization.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 import org.springframework.web.bind.annotation.RequestMethod
 
 class AccessResources {
-    @Schema(name = "Lutrogale.Access.CheckWay")
     enum class CheckWay {
         ID,
         URI,
     }
 
     class Request {
-        @Schema(name = "Lutrogale.Access.Request.UriBase")
         class UriBase(
             @Email
             val email: String,
             val uris: List<AccessUri>,
         )
 
-        @Schema(name = "Lutrogale.Access.Request.IdBase")
         class IdBase(
             @Email
             val email: String,
             val ids: List<Long>,
         )
 
-        @Schema(name = "Lutrogale.Access.Request.GraphQLBase")
         class GraphQLBase(
             @Email
             val email: String,
@@ -37,7 +32,6 @@ class AccessResources {
 
     class Reply {
         @JsonIgnoreProperties(ignoreUnknown = true)
-        @Schema(name = "Lutrogale.Access.Reply.AccessState")
         class AccessState(
             val target: String,
             val hasPermission: Boolean = false,
@@ -84,7 +78,6 @@ class AccessResources {
         }
     }
 
-    @Schema(name = "Lutrogale.Access.AccessUri")
     class AccessUri(
         val uri: String,
         val methodType: RequestMethod,
@@ -97,7 +90,6 @@ class AccessResources {
         }
     }
 
-    @Schema(name = "Lutrogale.Access.AccessGraphQL")
     class AccessGraphQL(
         val operation: String,
         val methodType: RequestMethod,
