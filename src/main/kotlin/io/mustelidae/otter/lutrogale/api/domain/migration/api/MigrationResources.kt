@@ -11,7 +11,7 @@ class MigrationResources {
             val version: String,
             val format: OpenAPIFormat,
             val migrationType: MigrationType,
-            val header: List<Header>? = null,
+            val header: List<HttpHeader>? = null,
         ) {
             enum class MigrationType {
                 TREE,
@@ -28,11 +28,11 @@ class MigrationResources {
         data class GraphQL(
             val url: String,
             val httpOperation: HttpOperation,
-            val header: List<Header>? = null,
+            val header: List<HttpHeader>? = null,
         )
 
-        @Schema(name = "Lutrogale.Migration.Request.Header")
-        data class Header(
+        @Schema(name = "Lutrogale.Migration.Request.HttpHeader")
+        data class HttpHeader(
             val key: String,
             val value: String,
         )
