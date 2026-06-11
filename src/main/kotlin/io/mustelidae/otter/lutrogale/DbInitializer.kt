@@ -52,7 +52,7 @@ class DbInitializer(
     private fun addUser(timestamp: Long): Long =
         userController
             .create(
-                UserResources.Request(
+                UserResources.Request.Create(
                     "test-$timestamp@otter.com",
                     "Lutrogale Otter",
                     false,
@@ -135,7 +135,7 @@ class DbInitializer(
     private fun addProject(timestamp: Long): Long =
         projectController
             .create(
-                ProjectResources.Request(
+                ProjectResources.Request.Create(
                     "Otter Project $timestamp",
                     "This is Sample Project created at $timestamp",
                 ),

@@ -51,7 +51,7 @@ class EmbeddedDbInitializer(
     private fun addUser(): Long =
         userController
             .create(
-                UserResources.Request(
+                UserResources.Request.Create(
                     USER_EMAIL,
                     "Lutrogale Otter",
                     false,
@@ -134,7 +134,7 @@ class EmbeddedDbInitializer(
     private fun addProject(): Long =
         projectController
             .create(
-                ProjectResources.Request(
+                ProjectResources.Request.Create(
                     "Otter Project",
                     "This is Sample Project",
                 ),

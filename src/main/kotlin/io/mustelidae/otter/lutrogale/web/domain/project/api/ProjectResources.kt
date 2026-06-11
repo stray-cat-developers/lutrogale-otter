@@ -5,11 +5,13 @@ import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.swagger.v3.oas.annotations.media.Schema
 
 class ProjectResources {
-    @Schema(name = "Lutrogale.Project.Request")
-    data class Request(
-        val name: String,
-        val description: String,
-    )
+    class Request {
+        @Schema(name = "Lutrogale.Project.Request.Create")
+        data class Create(
+            val name: String,
+            val description: String,
+        )
+    }
 
     @Schema(name = "Lutrogale.Project.Reply")
     class Reply(

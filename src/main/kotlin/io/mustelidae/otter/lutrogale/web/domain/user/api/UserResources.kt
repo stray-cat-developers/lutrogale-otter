@@ -14,9 +14,17 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
 
 class UserResources {
-    class BatchRegister {
-        @Schema(name = "Lutrogale.User.BatchRegister.Request")
-        data class Request(
+    class Request {
+        @Schema(name = "Lutrogale.User.Request.Create")
+        data class Create(
+            val email: String,
+            val name: String,
+            val isPrivacy: Boolean,
+            val department: String? = null,
+        )
+
+        @Schema(name = "Lutrogale.User.Request.BatchRegister")
+        data class BatchRegister(
             @field:Size(min = 1, max = 10)
             val emails: List<
                 @Email @NotBlank
@@ -26,24 +34,7 @@ class UserResources {
             val authorityDefinitionId: Long?,
             val initialStatus: User.Status,
         )
-
-        @Schema(name = "Lutrogale.User.BatchRegister.Result")
-        data class Result(
-            val email: String,
-            val outcome: Outcome,
-            val userId: Long?,
-        ) {
-            enum class Outcome { SUCCESS, SKIPPED }
-        }
     }
-
-    @Schema(name = "Lutrogale.User.Request")
-    class Request(
-        val email: String,
-        val name: String,
-        val isPrivacy: Boolean,
-        val department: String? = null,
-    )
 
     class Modify {
         @Schema(name = "Lutrogale.User.Modify.Info")
@@ -62,7 +53,16 @@ class UserResources {
     }
 
     class Reply {
-        @Schema(name = "Lutrogale.User.Simple")
+        @Schema(name = "Lutrogale.User.Reply.BatchRegister")
+        data class BatchRegister(
+            val email: String,
+            val outcome: Outcome,
+            val userId: Long?,
+        ) {
+            enum class Outcome { SUCCESS, SKIPPED }
+        }
+
+        @Schema(name = "Lutrogale.User.Reply.Simple")
         data class Simple(
             val id: Long,
             val email: String,
@@ -88,7 +88,7 @@ class UserResources {
             }
         }
 
-        @Schema(name = "Lutrogale.User.Detail")
+        @Schema(name = "Lutrogale.User.Reply.Detail")
         data class Detail(
             val id: Long,
             val email: String,

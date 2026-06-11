@@ -35,8 +35,8 @@ internal class UserBulkRegisterControllerFlow(
 
     fun bulkRegister(
         session: Cookie,
-        request: UserResources.BatchRegister.Request,
-    ): List<UserResources.BatchRegister.Result> =
+        request: UserResources.Request.BatchRegister,
+    ): List<UserResources.Reply.BatchRegister> =
         mockMvc
             .post("/v1/maintenance/management/user/batch") {
                 contentType = MediaType.APPLICATION_JSON
@@ -47,13 +47,13 @@ internal class UserBulkRegisterControllerFlow(
             }.andReturn()
             .response
             .contentAsString
-            .fromJson<Replies<UserResources.BatchRegister.Result>>()
+            .fromJson<Replies<UserResources.Reply.BatchRegister>>()
             .getContent()
             .toList()
 
     fun bulkRegisterExpectFail(
         session: Cookie,
-        request: UserResources.BatchRegister.Request,
+        request: UserResources.Request.BatchRegister,
     ): ResultActionsDsl =
         mockMvc.post("/v1/maintenance/management/user/batch") {
             contentType = MediaType.APPLICATION_JSON

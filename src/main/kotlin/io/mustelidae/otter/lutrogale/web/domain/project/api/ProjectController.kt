@@ -40,7 +40,7 @@ class ProjectController(
     @Operation(summary = "프로젝트 추가")
     @PostMapping("/project")
     fun create(
-        @RequestBody request: ProjectResources.Request,
+        @RequestBody request: ProjectResources.Request.Create,
     ): Reply<Long> {
         val id = projectInteraction.register(request.name, request.description)
         return id.toReply()
