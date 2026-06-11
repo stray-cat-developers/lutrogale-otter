@@ -159,10 +159,11 @@ sd 'old' 'new' file.kt     # sed 대신
 - 비즈니스 로직은 `*Interaction`에. `*Finder`는 읽기 전용.
 - 연관관계 편의 메서드는 `addBy(entity)` / `setBy(entity)` 형식
 - `status = true/false` soft delete 패턴 사용. `@SQLRestriction("status = true")` 적용.
-- `*Resources.kt`의 DTO inner class에는 `@Schema(name = "...")` 어노테이션을 반드시 달고, 이름은 `Lutrogale.{Domain}.{InnerClassPath}` 규칙을 따른다.
+- `*Resources.kt`의 DTO inner class에는 `@Schema(name = "...")` 어노테이션을 반드시 달고, 이름은 `Lutrogale-{Domain}-{InnerClassPath}` 규칙을 따른다.
   - `{Domain}`: `*Resources.kt`의 `*` 부분 (예: `User`, `Admin`, `Access`)
-  - `{InnerClassPath}`: 클래스 경로를 점(`.`)으로 이어 씀 (예: `Request.Create`, `Request.BatchRegister`, `Reply.Simple`, `Modify.Info`)
-  - 예) `Lutrogale.User.Request.Create`, `Lutrogale.User.Request.BatchRegister`, `Lutrogale.User.Reply.Simple`, `Lutrogale.User.Modify.Info`
+  - `{InnerClassPath}`: 클래스 경로를 하이픈(`-`)으로 이어 씀 (예: `Request-Create`, `Request-BatchRegister`, `Reply-Simple`, `Modify-Info`)
+  - 예) `Lutrogale-User-Request-Create`, `Lutrogale-User-Request-BatchRegister`, `Lutrogale-User-Reply-Simple`, `Lutrogale-User-Modify-Info`
+  - **점(`.`)은 swagger-ui JSON Pointer resolver가 경로 구분자로 오해하므로 사용 금지**
 
 ### Testing Rules
 

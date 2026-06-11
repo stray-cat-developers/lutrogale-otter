@@ -7,6 +7,7 @@ import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources.Rep
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
 import io.mustelidae.otter.lutrogale.web.domain.user.User
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
@@ -14,6 +15,7 @@ import java.time.LocalDateTime
 
 class UserResources {
     class Request {
+        @Schema(name = "Lutrogale-User-Request-Create")
         data class Create(
             val email: String,
             val name: String,
@@ -21,6 +23,7 @@ class UserResources {
             val department: String? = null,
         )
 
+        @Schema(name = "Lutrogale-User-Request-BatchRegister")
         data class BatchRegister(
             @field:Size(min = 1, max = 10)
             val emails: List<
@@ -34,12 +37,14 @@ class UserResources {
     }
 
     class Modify {
+        @Schema(name = "Lutrogale-User-Modify-Info")
         data class Info(
             val isPrivacy: Boolean,
             val name: String,
             val department: String,
         )
 
+        @Schema(name = "Lutrogale-User-Modify-UserState")
         data class UserState(
             val status: String,
         ) {
@@ -48,6 +53,7 @@ class UserResources {
     }
 
     class Reply {
+        @Schema(name = "Lutrogale-User-Reply-BatchRegister")
         data class BatchRegister(
             val email: String,
             val outcome: Outcome,
@@ -56,6 +62,7 @@ class UserResources {
             enum class Outcome { SUCCESS, SKIPPED }
         }
 
+        @Schema(name = "Lutrogale-User-Reply-Simple")
         data class Simple(
             val id: Long,
             val email: String,
@@ -81,6 +88,7 @@ class UserResources {
             }
         }
 
+        @Schema(name = "Lutrogale-User-Reply-Detail")
         data class Detail(
             val id: Long,
             val email: String,

@@ -2,15 +2,18 @@ package io.mustelidae.otter.lutrogale.web.domain.admin.api
 
 import io.mustelidae.otter.lutrogale.web.domain.admin.Admin
 import io.mustelidae.otter.lutrogale.web.domain.admin.AdminRole
+import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 class AdminResources {
+    @Schema(name = "Lutrogale-Admin-Modify")
     class Modify(
         val description: String,
         val imageUrl: String,
         val pw: String? = null,
     )
 
+    @Schema(name = "Lutrogale-Admin-Reply")
     class Reply(
         val id: Long,
         val email: String,
@@ -35,6 +38,7 @@ class AdminResources {
     }
 
     class Request {
+        @Schema(name = "Lutrogale-Admin-Request-Create")
         class Create(
             val email: String,
             val name: String,
@@ -44,11 +48,13 @@ class AdminResources {
             val parentAdminId: Long? = null,
         )
 
+        @Schema(name = "Lutrogale-Admin-Request-PasswordChange")
         class PasswordChange(
             val pw: String,
         )
     }
 
+    @Schema(name = "Lutrogale-Admin-AdminRow")
     data class AdminRow(
         val id: Long,
         val email: String,
