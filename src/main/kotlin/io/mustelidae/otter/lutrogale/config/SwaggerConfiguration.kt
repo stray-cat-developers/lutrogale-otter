@@ -4,6 +4,7 @@ import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
 import io.mustelidae.otter.lutrogale.api.domain.migration.api.MigrationResources
 import io.mustelidae.otter.lutrogale.web.domain.admin.api.AdminResources
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityBundleResources
+import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectResources
@@ -23,11 +24,13 @@ class SwaggerConfiguration {
             AccessResources.AccessGraphQL::class.java,
             AccessResources.Reply.AccessState::class.java,
             MigrationResources.HttpHeader::class.java,
+            AdminResources.Reply::class.java,
             AdminResources.AdminRow::class.java,
             AuthorityBundleResources.Reply.AuthorityBundle::class.java,
             MenuTreeResources.Reply.TreeBranch::class.java,
             NavigationResources.Reply.ReplyOfMenuNavigation::class.java,
             ProjectResources.Reply::class.java,
+            UserGrantResources.Reply.UserGrant::class.java,
             UserResources.Reply.BatchRegister::class.java,
             UserResources.Reply.Detail::class.java,
             UserResources.Reply.Simple::class.java,
