@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.xml.bind.annotation.XmlAnyElement
 
-@Schema(name = "Lutrogale.Common.Reply", description = "Http Json Response Base Format (Class 형태의 리소스를 반환할 때 사용)")
 open class Reply<T>() {
     @get:JsonUnwrapped
     @get:XmlAnyElement
