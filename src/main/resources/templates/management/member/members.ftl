@@ -306,7 +306,7 @@
                     ]
                 },
                 'tb_group': {
-                    'sDom': '<"top">t<"bottom"ilp<"clear">>',
+                    'dom': '<"top">t<"bottom"ilp<"clear">>',
                     'searching': true,
                     'columns': [
                         {title: '프로젝트ID', data: 'projectId'},
@@ -327,7 +327,7 @@
                     ]
                 },
                 'tb_personal': {
-                    'sDom': '<"top">t<"bottom"ilp<"clear">>',
+                    'dom': '<"top">t<"bottom"ilp<"clear">>',
                     'searching': true,
                     'columns': [
                         {title: '프로젝트ID', data: 'projectId'},

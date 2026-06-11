@@ -6,7 +6,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <!-- Bootstrap 3.3.6 -->
+    <!-- Bootstrap 3.4.1 -->
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-switch.min.css">
     <!-- Theme style -->
@@ -18,15 +18,15 @@
 
 	<#nested />
 
-    <!-- jQuery 2.2.3 -->
-    <script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
+    <!-- jQuery 3.7.1 -->
+    <script src="/static/plugins/jQuery/jquery-3.7.1.min.js"></script>
+    <!-- jQuery UI 1.13.3 -->
     <script src="/static/plugins/jQueryUI/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
-    <!-- Bootstrap 3.3.6 -->
+    <!-- Bootstrap 3.4.1 -->
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap-switch.min.js"></script>
 
