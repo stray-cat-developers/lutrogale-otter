@@ -5,7 +5,7 @@ import io.mustelidae.otter.lutrogale.api.domain.authorization.api.AccessResource
 import io.mustelidae.otter.lutrogale.common.Constant
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(name = "Authentication.Reply.AccessGrant")
+@Schema(name = "Authentication-Reply-AccessGrant")
 class AccessGrant(
     val email: String,
     val apiKey: String,

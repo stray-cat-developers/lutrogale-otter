@@ -4,6 +4,12 @@ import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
 import io.swagger.v3.oas.annotations.media.Schema
 
 class MigrationResources {
+    @Schema(name = "Lutrogale.Migration.HttpHeader")
+    data class HttpHeader(
+        val key: String,
+        val value: String,
+    )
+
     class Request {
         @Schema(name = "Lutrogale.Migration.Request.OpenAPI")
         data class OpenAPI(
@@ -11,7 +17,7 @@ class MigrationResources {
             val version: String,
             val format: OpenAPIFormat,
             val migrationType: MigrationType,
-            val header: List<Header>? = null,
+            val header: List<HttpHeader>? = null,
         ) {
             enum class MigrationType {
                 TREE,
@@ -28,13 +34,7 @@ class MigrationResources {
         data class GraphQL(
             val url: String,
             val httpOperation: HttpOperation,
-            val header: List<Header>? = null,
-        )
-
-        @Schema(name = "Lutrogale.Migration.Request.Header")
-        data class Header(
-            val key: String,
-            val value: String,
+            val header: List<HttpHeader>? = null,
         )
     }
 }
