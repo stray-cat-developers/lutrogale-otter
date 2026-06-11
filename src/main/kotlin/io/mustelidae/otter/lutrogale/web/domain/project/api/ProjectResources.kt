@@ -6,14 +6,14 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 class ProjectResources {
     class Request {
-        @Schema(name = "Lutrogale-Project-Request-Create")
+        @Schema(name = "Lutrogale.Project.Request.Create")
         data class Create(
             val name: String,
             val description: String,
         )
     }
 
-    @Schema(name = "Lutrogale-Project-Reply")
+    @Schema(name = "Lutrogale.Project.Reply")
     class Reply(
         val id: Long,
         val name: String,

@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.web.bind.annotation.RequestMethod
 
 class NavigationResources {
-    @Schema(name = "Lutrogale-Navigation-Modify")
+    @Schema(name = "Lutrogale.Navigation.Modify")
     class Modify(
         val name: String,
         val type: Constant.NavigationType,
@@ -15,7 +15,7 @@ class NavigationResources {
     )
 
     class Reply {
-        @Schema(name = "Lutrogale-Navigation-Reply-MenuNavigation")
+        @Schema(name = "Lutrogale.Navigation.Reply.MenuNavigation")
         class ReplyOfMenuNavigation(
             val id: Long,
             val type: Constant.NavigationType,

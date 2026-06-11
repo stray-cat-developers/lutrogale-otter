@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 class UserGrantResources {
     class Reply {
-        @Schema(name = "Lutrogale-UserGrant-Reply-AuthorityGrant")
+        @Schema(name = "Lutrogale.UserGrant.Reply.AuthorityGrant")
         data class AuthorityGrant(
             val id: Long,
             val name: String,
@@ -45,7 +45,7 @@ class UserGrantResources {
             }
         }
 
-        @Schema(name = "Lutrogale-UserGrant-Reply-PersonalGrant")
+        @Schema(name = "Lutrogale.UserGrant.Reply.PersonalGrant")
         data class PersonalGrant(
             val id: Long,
             val type: Constant.NavigationType,
@@ -93,7 +93,7 @@ class UserGrantResources {
             }
         }
 
-        @Schema(name = "Lutrogale-UserGrant-Reply-UserGrant")
+        @Schema(name = "Lutrogale.UserGrant.Reply.UserGrant")
         data class UserGrant(
             val authorityDefinitions: List<AuthorityGrant>,
             val menuNavigations: List<PersonalGrant>,
