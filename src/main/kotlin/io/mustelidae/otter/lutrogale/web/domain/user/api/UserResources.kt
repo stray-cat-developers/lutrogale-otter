@@ -14,13 +14,15 @@ import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
 
 class UserResources {
-    @Schema(name = "Lutrogale.User.Request")
-    class Request(
-        val email: String,
-        val name: String,
-        val isPrivacy: Boolean,
-        val department: String? = null,
-    ) {
+    class Request {
+        @Schema(name = "Lutrogale.User.Request.Create")
+        data class Create(
+            val email: String,
+            val name: String,
+            val isPrivacy: Boolean,
+            val department: String? = null,
+        )
+
         @Schema(name = "Lutrogale.User.Request.BatchRegister")
         data class BatchRegister(
             @field:Size(min = 1, max = 10)

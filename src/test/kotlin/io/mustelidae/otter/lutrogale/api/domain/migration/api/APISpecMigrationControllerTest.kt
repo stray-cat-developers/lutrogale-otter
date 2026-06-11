@@ -29,7 +29,7 @@ class APISpecMigrationControllerTest : FlowTestSupport() {
         projectId =
             projectController
                 .create(
-                    ProjectResources.Request(
+                    ProjectResources.Request.Create(
                         name = "migration",
                         description = "migration test",
                     ),

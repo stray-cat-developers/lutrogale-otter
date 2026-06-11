@@ -22,7 +22,7 @@ class LoginApiController(
     @Operation(hidden = true)
     @PostMapping("/v1/check-login")
     fun checkLogin(
-        @RequestBody request: LoginResources.Request,
+        @RequestBody request: LoginResources.Request.Create,
         httpServletRequest: HttpServletRequest,
     ): Reply<String> {
         val admin: Admin = adminLoginInteraction.loginCheck(request.email, request.password)

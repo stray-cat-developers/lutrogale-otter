@@ -40,7 +40,7 @@ class UserController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
-        @RequestBody request: UserResources.Request,
+        @RequestBody request: UserResources.Request.Create,
     ): Reply<Long> {
         val user = userInteraction.createBy(request.email, request.name, request.isPrivacy, request.department)
         return user.id!!.toReply()
