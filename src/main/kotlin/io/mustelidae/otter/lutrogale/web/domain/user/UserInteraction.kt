@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.web.domain.user
 
 import io.mustelidae.otter.lutrogale.common.DefaultError
 import io.mustelidae.otter.lutrogale.common.ErrorCode
+import io.mustelidae.otter.lutrogale.config.DataNotFindException
 import io.mustelidae.otter.lutrogale.config.InvalidArgumentException
 import io.mustelidae.otter.lutrogale.config.PolicyException
 import io.mustelidae.otter.lutrogale.web.domain.grant.UserGrantInteraction
@@ -51,6 +52,18 @@ class UserInteraction(
             }
 
         users.map { it.expire() }
+        userRepository.saveAll(users)
+    }
+
+    fun expireByEmail(email: String) {
+        val user = userFinder.findBy(email) ?: throw DataNotFindException(email, "사용자 정보가 없습니다.")
+        user.expire()
+        userRepository.save(user)
+    }
+
+    fun expireByEmails(emails: List<String>) {
+        val users = emails.mapNotNull { userFinder.findBy(it) }
+        users.forEach { it.expire() }
         userRepository.saveAll(users)
     }
 

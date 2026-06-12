@@ -4,6 +4,7 @@ import io.mustelidae.otter.lutrogale.utils.toDateString
 import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation.ListStructure
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.NotBlank
 
 class ProjectResources {
     class Request {
@@ -17,7 +18,7 @@ class ProjectResources {
         @Schema(name = "Lutrogale.Project.Request.RegisterSync")
         data class RegisterSync(
             val specType: Project.SpecType,
-            val url: String,
+            @field:NotBlank val url: String,
         )
     }
 
@@ -25,7 +26,7 @@ class ProjectResources {
         @Schema(name = "Lutrogale.Project.Modify.UpdateSync")
         data class UpdateSync(
             val specType: Project.SpecType,
-            val url: String,
+            @field:NotBlank val url: String,
         )
     }
 

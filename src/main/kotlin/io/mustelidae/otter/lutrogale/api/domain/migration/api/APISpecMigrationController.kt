@@ -58,7 +58,7 @@ class APISpecMigrationController(
                 MigrationResources.Request.OpenAPI.OpenAPIFormat.JSON -> Project.SpecType.OPENAPI_JSON
                 MigrationResources.Request.OpenAPI.OpenAPIFormat.YAML -> Project.SpecType.OPENAPI_YAML
             }
-        projectInteraction.startSyncSpec(projectId, specType, request.url)
+        projectInteraction.updateSync(projectId, specType, request.url)
         return "Sync configured successfully".toReply()
     }
 
@@ -87,7 +87,7 @@ class APISpecMigrationController(
         @PathVariable projectId: Long,
         @RequestBody request: MigrationResources.Request.GraphQLSync,
     ): Reply<String> {
-        projectInteraction.startSyncSpec(projectId, Project.SpecType.GRAPHQL, request.url)
+        projectInteraction.updateSync(projectId, Project.SpecType.GRAPHQL, request.url)
         return "Sync configured successfully".toReply()
     }
 }
