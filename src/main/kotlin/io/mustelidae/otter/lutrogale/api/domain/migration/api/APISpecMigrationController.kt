@@ -6,6 +6,8 @@ import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReply
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
+import io.mustelidae.otter.lutrogale.web.domain.project.Project
+import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 class APISpecMigrationController(
     private val openAPIMigrationInteraction: OpenAPIMigrationInteraction,
     private val graphQLMigrationInteraction: GraphQLMigrationInteraction,
+    private val projectInteraction: ProjectInteraction,
 ) {
     @PostMapping("/openapi/preview")
     @ResponseStatus(HttpStatus.OK)
@@ -30,10 +33,7 @@ class APISpecMigrationController(
     ): Reply<String> {
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
-
-        val preview = openAPIMigrationInteraction.preview(request.url, swaggerSpecType, request.migrationType, header)
-
-        return preview.toReply()
+        return openAPIMigrationInteraction.preview(request.url, swaggerSpecType, request.migrationType, header).toReply()
     }
 
     @PostMapping("/openapi/generate/project/{projectId}")
@@ -44,9 +44,22 @@ class APISpecMigrationController(
     ): Reply<Long> {
         val swaggerSpecType = SwaggerSpec.Type.valueOf(request.format.name)
         val header = request.header?.map { it.key to it.value }?.toList()
+        return openAPIMigrationInteraction.generate(projectId, request.url, swaggerSpecType, request.migrationType, header).toReply()
+    }
 
-        val rootMenuId = openAPIMigrationInteraction.generate(projectId, request.url, swaggerSpecType, request.migrationType, header)
-        return rootMenuId.toReply()
+    @PostMapping("/openapi/sync/project/{projectId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun syncOpenAPI(
+        @PathVariable projectId: Long,
+        @RequestBody request: MigrationResources.Request.OpenAPISync,
+    ): Reply<String> {
+        val specType =
+            when (request.format) {
+                MigrationResources.Request.OpenAPI.OpenAPIFormat.JSON -> Project.SpecType.OPENAPI_JSON
+                MigrationResources.Request.OpenAPI.OpenAPIFormat.YAML -> Project.SpecType.OPENAPI_YAML
+            }
+        projectInteraction.startSyncSpec(projectId, specType, request.url)
+        return "Sync configured successfully".toReply()
     }
 
     @PostMapping("/graphql/preview")
@@ -55,10 +68,7 @@ class APISpecMigrationController(
         @RequestBody request: MigrationResources.Request.GraphQL,
     ): Reply<String> {
         val header = request.header?.map { it.key to it.value }?.toList()
-
-        val preview = graphQLMigrationInteraction.preview(request.url, request.httpOperation, header)
-
-        return preview.toReply()
+        return graphQLMigrationInteraction.preview(request.url, request.httpOperation, header).toReply()
     }
 
     @PostMapping("/graphql/generate/project/{projectId}")
@@ -68,8 +78,16 @@ class APISpecMigrationController(
         @RequestBody request: MigrationResources.Request.GraphQL,
     ): Reply<Long> {
         val header = request.header?.map { it.key to it.value }?.toList()
+        return graphQLMigrationInteraction.generate(projectId, request.url, request.httpOperation, header).toReply()
+    }
 
-        val rootMenuId = graphQLMigrationInteraction.generate(projectId, request.url, request.httpOperation, header)
-        return rootMenuId.toReply()
+    @PostMapping("/graphql/sync/project/{projectId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun syncGraphQL(
+        @PathVariable projectId: Long,
+        @RequestBody request: MigrationResources.Request.GraphQLSync,
+    ): Reply<String> {
+        projectInteraction.startSyncSpec(projectId, Project.SpecType.GRAPHQL, request.url)
+        return "Sync configured successfully".toReply()
     }
 }

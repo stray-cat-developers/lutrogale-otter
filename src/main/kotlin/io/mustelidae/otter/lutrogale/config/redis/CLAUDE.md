@@ -122,4 +122,8 @@ class IdBaseAuthorizedKey(
   - TTL: 5분
   - GraphQL 엔드포인트도 내부적으로 URI로 변환(`/{operation}`)되어 이 키를 사용함
 
+- **`DistributedLockKey`** — `config/redis/distributedlock/`
+  - Key: `lutrogale:distributed-lock:{qualifier}`
+  - TTL: 어노테이션 `leaseTime` 파라미터로 결정 (기본 10분)
+
 > **주의**: 새 Key 클래스를 추가하면 이 목록에 반드시 등록한다.

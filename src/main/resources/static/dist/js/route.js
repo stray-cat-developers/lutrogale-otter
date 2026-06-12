@@ -68,6 +68,10 @@ var OsoriRoute = (function () {
     map.set("project.findOne",          "/v1/maintenance/project/{id}");
     map.set("project.findUsersProject", "/v1/maintenance/project/{id}/users");
     map.set("project.findNavigationsProject", "/v1/maintenance/project/{id}/navigations");
+    map.set("project.sync",             "/v1/maintenance/project/{id}/sync");
+
+    map.set("migration.openapi.preview",  "/v1/migration/openapi/preview");
+    map.set("migration.graphql.preview",  "/v1/migration/graphql/preview");
 
 
     var findBy = function (name) {

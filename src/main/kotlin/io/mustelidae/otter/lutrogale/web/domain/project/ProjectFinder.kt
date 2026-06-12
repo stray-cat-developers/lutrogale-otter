@@ -41,6 +41,8 @@ class ProjectFinder(
         return project
     }
 
+    fun findAllBySyncEnabled(): List<Project> = projectRepository.findBySyncEnabledTrue()
+
     fun findAllByIncludeNavigationsProject(id: Long): List<ReplyOfMenuNavigation> {
         val project = findByLive(id)
 

@@ -30,7 +30,7 @@ class StableHttpSpecClient(
      * @param headers 요청에 추가할 헤더들 list.
      * @return API 스펙의 String 표현값.
      */
-    override fun getOpenAPISpec(
+    override fun fetchOpenAPISpec(
         url: String,
         type: SwaggerSpec.Type,
         headers: List<Pair<String, Any>>?,
@@ -59,7 +59,7 @@ class StableHttpSpecClient(
      * @param headers 요청에 추가할 헤더들 list.
      * @return API 스펙의 String 표현값.
      */
-    override fun getGraphQLSpec(
+    override fun fetchGraphQLSpec(
         url: String,
         headers: List<Pair<String, Any>>?,
     ): String {

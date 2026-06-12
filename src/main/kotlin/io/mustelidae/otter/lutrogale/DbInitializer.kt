@@ -7,6 +7,7 @@ import io.mustelidae.otter.lutrogale.web.domain.admin.repository.AdminRepository
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityBundleResources
 import io.mustelidae.otter.lutrogale.web.domain.authority.api.AuthorityController
 import io.mustelidae.otter.lutrogale.web.domain.grant.api.UserGrantController
+import io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation.ListStructure
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeController
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.MenuTreeResources
 import io.mustelidae.otter.lutrogale.web.domain.project.api.ProjectController
@@ -138,6 +139,7 @@ class DbInitializer(
                 ProjectResources.Request.Create(
                     "Otter Project $timestamp",
                     "This is Sample Project created at $timestamp",
+                    ListStructure.FLAT,
                 ),
             ).content!!
 

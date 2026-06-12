@@ -21,7 +21,7 @@ class StableHttpSpecClientTest {
             )
         val stableRestStyleMigrationClient = StableHttpSpecClient(RestClient.new(env), true)
         val openAPISpec =
-            stableRestStyleMigrationClient.getOpenAPISpec(
+            stableRestStyleMigrationClient.fetchOpenAPISpec(
                 "https://petstore.swagger.io/v2/swagger.json",
                 SwaggerSpec.Type.JSON,
                 null,
@@ -42,7 +42,7 @@ class StableHttpSpecClientTest {
                 1000,
             )
         val stableHttpSpecClient = StableHttpSpecClient(RestClient.new(env), true)
-        val openAPISpec = stableHttpSpecClient.getOpenAPISpec("https://petstore.swagger.io/v2/swagger.yaml", SwaggerSpec.Type.YAML, null)
+        val openAPISpec = stableHttpSpecClient.fetchOpenAPISpec("https://petstore.swagger.io/v2/swagger.yaml", SwaggerSpec.Type.YAML, null)
 
         assertNotNull(openAPISpec)
     }
@@ -59,7 +59,7 @@ class StableHttpSpecClientTest {
             )
         val stableHttpSpecClient = StableHttpSpecClient(RestClient.new(env), true)
         val graphQLSpec =
-            stableHttpSpecClient.getGraphQLSpec(
+            stableHttpSpecClient.fetchGraphQLSpec(
                 "https://raw.githubusercontent.com/marmelab/GraphQL-example/refs/heads/master/schema.graphql",
                 null,
             )
