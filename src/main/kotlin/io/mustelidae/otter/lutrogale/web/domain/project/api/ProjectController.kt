@@ -4,6 +4,7 @@ import io.mustelidae.otter.lutrogale.common.Replies
 import io.mustelidae.otter.lutrogale.common.Reply
 import io.mustelidae.otter.lutrogale.common.toReplies
 import io.mustelidae.otter.lutrogale.common.toReply
+import io.mustelidae.otter.lutrogale.config.DataNotFindException
 import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.navigation.api.NavigationResources.Reply.ReplyOfMenuNavigation
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectFinder
@@ -12,12 +13,16 @@ import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "프로젝트")
@@ -39,10 +44,11 @@ class ProjectController(
 
     @Operation(summary = "프로젝트 추가")
     @PostMapping("/project")
+    @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @RequestBody request: ProjectResources.Request.Create,
     ): Reply<Long> {
-        val id = projectInteraction.register(request.name, request.description)
+        val id = projectInteraction.register(request.name, request.description, request.listStructure)
         return id.toReply()
     }
 
@@ -81,4 +87,46 @@ class ProjectController(
         projectFinder
             .findAllByIncludeNavigationsProject(id)
             .toReplies()
+
+    @Operation(summary = "자동 Sync 정보 조회")
+    @GetMapping("/project/{id}/sync")
+    fun getSyncInfo(
+        @PathVariable id: Long,
+    ): Reply<ProjectResources.Reply.SyncInfo> {
+        val project = projectFinder.findBy(id)
+        if (!project.syncEnabled) throw DataNotFindException("Sync가 설정되지 않았습니다.")
+        return ProjectResources.Reply.SyncInfo
+            .from(project)
+            .toReply()
+    }
+
+    @Operation(summary = "자동 Sync 등록")
+    @PostMapping("/project/{id}/sync")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun registerSync(
+        @PathVariable id: Long,
+        @RequestBody request: ProjectResources.Request.RegisterSync,
+    ): Reply<Unit> {
+        projectInteraction.registerSyncSpec(id, request.specType, request.url)
+        return Unit.toReply()
+    }
+
+    @Operation(summary = "자동 Sync 업데이트")
+    @PutMapping("/project/{id}/sync")
+    fun updateSync(
+        @PathVariable id: Long,
+        @RequestBody request: ProjectResources.Modify.UpdateSync,
+    ): Reply<Unit> {
+        projectInteraction.startSyncSpec(id, request.specType, request.url)
+        return Unit.toReply()
+    }
+
+    @Operation(summary = "자동 Sync 삭제")
+    @DeleteMapping("/project/{id}/sync")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteSync(
+        @PathVariable id: Long,
+    ) {
+        projectInteraction.stopSyncSpec(id)
+    }
 }

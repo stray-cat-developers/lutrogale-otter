@@ -3,7 +3,7 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.client
 import io.mustelidae.otter.lutrogale.api.domain.migration.openapi.SwaggerSpec
 
 class DummyHttpSpecClient : HttpSpecClient {
-    override fun getOpenAPISpec(
+    override fun fetchOpenAPISpec(
         url: String,
         type: SwaggerSpec.Type,
         headers: List<Pair<String, Any>>?,
@@ -22,7 +22,7 @@ class DummyHttpSpecClient : HttpSpecClient {
             }
         }
 
-    override fun getGraphQLSpec(
+    override fun fetchGraphQLSpec(
         url: String,
         headers: List<Pair<String, Any>>?,
     ): String = TWEET_GRAPHQL

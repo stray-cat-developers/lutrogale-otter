@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ProjectRepository : JpaRepository<Project, Long> {
     fun findByApiKey(apiKey: String): Project?
+
+    fun findBySyncEnabledTrue(): List<Project>
 }

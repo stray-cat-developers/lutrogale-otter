@@ -30,11 +30,22 @@ class MigrationResources {
             }
         }
 
+        @Schema(name = "Lutrogale.Migration.Request.OpenAPISync")
+        data class OpenAPISync(
+            val url: String,
+            val format: OpenAPI.OpenAPIFormat,
+        )
+
         @Schema(name = "Lutrogale.Migration.Request.GraphQL")
         data class GraphQL(
             val url: String,
             val httpOperation: HttpOperation,
             val header: List<HttpHeader>? = null,
+        )
+
+        @Schema(name = "Lutrogale.Migration.Request.GraphQLSync")
+        data class GraphQLSync(
+            val url: String,
         )
     }
 }

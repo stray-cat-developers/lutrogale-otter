@@ -16,7 +16,7 @@ class FlatBasePathToMenuTest {
         val schema = DummyHttpSpecClient.TWEET_GRAPHQL
         val rootMenuNavigation = MenuNavigation.root()
         val project =
-            Project("gql test", null, "").apply {
+            Project("gql test", null, "", io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation.ListStructure.FLAT).apply {
                 addBy(rootMenuNavigation)
             }
         val menuNavigationRepository: MenuNavigationRepository = mockk()
@@ -36,7 +36,7 @@ class FlatBasePathToMenuTest {
         val schema = DummyHttpSpecClient.TWEET_GRAPHQL
         val rootMenuNavigation = MenuNavigation.root()
         val project =
-            Project("gql test", null, "").apply {
+            Project("gql test", null, "", io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation.ListStructure.FLAT).apply {
                 addBy(rootMenuNavigation)
             }
         val menuNavigationRepository: MenuNavigationRepository = mockk()
@@ -55,7 +55,7 @@ class FlatBasePathToMenuTest {
         val schema = DummyHttpSpecClient.TWEET_GRAPHQL
         val rootMenuNavigation = MenuNavigation.root()
         val project =
-            Project("gql test", null, "").apply {
+            Project("gql test", null, "", io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation.ListStructure.FLAT).apply {
                 addBy(rootMenuNavigation)
             }
         val menuNavigationRepository: MenuNavigationRepository = mockk()

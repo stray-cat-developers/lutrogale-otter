@@ -102,11 +102,22 @@ class MenuNavigation(
     }
 
     fun expire() {
+        if (isRoot()) {
+            throw IllegalStateException("최상위 navigation은 expire할 수 없습니다.")
+        }
+
         val userPersonalGrants: List<UserPersonalGrant> = this.userPersonalGrants
         userPersonalGrants.forEach {
             it.expire()
         }
         status = false
+    }
+
+    fun isRoot(): Boolean = treeId == "1" && parentTreeId == "#"
+
+    enum class ListStructure {
+        TREE,
+        FLAT,
     }
 
     companion object {

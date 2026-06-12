@@ -6,12 +6,17 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.converter.SwaggerConverter
 import io.swagger.v3.parser.core.models.ParseOptions
+import org.slf4j.LoggerFactory
 import org.springframework.data.util.Version
 
 class SwaggerSpec(
     private val originalSpec: String,
     val type: Type,
 ) {
+    companion object {
+        private val log = LoggerFactory.getLogger(SwaggerSpec::class.java)
+    }
+
     val openAPI: OpenAPI
 
     init {
@@ -36,6 +41,7 @@ class SwaggerSpec(
                         val treeNode = Jackson.getMapper().readTree(originalSpec)
                         treeNode.get("swagger") ?: treeNode.get("openapi")
                     } catch (e: Exception) {
+                        log.debug("Failed to parse JSON OpenAPI spec: ${e.message}", e)
                         throw IllegalStateException("The format of the Open API Spec is not Json Type.", e)
                     }
                 }
@@ -45,6 +51,7 @@ class SwaggerSpec(
                         val treeNode = Jackson.getYmlMapper().readTree(originalSpec)
                         treeNode.get("swagger") ?: treeNode.get("openapi")
                     } catch (e: Exception) {
+                        log.debug("Failed to parse YAML OpenAPI spec: ${e.message}", e)
                         throw IllegalStateException("The format of the Open API Spec is not YAML Type.", e)
                     }
                 }

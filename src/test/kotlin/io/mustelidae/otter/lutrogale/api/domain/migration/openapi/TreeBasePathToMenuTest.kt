@@ -26,7 +26,7 @@ class TreeBasePathToMenuTest {
 
         val root =
             MenuNavigation.root().apply {
-                setBy(Project("migration", null, ""))
+                setBy(Project("migration", null, "", io.mustelidae.otter.lutrogale.web.domain.navigation.MenuNavigation.ListStructure.TREE))
             }
         val treeBasePathToMenu = TreeBasePathToMenu(specs, root)
         val menuNavigationRepository: MenuNavigationRepository = mockk()
