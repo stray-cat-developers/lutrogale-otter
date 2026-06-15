@@ -42,8 +42,8 @@ class DistributedLockAspect(
         val acquired = tryAcquire(key, lockValue, duration)
 
         if (acquired == null) {
-            log.warn("Redis 연결 실패로 분산락을 건너뜁니다. key={}", key)
-            return pjp.proceed()
+            log.error("Redis 연결 실패로 분산락 상태를 확인할 수 없어 실행을 중단합니다. key={}", key)
+            throw IllegalStateException("Failed to acquire distributed lock due to Redis connection failure: $key")
         }
 
         if (!acquired) {

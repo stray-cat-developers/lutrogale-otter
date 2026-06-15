@@ -9,6 +9,7 @@ import io.mustelidae.otter.lutrogale.web.common.annotation.LoginCheck
 import io.mustelidae.otter.lutrogale.web.domain.project.Project
 import io.mustelidae.otter.lutrogale.web.domain.project.ProjectInteraction
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -51,14 +52,14 @@ class APISpecMigrationController(
     @ResponseStatus(HttpStatus.OK)
     fun syncOpenAPI(
         @PathVariable projectId: Long,
-        @RequestBody request: MigrationResources.Request.OpenAPISync,
+        @RequestBody @Valid request: MigrationResources.Request.OpenAPISync,
     ): Reply<String> {
         val specType =
             when (request.format) {
                 MigrationResources.Request.OpenAPI.OpenAPIFormat.JSON -> Project.SpecType.OPENAPI_JSON
                 MigrationResources.Request.OpenAPI.OpenAPIFormat.YAML -> Project.SpecType.OPENAPI_YAML
             }
-        projectInteraction.startSyncSpec(projectId, specType, request.url)
+        projectInteraction.updateSync(projectId, specType, request.url)
         return "Sync configured successfully".toReply()
     }
 
@@ -85,9 +86,9 @@ class APISpecMigrationController(
     @ResponseStatus(HttpStatus.OK)
     fun syncGraphQL(
         @PathVariable projectId: Long,
-        @RequestBody request: MigrationResources.Request.GraphQLSync,
+        @RequestBody @Valid request: MigrationResources.Request.GraphQLSync,
     ): Reply<String> {
-        projectInteraction.startSyncSpec(projectId, Project.SpecType.GRAPHQL, request.url)
+        projectInteraction.updateSync(projectId, Project.SpecType.GRAPHQL, request.url)
         return "Sync configured successfully".toReply()
     }
 }

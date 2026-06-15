@@ -27,7 +27,7 @@ class ProjectInteraction(
         return projectRepository.save(project).id!!
     }
 
-    fun registerSyncSpec(
+    fun createSync(
         projectId: Long,
         spec: Project.SpecType,
         migrationUrl: String,
@@ -38,7 +38,7 @@ class ProjectInteraction(
         projectRepository.save(project)
     }
 
-    fun startSyncSpec(
+    fun updateSync(
         projectId: Long,
         spec: Project.SpecType,
         migrationUrl: String,

@@ -11,13 +11,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.RequestMethod
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * GraphQL 스키마를 동기화하여 메뉴 구조로 변환하는 클래스입니다.
- * 기존 메뉴와 새로운 스키마를 비교하여 추가/만료 처리를 수행합니다.
- *
- * @property project 메뉴 네비게이션과 연관된 프로젝트입니다.
- * @property scheme GraphQL 스키마 문자열입니다.
- */
 class FlatBaseGraphQLSyncToMenu(
     val project: Project,
     private val scheme: String,
@@ -26,30 +19,20 @@ class FlatBaseGraphQLSyncToMenu(
 
     override var rootMenuNavigation: MenuNavigation = project.menuNavigations.first()
 
-    /**
-     * GraphQL 스키마를 분석하여 기존 메뉴와 동기화합니다.
-     * 새로운 필드는 추가하고, 스키마에 없는 기존 메뉴는 만료 처리합니다.
-     *
-     * @param menuNavigationRepository MenuNavigation 엔티티들과 상호작용하기 위해 사용되는 저장소
-     */
     override fun makeTree(menuNavigationRepository: MenuNavigationRepository) {
         try {
             log.info("Starting GraphQL sync for project: ${project.name}")
 
-            // 1. scheme에서 필드 정보 추출
             val schemeFields = extractFieldsFromScheme()
 
-            // 2. 기존 메뉴 네비게이션 리스트 (root 제외)
             val existingMenus = project.menuNavigations.filter { !it.isRoot() && it.status }
             val existingMenuKeys = existingMenus.map { "${it.methodType}_${it.uriBlock}" }.toSet()
 
-            // 3. 기존 메뉴 네비게이션 리스트에 없는 scheme를 찾아 신규 추가
             val newFields = schemeFields.filter { "${it.method}_${it.fieldName}" !in existingMenuKeys }
             newFields.forEach { fieldInfo ->
                 addNewMenuNavigation(fieldInfo, menuNavigationRepository)
             }
 
-            // 4. 기존 메뉴 네비게이션 리스트에는 있는데 scheme가 없는 경우 해당 메뉴 네비게이션 expire
             val schemeMenuKeys = schemeFields.map { "${it.method}_${it.fieldName}" }.toSet()
             val menusToExpire = existingMenus.filter { "${it.methodType}_${it.uriBlock}" !in schemeMenuKeys }
             menusToExpire.forEach { menu ->
@@ -69,7 +52,6 @@ class FlatBaseGraphQLSyncToMenu(
     private fun extractFieldsFromScheme(): List<FieldInfo> {
         val fieldInfos = mutableListOf<FieldInfo>()
 
-        // 기존 메뉴 네비게이션의 treeId에서 마지막 번호 추출
         val existingTreeIds =
             project.menuNavigations
                 .mapNotNull { menu ->
@@ -94,7 +76,6 @@ class FlatBaseGraphQLSyncToMenu(
             val typeDefinitionRegistry = SchemaParser().parse(scheme)
             val types = typeDefinitionRegistry.types()
 
-            // Query 필드 처리
             val query = types["Query"] as? ObjectTypeDefinition
             query?.fieldDefinitions?.forEach { field ->
                 fieldInfos.add(
@@ -108,7 +89,6 @@ class FlatBaseGraphQLSyncToMenu(
                 )
             }
 
-            // Mutation 필드 처리
             val mutation = types["Mutation"] as? ObjectTypeDefinition
             mutation?.fieldDefinitions?.forEach { field ->
                 fieldInfos.add(

@@ -23,6 +23,8 @@ class UserFinder(
 
     fun findBy(email: String): User? = userRepository.findByEmail(email)
 
+    fun findByEmails(emails: List<String>): List<User> = userRepository.findByEmailIn(emails)
+
     fun findBy(status: User.Status): List<User> =
         findAll()
             .stream()

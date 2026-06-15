@@ -13,6 +13,7 @@ import io.mustelidae.otter.lutrogale.web.domain.user.UserFinder
 import io.mustelidae.otter.lutrogale.web.domain.user.api.UserResources
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -94,7 +95,7 @@ class ProjectController(
         @PathVariable id: Long,
     ): Reply<ProjectResources.Reply.SyncInfo> {
         val project = projectFinder.findBy(id)
-        if (!project.syncEnabled) throw DataNotFindException("Sync가 설정되지 않았습니다.")
+        if (!project.syncEnabled) throw DataNotFindException("Sync가 설정되지 않은 프로젝트입니다.")
         return ProjectResources.Reply.SyncInfo
             .from(project)
             .toReply()
@@ -105,9 +106,9 @@ class ProjectController(
     @ResponseStatus(HttpStatus.CREATED)
     fun registerSync(
         @PathVariable id: Long,
-        @RequestBody request: ProjectResources.Request.RegisterSync,
+        @RequestBody @Valid request: ProjectResources.Request.RegisterSync,
     ): Reply<Unit> {
-        projectInteraction.registerSyncSpec(id, request.specType, request.url)
+        projectInteraction.createSync(id, request.specType, request.url)
         return Unit.toReply()
     }
 
@@ -115,9 +116,9 @@ class ProjectController(
     @PutMapping("/project/{id}/sync")
     fun updateSync(
         @PathVariable id: Long,
-        @RequestBody request: ProjectResources.Modify.UpdateSync,
+        @RequestBody @Valid request: ProjectResources.Modify.UpdateSync,
     ): Reply<Unit> {
-        projectInteraction.startSyncSpec(id, request.specType, request.url)
+        projectInteraction.updateSync(id, request.specType, request.url)
         return Unit.toReply()
     }
 

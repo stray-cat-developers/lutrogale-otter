@@ -2,6 +2,7 @@ package io.mustelidae.otter.lutrogale.api.domain.migration.api
 
 import io.mustelidae.otter.lutrogale.api.domain.migration.graphql.HttpOperation
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.constraints.NotBlank
 
 class MigrationResources {
     @Schema(name = "Lutrogale.Migration.HttpHeader")
@@ -32,7 +33,7 @@ class MigrationResources {
 
         @Schema(name = "Lutrogale.Migration.Request.OpenAPISync")
         data class OpenAPISync(
-            val url: String,
+            @field:NotBlank val url: String,
             val format: OpenAPI.OpenAPIFormat,
         )
 
@@ -45,7 +46,7 @@ class MigrationResources {
 
         @Schema(name = "Lutrogale.Migration.Request.GraphQLSync")
         data class GraphQLSync(
-            val url: String,
+            @field:NotBlank val url: String,
         )
     }
 }
