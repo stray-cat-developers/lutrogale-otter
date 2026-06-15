@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id("org.springframework.boot") version "3.5.14"
     id("io.spring.dependency-management") version "1.1.4"
@@ -29,7 +27,7 @@ repositories {
     mavenCentral()
 }
 
-ext["log4j2.version"] = "2.17.1"
+extra["log4j2.version"] = "2.17.1"
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.4.0")
@@ -81,7 +79,7 @@ springBoot {
     buildInfo()
 }
 
-tasks.getByName<Test>("test") {
+tasks.named<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()
 
