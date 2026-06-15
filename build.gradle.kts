@@ -27,8 +27,6 @@ repositories {
     mavenCentral()
 }
 
-extra["log4j2.version"] = "2.17.1"
-
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.4.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
