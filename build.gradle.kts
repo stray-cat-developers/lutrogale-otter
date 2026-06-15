@@ -77,6 +77,10 @@ dependencies {
     testImplementation("com.github.fppt:jedis-mock:1.1.14")
 }
 
+springBoot {
+    buildInfo()
+}
+
 tasks.getByName<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()
