@@ -1,16 +1,19 @@
 package io.mustelidae.otter.lutrogale.config
 
+import com.github.fppt.jedismock.RedisServer
 import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.utility.DockerImageName
+import org.springframework.context.annotation.Primary
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 
 @TestConfiguration(proxyBeanMethods = false)
 class TestRedisConfiguration {
+    @Bean(destroyMethod = "stop")
+    fun redisServer(): RedisServer = RedisServer.newRedisServer().start()
+
     @Bean
-    @ServiceConnection(name = "redis")
-    fun redisContainer(): GenericContainer<*> =
-        GenericContainer(DockerImageName.parse("redis:7.2-alpine"))
-            .withExposedPorts(6379)
+    @Primary
+    fun redisConnectionFactory(redisServer: RedisServer): LettuceConnectionFactory =
+        LettuceConnectionFactory(RedisStandaloneConfiguration(redisServer.host, redisServer.bindPort))
 }

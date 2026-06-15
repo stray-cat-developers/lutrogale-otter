@@ -74,26 +74,12 @@ dependencies {
 
     implementation("org.springframework.security:spring-security-crypto")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    testImplementation("org.springframework.boot:spring-boot-testcontainers")
-    testImplementation("org.testcontainers:testcontainers")
-    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("com.github.fppt:jedis-mock:1.1.14")
 }
 
 tasks.getByName<Test>("test") {
     jvmArgs("-XX:+EnableDynamicAgentLoading") // https://github.com/mockito/mockito/issues/3037
     useJUnitPlatform()
-
-    // Testcontainers: Rancher Desktop 소켓이 있으면 DOCKER_HOST 자동 설정 및 Ryuk 비활성화
-    val rdSock = file("${System.getProperty("user.home")}/.rd/docker.sock")
-    if (rdSock.exists()) {
-        if (System.getenv("DOCKER_HOST") == null) {
-            environment("DOCKER_HOST", "unix://${rdSock.absolutePath}")
-        }
-        // Rancher Desktop은 Ryuk(socket mount)를 지원하지 않으므로 비활성화
-        if (System.getenv("TESTCONTAINERS_RYUK_DISABLED") == null) {
-            environment("TESTCONTAINERS_RYUK_DISABLED", "true")
-        }
-    }
 
     addTestListener(object : TestListener {
         override fun beforeSuite(suite: TestDescriptor) {}
