@@ -59,14 +59,12 @@ class DistributedLockAspectTest {
     }
 
     @Test
-    fun `Redis 연결 실패 시 fail-open으로 proceed가 실행된다`() {
+    fun `Redis 연결 실패 시 fail-closed로 IllegalStateException이 발생한다`() {
         every { valueOps.setIfAbsent(any(), any(), any()) } throws RuntimeException("Redis connection failed")
-        every { pjp.proceed() } returns "fallback-result"
 
-        val result = aspect.around(pjp, lock)
+        assertThrows<IllegalStateException> { aspect.around(pjp, lock) }
 
-        result shouldBe "fallback-result"
-        verify(exactly = 1) { pjp.proceed() }
+        verify(exactly = 0) { pjp.proceed() }
     }
 
     @Test

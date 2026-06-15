@@ -62,7 +62,7 @@ class UserInteraction(
     }
 
     fun expireByEmails(emails: List<String>) {
-        val users = emails.mapNotNull { userFinder.findBy(it) }
+        val users = userFinder.findByEmails(emails)
         users.forEach { it.expire() }
         userRepository.saveAll(users)
     }
