@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "io.mustelidae.otter.lutrogale"
-version = "1.0.3"
+version = "1.1.0"
 
 kotlin {
     jvmToolchain(21)

@@ -4,6 +4,17 @@
 [![Build Status](https://github.com/stray-cat-developers/lutrogale-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/lutrogale-otter)
 
 ## New Features!
+### 1.1.0
+
+- **관리자 계정 관리**: SUPER 관리자가 관리자 계정을 목록 조회, 생성, 만료, 비밀번호 변경할 수 있습니다.
+- **사용자 일괄 등록**: SUPER 관리자가 CSV 형식으로 다수의 사용자를 한 번에 등록할 수 있습니다.
+- **권한 감사 로그**: 권한 체크 결과를 Grafana/Loki 파이프라인으로 전송하여 감사 로그를 기록합니다.
+- **마이그레이션 스펙 URL 자동 동기화**: 등록된 OpenAPI/GraphQL 스펙 URL을 주기적으로 자동 동기화하여 MenuNavigation 트리를 최신 상태로 유지합니다.
+  - 대시보드에서 프로젝트별 동기화 상태를 확인하고 수동 동기화를 실행할 수 있습니다.
+- **이메일 기반 사용자 만료 API**: 이메일 주소로 특정 사용자를 만료(EXPIRE) 상태로 일괄 처리하는 API를 추가했습니다.
+- **보안 강화**: 관리자 비밀번호 해싱 알고리즘을 SHA-256에서 BCrypt로 교체했습니다.
+- **라이브러리 업그레이드**: Spring Boot, Kotlin, QueryDSL 등 주요 라이브러리를 최신 안정 버전으로 업그레이드했습니다.
+
 ### 1.0.3
 
 - 권한 체크 결과를 Redis에 5분간 캐싱하여 동일 요청에 대한 DB 조회를 줄입니다.
